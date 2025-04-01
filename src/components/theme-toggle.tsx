@@ -1,0 +1,35 @@
+import { Button } from "@/components/ui/button"
+
+export function ThemeToggle() {
+  return (
+    <Button 
+      variant="ghost" 
+      size="icon" 
+      className="rounded-full bg-background/60 border-2 border-primary/20 hover:bg-primary/10 hover:-translate-y-0.5 transition-all duration-300"
+      aria-label="切换主题"
+    >
+      <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        width="20" 
+        height="20" 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        stroke="currentColor" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round" 
+        className="text-primary"
+      >
+        <path d="M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"></path>
+        <path d="M12 3v1"></path>
+        <path d="M12 20v1"></path>
+        <path d="M3 12h1"></path>
+        <path d="M20 12h1"></path>
+        <path d="m18.364 5.636-.707.707"></path>
+        <path d="m6.343 17.657-.707.707"></path>
+        <path d="m5.636 5.636.707.707"></path>
+        <path d="m17.657 17.657.707.707"></path>
+      </svg>
+    </Button>
+  )
+} 
