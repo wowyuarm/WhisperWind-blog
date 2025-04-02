@@ -26,22 +26,22 @@ export async function generateStaticParams(): Promise<PostPageProps['params'][]>
   }));
 }
 
-// 生成页面元数据
-export function generateMetadata({ params }: PostPageProps) {
-  const post = getPostBySlug(params.slug);
+// // 生成页面元数据 (Temporarily commented out for debugging)
+// export function generateMetadata({ params }: PostPageProps) {
+//   const post = getPostBySlug(params.slug);
   
-  if (!post) {
-    return {
-      title: "文章未找到 - WhisperWind Blog",
-      description: "您查找的文章不存在或已被删除",
-    };
-  }
+//   if (!post) {
+//     return {
+//       title: "文章未找到 - WhisperWind Blog",
+//       description: "您查找的文章不存在或已被删除",
+//     };
+//   }
   
-  return {
-    title: `${post.title} - WhisperWind Blog`,
-    description: post.excerpt || "阅读WhisperWind Blog的最新文章",
-  };
-}
+//   return {
+//     title: `${post.title} - WhisperWind Blog`,
+//     description: post.excerpt || "阅读WhisperWind Blog的最新文章",
+//   };
+// }
 
 export default function PostPage({ params }: PostPageProps) {
   // 获取文章数据
