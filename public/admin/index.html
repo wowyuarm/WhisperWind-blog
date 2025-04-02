@@ -10,12 +10,13 @@
     <script>
       // Wait for the DOM to be fully loaded before initializing CMS
       document.addEventListener('DOMContentLoaded', function() {
-        // Load the configuration file
-        CMS.init({ configURL: "/admin/config.yml" });
+        // Initialize CMS. It will automatically look for config.yml in the same directory.
+        CMS.init(); 
       });
     </script>
   </head>
   <body>
-    <!-- Removed Netlify Identity related script -->
+    <!-- Decap CMS mounts its UI in this div -->
+    <div id="nc-root"></div>
   </body>
 </html> 
