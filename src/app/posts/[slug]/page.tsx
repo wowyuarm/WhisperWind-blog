@@ -43,7 +43,7 @@ export async function generateStaticParams(): Promise<PostPageProps['params'][]>
 //   };
 // }
 
-export default function PostPage({ params }: PostPageProps) {
+export default async function PostPage({ params }: PostPageProps) {
   // 获取文章数据
   const post = getPostBySlug(params.slug);
   
