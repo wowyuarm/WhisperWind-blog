@@ -19,14 +19,8 @@ export async function generateStaticParams() {
   }));
 }
 
-interface PostPageProps {
-  params: {
-    slug: string;
-  };
-}
-
 // 生成页面元数据
-export function generateMetadata({ params }: PostPageProps) {
+export function generateMetadata({ params }: { params: { slug: string } }) {
   const post = getPostBySlug(params.slug);
   
   if (!post) {
@@ -42,7 +36,7 @@ export function generateMetadata({ params }: PostPageProps) {
   };
 }
 
-export default function PostPage({ params }: PostPageProps) {
+export default function PostPage({ params }: { params: { slug: string } }) {
   // 获取文章数据
   const post = getPostBySlug(params.slug);
   
