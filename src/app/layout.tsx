@@ -25,28 +25,14 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" className={`${nunito.variable}`}>
       <head>
-        {/* Netlify Identity Widget 用于Decap CMS认证 */}
-        <Script src="https://identity.netlify.com/v1/netlify-identity-widget.js" strategy="afterInteractive" />
+        {/* Netlify Identity Widget Removed */}
       </head>
       <body className="antialiased">
         <MotionConfig reducedMotion="user">
           {children}
         </MotionConfig>
         
-        {/* 用于Netlify Identity重定向的脚本 */}
-        <Script id="netlify-identity-redirect">
-          {`
-            if (window.netlifyIdentity) {
-              window.netlifyIdentity.on("init", user => {
-                if (!user) {
-                  window.netlifyIdentity.on("login", () => {
-                    document.location.href = "/admin/";
-                  });
-                }
-              });
-            }
-          `}
-        </Script>
+        {/* Netlify Identity Redirect Script Removed */}
       </body>
     </html>
   );

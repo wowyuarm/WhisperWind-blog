@@ -2,8 +2,6 @@ backend:
   name: github
   repo: wowyuarm/WhisperWind-blog
   branch: main
-  base_url: https://api.netlify.com
-  auth_endpoint: auth
 
 # 开启预览功能
 local_backend: true

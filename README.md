@@ -47,13 +47,20 @@ backend:
   branch: main
 ```
 
-2. 设置GitHub OAuth应用，用于CMS认证：
-   - 在GitHub中创建一个新的OAuth应用：[https://github.com/settings/developers](https://github.com/settings/developers)
-   - 将Authorization callback URL设置为`https://api.netlify.com/auth/done`
-   - 获取Client ID和Client Secret
-   - 使用Netlify提供的认证服务或自行设置认证服务器
+2. **设置GitHub OAuth应用:** 为了让 Decap CMS 能够代表你访问 GitHub 仓库，你需要创建一个 GitHub OAuth 应用：
+   *   前往你的 GitHub 设置 > Developer settings > OAuth Apps > New OAuth App。
+   *   **Application name:** 给你的应用起个名字 (例如：My Blog CMS)。
+   *   **Homepage URL:** 填写你部署后的博客首页 URL (例如：https://your-username.github.io/your-repo-name/)。
+   *   **Authorization callback URL:** **非常重要**，这里填写你部署后的博客域名加上 `/admin/` 路径 (例如：`https://your-username.github.io/your-repo-name/admin/`)。如果你使用的是自定义域名，则填写自定义域名加上 `/admin/`。
+   *   创建应用后，你会得到一个 **Client ID** 和一个 **Client Secret**。
 
-3. 部署你的站点后，访问`/admin/`路径登录CMS
+3. **启用 GitHub 作为认证提供者:**
+   *   Decap CMS 会自动检测到 `backend.name` 为 `github`，并引导你通过 GitHub 进行登录。
+   *   首次访问 `/admin/` 页面时，它会跳转到 GitHub 进行授权。你需要授权该 OAuth 应用访问你的仓库。
+
+4. **部署你的站点:** 确保你的博客站点已经部署 (例如通过 GitHub Pages)，这样 GitHub OAuth 的回调 URL 才能正常工作。
+
+5.  部署并完成 OAuth 设置后，访问你博客的 `/admin/` 路径 (例如 `https://your-username.github.io/your-repo-name/admin/`) 即可登录 CMS。
 
 ### 自定义
 
