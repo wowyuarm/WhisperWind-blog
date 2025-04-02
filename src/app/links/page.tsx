@@ -2,6 +2,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getFriendLinks } from "@/lib/config";
 import Link from "next/link";
+import Image from "next/image";
 
 export const metadata = {
   title: "友情链接 - WhisperWind Blog",
@@ -30,11 +31,15 @@ export default function LinksPage() {
                   <CardTitle className="text-primary">
                     <Link href={link.url} target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center">
                       {link.icon && (
-                        <img 
-                          src={link.icon} 
-                          alt={`${link.name} 图标`} 
-                          className="w-6 h-6 mr-2 rounded-sm" 
-                        />
+                        <span className="relative w-6 h-6 mr-2 rounded-sm overflow-hidden flex-shrink-0">
+                          <Image 
+                            src={link.icon} 
+                            alt={`${link.name} 图标`} 
+                            fill
+                            sizes="24px"
+                            className="object-cover"
+                          />
+                        </span>
                       )}
                       {link.name}
                     </Link>

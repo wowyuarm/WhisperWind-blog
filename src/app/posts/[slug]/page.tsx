@@ -1,6 +1,6 @@
 import { Layout } from "@/components/layout/Layout";
 import { Badge } from "@/components/ui/badge";
-import { getPostBySlug, getAllPostMetas, type Post } from "@/lib/content";
+import { getPostBySlug, getAllPostMetas } from "@/lib/content";
 import { formatDate } from "@/lib/utils";
 import { notFound } from "next/navigation";
 import Link from "next/link";

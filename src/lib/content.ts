@@ -106,7 +106,7 @@ export function getPostBySlug(slug: string): Post | null {
  * 获取所有文章的元数据
  */
 export function getAllPostMetas(): PostMeta[] {
-  return getAllPosts().map(({ content: _content, ...meta }) => meta);
+  return getAllPosts().map(({ ...meta }) => meta);
 }
 
 /**

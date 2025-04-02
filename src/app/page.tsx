@@ -3,7 +3,7 @@ import { PostCard } from "@/components/blog/PostCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAllPostMetas } from "@/lib/content";
-import { CloudIcon, LeafIcon, SunflowerIcon, WindIcon } from "@/components/ui/nature-icons";
+import { LeafIcon, SunflowerIcon, WindIcon } from "@/components/ui/nature-icons";
 import Link from "next/link";
 
 export default function Home() {

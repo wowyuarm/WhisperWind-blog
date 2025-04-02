@@ -4,7 +4,7 @@ import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 import { formatDate } from '@/lib/utils'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../ui/card'
-import { motion } from 'framer-motion'
+import Image from 'next/image'
 
 interface PostCardProps {
   title: string
@@ -23,10 +23,12 @@ export function PostCard({ title, slug, excerpt, date, tags = [], coverImage }: 
       <Card className="h-full bg-warm-paper border-secondary/20 shadow-ghibli transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1 overflow-hidden">
         {coverImage && (
           <div className="w-full h-40 overflow-hidden rounded-t-xl relative">
-            <img 
+            <Image 
               src={coverImage} 
               alt={title}
-              className="w-full h-full object-cover transition-transform duration-700 ease-in-out group-hover:scale-105"
+              fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover transition-transform duration-700 ease-in-out group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-warm-paper/80 to-transparent opacity-40"></div>
           </div>

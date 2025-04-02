@@ -51,11 +51,11 @@ export default function TagPage({ params }: TagPageProps) {
           </div>
           
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
-            带有 "{tag}" 标签的文章
+            带有 &quot;{tag}&quot; 标签的文章
           </h1>
           <div className="w-20 h-1 bg-primary rounded-full mb-6"></div>
           <p className="text-muted-foreground mb-8 max-w-3xl">
-            找到 {taggedPosts.length} 篇带有 "{tag}" 标签的文章。
+            找到 {taggedPosts.length} 篇带有 &quot;{tag}&quot; 标签的文章。
           </p>
         </div>
         

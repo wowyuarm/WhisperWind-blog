@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 // 移除Geist Mono导入，改用本地字体
 import { Nunito } from 'next/font/google';
 import "./globals.css";
-import Script from "next/script";
 import { MotionConfig } from "framer-motion";
 
 // 使用Nunito作为主要字体，它更圆润友好
