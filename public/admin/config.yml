@@ -44,34 +44,42 @@ collections:
       - { label: "URL路径", name: "permalink", widget: "string" }
       - { label: "内容", name: "body", widget: "markdown" }
 
-  # 友链数据文件
+  # 友链数据文件 (Corrected to use 'files')
   - name: "links"
     label: "友情链接"
-    file: "src/content/links.json"
-    fields:
-      - label: "链接"
-        name: "links"
-        widget: "list"
+    files: # Use 'files' list
+      - label: "友情链接列表"
+        name: "friend_links" # Unique name for this file definition
+        file: "src/content/links.json" # The actual file path
         fields:
-          - { label: "名称", name: "name", widget: "string" }
-          - { label: "URL", name: "url", widget: "string" }
-          - { label: "描述", name: "description", widget: "string", required: false }
-          - { label: "图标", name: "icon", widget: "image", required: false }
+          - label: "链接"
+            name: "links"
+            widget: "list"
+            fields:
+              - { label: "名称", name: "name", widget: "string" }
+              - { label: "URL", name: "url", widget: "string" }
+              - { label: "描述", name: "description", widget: "string", required: false }
+              - { label: "图标", name: "icon", widget: "image", required: false }
 
-  # 网站配置
+  # 网站配置 (Corrected to use 'files')
   - name: "config"
     label: "网站配置"
-    file: "src/content/config.json"
-    fields:
-      - { label: "网站标题", name: "title", widget: "string" }
-      - { label: "网站描述", name: "description", widget: "text" }
-      - { label: "网站作者", name: "author", widget: "string" }
-      - { label: "网站Logo", name: "logo", widget: "image", required: false }
-      - { label: "社交链接", name: "social", widget: "object", fields:
-          [
-            { label: "GitHub", name: "github", widget: "string", required: false },
-            { label: "Twitter", name: "twitter", widget: "string", required: false },
-            { label: "微博", name: "weibo", widget: "string", required: false },
-            { label: "知乎", name: "zhihu", widget: "string", required: false }
-          ]
-        } 
+    files: # Use 'files' list
+      - label: "基本配置"
+        name: "site_config" # Unique name for this file definition
+        file: "src/content/config.json" # The actual file path
+        fields:
+          - { label: "网站标题", name: "title", widget: "string" }
+          - { label: "网站描述", name: "description", widget: "text" }
+          - { label: "网站作者", name: "author", widget: "string" }
+          - { label: "网站Logo", name: "logo", widget: "image", required: false }
+          - label: "社交链接"
+            name: "social"
+            widget: "object"
+            fields:
+              [
+                { label: "GitHub", name: "github", widget: "string", required: false },
+                { label: "Twitter", name: "twitter", widget: "string", required: false },
+                { label: "微博", name: "weibo", widget: "string", required: false },
+                { label: "知乎", name: "zhihu", widget: "string", required: false }
+              ] 
