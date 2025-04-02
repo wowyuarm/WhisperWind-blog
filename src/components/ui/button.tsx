@@ -7,16 +7,16 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all duration-400 ease-in-out disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/30 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive btn-ghibli border-2 shadow-md",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all duration-400 ease-out disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/30 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive btn-ghibli border-2 shadow-md transform hover:-translate-y-0.5 hover:shadow-lg active:scale-95",
   {
     variants: {
       variant: {
         default:
-          "bg-warm-paper text-primary border-primary/40 hover:bg-primary/10 hover:border-primary/60 shadow-md",
+          "bg-warm-paper text-primary border-primary/40 hover:bg-primary/10 hover:border-primary/60",
         destructive:
-          "bg-destructive/10 text-destructive border-destructive/40 hover:bg-destructive/20 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 shadow-md",
+          "bg-destructive/10 text-destructive border-destructive/40 hover:bg-destructive/20 hover:border-destructive/60 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40",
         outline:
-          "border-2 bg-warm-paper backdrop-blur-sm shadow-sm hover:bg-secondary/20 hover:text-warm dark:bg-input/30 dark:border-input dark:hover:bg-input/50 text-foreground border-border",
+          "border-2 bg-warm-paper backdrop-blur-sm shadow-sm hover:bg-secondary/20 hover:text-warm hover:border-primary/40 dark:bg-input/30 dark:border-input dark:hover:bg-input/50 text-foreground border-secondary/40",
         secondary:
           "bg-secondary/80 text-secondary-foreground shadow-sm hover:bg-secondary/90 border-secondary/60",
         ghost:

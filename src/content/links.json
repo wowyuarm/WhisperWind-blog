@@ -1,0 +1,24 @@
+{
+  "links": [
+    {
+      "name": "Next.js官网",
+      "url": "https://nextjs.org/",
+      "description": "React框架，用于构建现代Web应用程序"
+    },
+    {
+      "name": "Tailwind CSS",
+      "url": "https://tailwindcss.com/",
+      "description": "实用优先的CSS框架"
+    },
+    {
+      "name": "shadcn/ui",
+      "url": "https://ui.shadcn.com/",
+      "description": "精美的React组件库，基于Radix UI构建"
+    },
+    {
+      "name": "Decap CMS",
+      "url": "https://decapcms.org/",
+      "description": "面向Git的内容管理系统"
+    }
+  ]
+} 

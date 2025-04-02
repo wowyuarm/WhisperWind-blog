@@ -1,20 +1,28 @@
-import { Header } from "./Header";
-import { Footer } from "./Footer";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
+import { PageTransition } from "@/components/animation/PageTransition";
+import { ReactNode } from "react";
 
 interface LayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
+  showHeader?: boolean;
+  showFooter?: boolean;
 }
 
-export function Layout({ children }: LayoutProps) {
+export function Layout({ 
+  children, 
+  showHeader = true, 
+  showFooter = true 
+}: LayoutProps) {
   return (
-    <div className="flex min-h-screen flex-col">
-      <Header />
-      <main className="flex-1 container mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-14">
-        <div className="page-container relative rounded-xl overflow-hidden p-6 md:p-8">
+    <div className="flex flex-col min-h-screen bg-warm-paper/90 bg-[url('/images/ghibli-bg.png')] bg-fixed bg-cover bg-center overflow-x-hidden">
+      {showHeader && <Header />}
+      <PageTransition>
+        <main className="flex-1 w-full mx-auto container px-4 pb-12 relative">
           {children}
-        </div>
-      </main>
-      <Footer />
+        </main>
+      </PageTransition>
+      {showFooter && <Footer />}
     </div>
   );
 } 

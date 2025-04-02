@@ -9,7 +9,7 @@ const Card = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      "bg-warm-paper rounded-lg shadow-md border border-border/50 overflow-hidden relative card-hover transition-colors hand-drawn-border",
+      "bg-warm-paper rounded-lg shadow-ghibli border border-secondary/30 overflow-hidden relative transition-all duration-400 hover:shadow-lg",
       className
     )}
     {...props}
@@ -23,7 +23,7 @@ const CardHeader = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex flex-col p-6 pb-3 relative", className)}
+    className={cn("flex flex-col p-6 pb-3 relative transition-all duration-300", className)}
     {...props}
   />
 ))
@@ -35,7 +35,10 @@ const CardTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <h3
     ref={ref}
-    className={cn("leading-relaxed font-semibold text-warm watercolor-underline tracking-wide text-lg", className)}
+    className={cn(
+      "leading-relaxed font-semibold text-primary/90 tracking-wide text-lg transition-colors duration-300",
+      className
+    )}
     {...props}
   />
 ))
@@ -47,7 +50,10 @@ const CardDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-muted-foreground text-sm leading-loose tracking-wide", className)}
+    className={cn(
+      "text-muted-foreground text-sm leading-loose tracking-wide transition-colors duration-300",
+      className
+    )}
     {...props}
   />
 ))
@@ -59,7 +65,7 @@ const CardContent = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("p-6 pt-3 relative", className)}
+    className={cn("p-6 pt-3 relative transition-all duration-300", className)}
     {...props}
   />
 ))
@@ -71,7 +77,7 @@ const CardFooter = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <div
     ref={ref}
-    className={cn("flex items-center p-6 pt-3 border-t border-border/40", className)}
+    className={cn("flex items-center p-6 pt-3 border-t border-secondary/30 transition-all duration-300", className)}
     {...props}
   />
 ))

@@ -1,0 +1,79 @@
+backend:
+  name: github
+  repo: wowyuarm/WhisperWind-blog
+  branch: main
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
+
+# 开启预览功能
+local_backend: true
+
+# 媒体和公共路径配置
+media_folder: "public/uploads" # 媒体文件存储的位置
+public_folder: "/uploads" # 访问媒体文件的公共URL路径
+
+# 发布模式 (编辑保存后直接发布)
+publish_mode: editorial_workflow
+
+# 网站URL (用于表单提交)
+site_url: https://wowyuarm.github.io/WhisperWind-blog/
+
+# 内容集合
+collections:
+  # 博客文章集合
+  - name: "blog"
+    label: "博客文章"
+    folder: "src/content/posts"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "标题", name: "title", widget: "string" }
+      - { label: "发布日期", name: "publishDate", widget: "datetime", format: "YYYY-MM-DD" }
+      - { label: "URL路径", name: "slug", widget: "string" }
+      - { label: "标签", name: "tags", widget: "list", required: false }
+      - { label: "特色图片", name: "featuredImage", widget: "image", required: false }
+      - { label: "摘要", name: "excerpt", widget: "text", required: false }
+      - { label: "正文", name: "body", widget: "markdown" }
+
+  # 单页面集合
+  - name: "pages"
+    label: "页面"
+    folder: "src/content/pages"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "标题", name: "title", widget: "string" }
+      - { label: "URL路径", name: "permalink", widget: "string" }
+      - { label: "内容", name: "body", widget: "markdown" }
+
+  # 友链数据文件
+  - name: "links"
+    label: "友情链接"
+    file: "src/content/links.json"
+    fields:
+      - label: "链接"
+        name: "links"
+        widget: "list"
+        fields:
+          - { label: "名称", name: "name", widget: "string" }
+          - { label: "URL", name: "url", widget: "string" }
+          - { label: "描述", name: "description", widget: "string", required: false }
+          - { label: "图标", name: "icon", widget: "image", required: false }
+
+  # 网站配置
+  - name: "config"
+    label: "网站配置"
+    file: "src/content/config.json"
+    fields:
+      - { label: "网站标题", name: "title", widget: "string" }
+      - { label: "网站描述", name: "description", widget: "text" }
+      - { label: "网站作者", name: "author", widget: "string" }
+      - { label: "网站Logo", name: "logo", widget: "image", required: false }
+      - { label: "社交链接", name: "social", widget: "object", fields:
+          [
+            { label: "GitHub", name: "github", widget: "string", required: false },
+            { label: "Twitter", name: "twitter", widget: "string", required: false },
+            { label: "微博", name: "weibo", widget: "string", required: false },
+            { label: "知乎", name: "zhihu", widget: "string", required: false }
+          ]
+        } 
