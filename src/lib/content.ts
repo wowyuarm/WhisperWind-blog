@@ -106,11 +106,12 @@ export function getPostBySlug(slug: string): Post | null {
  * 获取所有文章的元数据
  */
 export function getAllPostMetas(): PostMeta[] {
-  return getAllPosts().map(({ content, ...meta }) => meta);
+  return getAllPosts().map(({ content: _content, ...meta }) => meta);
 }
 
 /**
  * 将Markdown转换为HTML
+ * @deprecated Use react-markdown component instead for client-side rendering.
  */
 export async function markdownToHtml(markdown: string): Promise<string> {
   const result = await unified()
