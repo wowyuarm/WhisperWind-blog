@@ -1,15 +1,4 @@
 import { Layout } from "@/components/layout/Layout";
-import { Badge } from "@/components/ui/badge";
-import { getPostBySlug, getAllPostMetas } from "@/lib/content";
-import { formatDate } from "@/lib/utils";
-import { notFound } from "next/navigation";
-import Link from "next/link";
-import { Suspense } from "react";
-import Markdown from "react-markdown";
-import rehypeHighlight from "rehype-highlight";
-import rehypeRaw from "rehype-raw";
-import remarkGfm from "remark-gfm";
-import Image from "next/image";
 
 // 定义 Props 类型
 interface PostPageProps {
