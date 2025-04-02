@@ -1,17 +1,42 @@
-import { Layout } from "@/components/layout/Layout";
+import Head from 'next/head';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { PostCard } from "@/components/blog/PostCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getAllPostMetas } from "@/lib/content";
+import { getAllPostMetas, type PostMeta } from "@/lib/content";
 import { LeafIcon, SunflowerIcon, WindIcon } from "@/components/ui/nature-icons";
 import Link from "next/link";
+import { getSiteConfig, type SiteConfig } from "@/lib/config";
 
-export default function Home() {
-  // 获取所有文章的元数据
-  const posts = getAllPostMetas();
+// Define props type
+interface HomePageProps {
+  recentPosts: PostMeta[];
+  siteConfig: SiteConfig;
+}
 
+export const getStaticProps: GetStaticProps<HomePageProps> = async () => {
+  // 获取所有文章的元数据并按日期排序
+  const posts = getAllPostMetas().sort((a, b) => {
+    return new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime();
+  });
+  const recentPosts = posts.slice(0, 3); // Get latest 3 posts
+  const siteConfig = getSiteConfig();
+
+  return {
+    props: {
+      recentPosts,
+      siteConfig,
+    },
+  };
+};
+
+export default function Home({ recentPosts }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <Layout>
+    <>
+      <Head>
+        <title>WhisperWind Blog - 吉卜力风格博客模板</title>
+        <meta name="description" content="一个具有吉卜力风格的开源博客模板，基于Next.js构建" />
+      </Head>
       {/* 英雄区域 - 增加更多空间展示背景图片 */}
       <section className="py-16 md:py-24 lg:py-28 relative">
         <div className="max-w-4xl mx-auto text-center content-area opacity-0 animate-fade-in-up">
@@ -55,10 +80,10 @@ export default function Home() {
           </div>
         </div>
 
-        {posts.length > 0 ? (
+        {recentPosts.length > 0 ? (
           <div className="opacity-0 animate-fade-in-up animation-delay-300">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {posts.slice(0, 3).map((post, index) => (
+              {recentPosts.map((post, index) => (
                 <div 
                   key={post.slug} 
                   className={`opacity-0 animate-fade-in-up ${
@@ -95,7 +120,7 @@ export default function Home() {
           </div>
         )}
 
-        {posts.length > 0 && (
+        {recentPosts.length > 0 && (
           <div className="mt-10 text-center opacity-0 animate-fade-in-up animation-delay-700">
             <Button asChild variant="outline" className="bg-white/80">
               <Link href="/archive">查看所有文章</Link>
@@ -181,6 +206,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-    </Layout>
+    </>
   );
 }

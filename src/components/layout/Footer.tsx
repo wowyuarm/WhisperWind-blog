@@ -1,9 +1,27 @@
 import Link from "next/link";
-import { getSiteConfig } from "@/lib/config";
+import { type SiteConfig } from "@/lib/config";
 
-export function Footer() {
+// Define props for Footer, making config optional
+interface FooterProps {
+  config?: SiteConfig; // Make config optional
+}
+
+export function Footer({ config }: FooterProps) { // config can be undefined
   const currentYear = new Date().getFullYear();
-  const config = getSiteConfig();
+
+  // Handle undefined config gracefully
+  if (!config) {
+    // Render a minimal footer or nothing
+    return (
+      <footer className="border-t border-secondary/30 backdrop-blur-sm mt-auto bg-warm-paper/90 py-8">
+        <div className="container mx-auto px-4 text-center">
+           <p className="text-xs text-muted-foreground">
+            &copy; {currentYear} WhisperWind Blog. Minimal Footer.
+          </p>
+        </div>
+      </footer>
+    );
+  }
 
   return (
     <footer className="border-t border-secondary/30 backdrop-blur-sm mt-auto bg-warm-paper/90 py-8">

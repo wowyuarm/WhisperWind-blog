@@ -1,20 +1,36 @@
-import { Layout } from "@/components/layout/Layout";
+import Head from 'next/head';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { PostCard } from "@/components/blog/PostCard";
-import { getAllPostMetas } from "@/lib/content";
+import { getAllPostMetas, type PostMeta } from "@/lib/content";
+import { getSiteConfig, type SiteConfig } from "@/lib/config";
 
-export const metadata = {
-  title: "文章归档 - WhisperWind Blog",
-  description: "浏览所有文章归档，包含标题、日期和标签信息",
-};
+// Define props type
+interface ArchivePageProps {
+  posts: PostMeta[];
+  siteConfig: SiteConfig;
+}
 
-export default function ArchivePage() {
+export const getStaticProps: GetStaticProps<ArchivePageProps> = async () => {
   // 获取所有文章的元数据并按日期排序
   const posts = getAllPostMetas().sort((a, b) => {
     return new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime();
   });
+  const siteConfig = getSiteConfig();
+  return {
+    props: {
+      posts,
+      siteConfig,
+    },
+  };
+};
 
+export default function ArchivePage({ posts }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <Layout>
+    <>
+      <Head>
+        <title>文章归档 - WhisperWind Blog</title>
+        <meta name="description" content="浏览WhisperWind Blog的所有文章归档" />
+      </Head>
       <div className="py-8 md:py-12">
         <div className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">文章归档</h1>
@@ -48,6 +64,6 @@ export default function ArchivePage() {
           </div>
         )}
       </div>
-    </Layout>
+    </>
   );
 } 

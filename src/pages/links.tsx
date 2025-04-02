@@ -1,19 +1,34 @@
-import { Layout } from "@/components/layout/Layout";
+import Head from 'next/head';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { getFriendLinks } from "@/lib/config";
+import { getFriendLinks, getSiteConfig, type FriendLink, type SiteConfig } from "@/lib/config";
 import Link from "next/link";
 import Image from "next/image";
 
-export const metadata = {
-  title: "友情链接 - WhisperWind Blog",
-  description: "我们的友情链接和推荐资源",
+// Define props type
+interface LinksPageProps {
+  links: FriendLink[];
+  siteConfig: SiteConfig;
+}
+
+export const getStaticProps: GetStaticProps<LinksPageProps> = async () => {
+  const links = getFriendLinks();
+  const siteConfig = getSiteConfig();
+  return {
+    props: {
+      links,
+      siteConfig,
+    },
+  };
 };
 
-export default function LinksPage() {
-  const links = getFriendLinks();
-
+export default function LinksPage({ links }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <Layout>
+    <>
+      <Head>
+        <title>友情链接 - WhisperWind Blog</title>
+        <meta name="description" content="WhisperWind Blog 的友情链接和推荐资源" />
+      </Head>
       <section className="py-12">
         <div className="mb-8 text-center">
           <h1 className="text-4xl font-bold mb-4 text-primary">友情链接</h1>
@@ -81,6 +96,6 @@ export default function LinksPage() {
           </p>
         </div>
       </section>
-    </Layout>
+    </>
   );
 } 

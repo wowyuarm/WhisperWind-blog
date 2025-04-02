@@ -2,17 +2,20 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { PageTransition } from "@/components/animation/PageTransition";
 import { ReactNode } from "react";
+import { type SiteConfig } from "@/lib/config";
 
 interface LayoutProps {
   children: ReactNode;
   showHeader?: boolean;
   showFooter?: boolean;
+  siteConfig?: SiteConfig;
 }
 
 export function Layout({ 
   children, 
   showHeader = true, 
-  showFooter = true 
+  showFooter = true,
+  siteConfig
 }: LayoutProps) {
   return (
     <div className="flex flex-col min-h-screen bg-warm-paper/90 bg-[url('/images/ghibli-bg.png')] bg-fixed bg-cover bg-center overflow-x-hidden">
@@ -22,7 +25,7 @@ export function Layout({
           {children}
         </main>
       </PageTransition>
-      {showFooter && <Footer />}
+      {showFooter && <Footer config={siteConfig} />}
     </div>
   );
 } 

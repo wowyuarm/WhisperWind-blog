@@ -1,10 +1,13 @@
-import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Head from 'next/head';
 
 export default function NotFound() {
   return (
-    <Layout>
+    <>
+      <Head>
+          <title>404 - 页面未找到</title>
+      </Head>
       <div className="flex flex-col items-center justify-center py-20 text-center">
         <h1 className="text-9xl font-bold text-primary mb-4">404</h1>
         <h2 className="text-3xl font-bold mb-6">页面不存在</h2>
@@ -20,6 +23,6 @@ export default function NotFound() {
           </Button>
         </div>
       </div>
-    </Layout>
+    </>
   );
 } 
