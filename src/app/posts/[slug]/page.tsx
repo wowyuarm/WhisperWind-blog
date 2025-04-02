@@ -11,8 +11,15 @@ import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import Image from "next/image";
 
+// 定义 Props 类型
+interface PostPageProps {
+  params: {
+    slug: string;
+  };
+}
+
 // 为静态生成页面提供路径参数
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<PostPageProps['params'][]> {
   const posts = getAllPostMetas();
   return posts.map((post) => ({
     slug: post.slug,
@@ -20,7 +27,7 @@ export async function generateStaticParams() {
 }
 
 // 生成页面元数据
-export function generateMetadata({ params }: { params: { slug: string } }) {
+export function generateMetadata({ params }: PostPageProps) {
   const post = getPostBySlug(params.slug);
   
   if (!post) {
@@ -36,7 +43,7 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
   };
 }
 
-export default function PostPage({ params }: { params: { slug: string } }) {
+export default function PostPage({ params }: PostPageProps) {
   // 获取文章数据
   const post = getPostBySlug(params.slug);
   
