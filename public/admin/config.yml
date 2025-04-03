@@ -3,8 +3,11 @@ backend:
   repo: wowyuarm/WhisperWind-blog
   branch: main
 
+# Set locale to Simplified Chinese
+locale: 'zh_Hans'
+
 # 开启预览功能
-local_backend: true
+# local_backend: true # Disable local backend for testing uploads
 
 # 媒体和公共路径配置
 media_folder: "public/uploads" # 媒体文件存储的位置

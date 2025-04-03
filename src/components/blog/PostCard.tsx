@@ -5,26 +5,27 @@ import { Button } from '../ui/button'
 import { formatDate } from '@/lib/utils'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../ui/card'
 import Image from 'next/image'
+import { type PostMeta } from '@/lib/content'
 
 interface PostCardProps {
   title: string
   slug: string
-  excerpt: string
-  date: string
+  excerpt?: string
+  publishDate: string
   tags?: string[]
-  coverImage?: string
+  featuredImage?: string
 }
 
-export function PostCard({ title, slug, excerpt, date, tags = [], coverImage }: PostCardProps) {
-  const formattedDate = formatDate(date)
+export function PostCard({ title, slug, excerpt, publishDate, tags = [], featuredImage }: PostCardProps) {
+  const formattedDate = formatDate(publishDate)
 
   return (
     <article className="group h-full">
       <Card className="h-full bg-warm-paper border-secondary/20 shadow-ghibli transition-all duration-300 group-hover:shadow-lg group-hover:-translate-y-1 overflow-hidden">
-        {coverImage && (
+        {featuredImage && (
           <div className="w-full h-40 overflow-hidden rounded-t-xl relative">
             <Image 
-              src={coverImage} 
+              src={featuredImage} 
               alt={title}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

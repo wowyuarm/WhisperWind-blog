@@ -93,9 +93,9 @@ export default function TagPage({ tag, taggedPosts }: InferGetStaticPropsType<ty
               title={post.title}
               slug={post.slug}
               excerpt={post.excerpt || ''}
-              date={post.publishDate}
+              publishDate={post.publishDate}
               tags={post.tags}
-              coverImage={post.featuredImage}
+              featuredImage={post.featuredImage}
             />
           ))}
         </div>

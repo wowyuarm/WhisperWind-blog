@@ -87,7 +87,7 @@ export function Footer({ config }: FooterProps) { // config can be undefined
               <Link href="/links" className="hover:text-primary transition-colors duration-300">
                 友链
               </Link>
-              <Link href="/admin" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors duration-300">
+              <Link href="http://localhost:3000/admin/index.html" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors duration-300">
                 管理
               </Link>
             </div>

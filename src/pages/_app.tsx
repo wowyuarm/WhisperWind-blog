@@ -2,6 +2,7 @@ import type { AppProps } from 'next/app';
 import { Layout } from '@/components/layout/Layout'; // 确认 Layout 路径正确
 import { MotionConfig } from 'framer-motion';
 import '@/styles/globals.css'; // 使用新的CSS路径
+import '@/styles/ghibli-font.css'; // Load the local font CSS
 // import { getSiteConfig } from '@/lib/config'; // Removed unused import
 // import { SiteConfig } from '@/lib/config'; // Removed unused type import
 // import { NextComponentType, NextPageContext } from 'next'; // Removed unused imports

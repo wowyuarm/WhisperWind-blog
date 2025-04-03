@@ -3,14 +3,43 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="robots" content="noindex" />
+    <!-- Security headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: 'unsafe-inline' 'unsafe-eval'; connect-src https: http://localhost:* ws://localhost:*;" />
     <title>WhisperWind Blog CMS</title>
-    <!-- Decap CMS script -->
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-    <!-- config.yml will be loaded automatically -->
+    
+    <!-- Ensure mount point is visible -->
+    <style>
+      #nc-root {
+        height: 100vh;
+        width: 100vw;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: white;
+      }
+    </style>
   </head>
   <body>
-    <!-- Mount point -->
-    <div id="cms"></div>
-    <!-- Removed the explicit initialization script -->
+    <!-- Mount point for the CMS -->
+    <div id="nc-root"></div>
+
+    <!-- Load CMS after DOM is ready -->
+    <script>
+      window.onload = function() {
+        // Create script element
+        var script = document.createElement('script');
+        script.src = 'https://unpkg.com/netlify-cms@^2.10.192/dist/netlify-cms.js';
+        script.onload = function() {
+          console.log('Netlify CMS script loaded');
+          // CMS will auto-initialize
+        };
+        script.onerror = function(error) {
+          console.error('Error loading Netlify CMS:', error);
+        };
+        document.body.appendChild(script);
+      };
+    </script>
   </body>
 </html> 

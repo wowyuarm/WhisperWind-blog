@@ -19,6 +19,9 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['GhibliFontPro', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+      },
       boxShadow: {
         'ghibli': '0 8px 15px -3px rgba(210, 180, 140, 0.12), 0 4px 8px -4px rgba(92, 82, 74, 0.06)',
         'ghibli-lg': '0 12px 20px -3px rgba(210, 180, 140, 0.15), 0 8px 12px -6px rgba(92, 82, 74, 0.08)',

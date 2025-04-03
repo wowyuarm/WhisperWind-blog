@@ -96,9 +96,9 @@ export default function Home({ recentPosts }: InferGetStaticPropsType<typeof get
                       title={post.title}
                       slug={post.slug}
                       excerpt={post.excerpt || ''}
-                      date={post.publishDate}
+                      publishDate={post.publishDate}
                       tags={post.tags}
-                      coverImage={post.featuredImage}
+                      featuredImage={post.featuredImage}
                     />
                   </div>
                 </div>
