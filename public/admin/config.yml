@@ -4,22 +4,25 @@ backend:
   branch: main
   base_url: https://api.netlify.com
   auth_endpoint: auth
+  commit_messages:
+    create: "创建 {{collection}} '{{slug}}'"
+    update: "更新 {{collection}} '{{slug}}'"
+    delete: "删除 {{collection}} '{{slug}}'"
+    uploadMedia: "上传媒体 {{path}}"
+    deleteMedia: "删除媒体 {{path}}"
 
 # Set locale to Simplified Chinese
 locale: 'zh_Hans'
 
-# 开启预览功能
-local_backend: true
+# GitHub Pages环境配置
+publish_mode: editorial_workflow
+site_url: https://wowyuarm.github.io/WhisperWind-blog/
+display_url: https://wowyuarm.github.io/WhisperWind-blog/
+logo_url: https://wowyuarm.github.io/WhisperWind-blog/public/images/logo.png
 
 # 媒体和公共路径配置
-media_folder: "public/uploads" # 媒体文件存储的位置
+media_folder: "public/uploads" # 媒体文件存储的位置 (不使用前导斜杠，避免路径问题)
 public_folder: "/uploads" # 访问媒体文件的公共URL路径
-
-# 发布模式 (编辑保存后直接发布)
-publish_mode: editorial_workflow
-
-# 网站URL (用于表单提交)
-site_url: https://wowyuarm.github.io/WhisperWind-blog/
 
 # 内容集合
 collections:

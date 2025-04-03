@@ -13,9 +13,9 @@ export function Footer({ config }: FooterProps) { // config can be undefined
   const getAdminUrl = () => {
     // 检查是否在Github Pages环境下（通过检查当前URL是否包含仓库名）
     if (typeof window !== 'undefined' && window.location.hostname.includes('github.io')) {
-      return "/WhisperWind-blog/admin";
+      return "/WhisperWind-blog/admin/";
     }
-    return "/admin";
+    return "/admin/index.html";
   };
 
   // Handle undefined config gracefully

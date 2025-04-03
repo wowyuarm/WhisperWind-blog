@@ -5,41 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="robots" content="noindex" />
-    <!-- Security headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: 'unsafe-inline' 'unsafe-eval'; connect-src https: http://localhost:* ws://localhost:*;" />
+    
+    <!-- 允许更宽松的CSP，解决媒体上传问题 -->
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-eval' 'unsafe-inline'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';" />
+    
     <title>WhisperWind Blog CMS</title>
     
-    <!-- Ensure mount point is visible -->
+    <!-- 更简洁的CSS -->
     <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
       #nc-root {
-        height: 100vh;
-        width: 100vw;
-        position: fixed;
-        top: 0;
-        left: 0;
-        background: white;
+        height: 100%;
       }
     </style>
+    
+    <!-- GitHub Pages环境处理 -->
+    <script>
+      // 处理GitHub Pages环境中的路径问题
+      if (window.location.hostname.includes('github.io')) {
+        // 定义全局变量，供CMS使用
+        window.CMS_PATH_PREFIX = '/WhisperWind-blog';
+        
+        // 确保正确的路径
+        if (!window.location.pathname.includes('/WhisperWind-blog/admin/')) {
+          window.location.href = '/WhisperWind-blog/admin/';
+        }
+      }
+    </script>
   </head>
   <body>
-    <!-- Mount point for the CMS -->
+    <!-- CMS挂载点 -->
     <div id="nc-root"></div>
-
-    <!-- Load CMS after DOM is ready -->
-    <script>
-      window.onload = function() {
-        // Create script element
-        var script = document.createElement('script');
-        script.src = 'https://unpkg.com/netlify-cms@^2.10.192/dist/netlify-cms.js';
-        script.onload = function() {
-          console.log('Netlify CMS script loaded');
-          // CMS will auto-initialize
-        };
-        script.onerror = function(error) {
-          console.error('Error loading Netlify CMS:', error);
-        };
-        document.body.appendChild(script);
-      };
-    </script>
+    
+    <!-- 加载官方稳定版本的CMS -->
+    <script src="https://unpkg.com/decap-cms@3.0.12/dist/decap-cms.js"></script>
   </body>
 </html> 
