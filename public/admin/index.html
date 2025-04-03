@@ -4,27 +4,13 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>WhisperWind Blog CMS</title>
-    <!-- Removed Netlify Identity Widget script -->
+    <!-- Decap CMS script -->
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-    <!-- Removed the initialization script from head -->
+    <!-- config.yml will be loaded automatically -->
   </head>
   <body>
-    <!-- Use a different ID for the mount point -->
+    <!-- Mount point -->
     <div id="cms"></div>
-
-    <!-- Moved the initialization script here -->
-    <script>
-      // Wait for the DOM to be fully loaded before initializing CMS
-      // (Though moving it here might make DOMContentLoaded listener redundant,
-      // it doesn't hurt to keep it for robustness)
-      document.addEventListener('DOMContentLoaded', function() {
-        // Check if CMS object is available before calling init
-        if (window.CMS) {
-            window.CMS.init();
-        } else {
-            console.error('Decap CMS object (CMS) not found. Initialization failed.');
-        }
-      });
-    </script>
+    <!-- Removed the explicit initialization script -->
   </body>
 </html> 
