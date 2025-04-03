@@ -6,17 +6,25 @@
     <title>WhisperWind Blog CMS</title>
     <!-- Removed Netlify Identity Widget script -->
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-    <!-- Include the configuration -->
-    <script>
-      // Wait for the DOM to be fully loaded before initializing CMS
-      document.addEventListener('DOMContentLoaded', function() {
-        // Initialize CMS. It will automatically look for config.yml in the same directory.
-        CMS.init(); 
-      });
-    </script>
+    <!-- Removed the initialization script from head -->
   </head>
   <body>
     <!-- Decap CMS mounts its UI in this div -->
     <div id="nc-root"></div>
+
+    <!-- Moved the initialization script here -->
+    <script>
+      // Wait for the DOM to be fully loaded before initializing CMS
+      // (Though moving it here might make DOMContentLoaded listener redundant,
+      // it doesn't hurt to keep it for robustness)
+      document.addEventListener('DOMContentLoaded', function() {
+        // Check if CMS object is available before calling init
+        if (window.CMS) {
+            window.CMS.init();
+        } else {
+            console.error('Decap CMS object (CMS) not found. Initialization failed.');
+        }
+      });
+    </script>
   </body>
 </html> 
