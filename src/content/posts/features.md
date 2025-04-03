@@ -1,10 +1,12 @@
 ---
-title: "WhisperWind Blog 的强大功能"
-publishDate: "2024-04-02"
-slug: "features"
-tags: ["功能", "教程"]
-featuredImage: "/images/features.jpg"
-excerpt: "探索 WhisperWind Blog 提供的强大功能，包括内容管理、响应式设计、SEO优化等。"
+title: WhisperWind Blog 的强大功能
+publishDate: 2024-04-02
+slug: features
+tags:
+  - 功能
+  - 教程
+featuredImage: ""
+excerpt: 探索 WhisperWind Blog 提供的强大功能，包括内容管理、响应式设计、SEO优化等。
 ---
 
 # WhisperWind Blog 的强大功能
