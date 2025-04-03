@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { type SiteConfig } from "@/lib/config";
-import { useRouter } from "next/router";
 
 // Define props for Footer, making config optional
 interface FooterProps {
@@ -9,7 +8,6 @@ interface FooterProps {
 
 export function Footer({ config }: FooterProps) { // config can be undefined
   const currentYear = new Date().getFullYear();
-  const router = useRouter();
   
   // 获取admin链接，处理GitHub Pages部署情况
   const getAdminUrl = () => {
