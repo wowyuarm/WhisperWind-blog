@@ -2,12 +2,14 @@ backend:
   name: github
   repo: wowyuarm/WhisperWind-blog
   branch: main
+  base_url: https://api.netlify.com
+  auth_endpoint: auth
 
 # Set locale to Simplified Chinese
 locale: 'zh_Hans'
 
 # 开启预览功能
-# local_backend: true # Disable local backend for testing uploads
+local_backend: true
 
 # 媒体和公共路径配置
 media_folder: "public/uploads" # 媒体文件存储的位置

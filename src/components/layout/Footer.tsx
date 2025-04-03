@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { type SiteConfig } from "@/lib/config";
+import { useRouter } from "next/router";
 
 // Define props for Footer, making config optional
 interface FooterProps {
@@ -8,6 +9,16 @@ interface FooterProps {
 
 export function Footer({ config }: FooterProps) { // config can be undefined
   const currentYear = new Date().getFullYear();
+  const router = useRouter();
+  
+  // 获取admin链接，处理GitHub Pages部署情况
+  const getAdminUrl = () => {
+    // 检查是否在Github Pages环境下（通过检查当前URL是否包含仓库名）
+    if (typeof window !== 'undefined' && window.location.hostname.includes('github.io')) {
+      return "/WhisperWind-blog/admin";
+    }
+    return "/admin";
+  };
 
   // Handle undefined config gracefully
   if (!config) {
@@ -87,7 +98,7 @@ export function Footer({ config }: FooterProps) { // config can be undefined
               <Link href="/links" className="hover:text-primary transition-colors duration-300">
                 友链
               </Link>
-              <Link href="http://localhost:3000/admin/index.html" target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors duration-300">
+              <Link href={getAdminUrl()} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors duration-300">
                 管理
               </Link>
             </div>
