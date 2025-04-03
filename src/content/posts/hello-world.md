@@ -1,10 +1,12 @@
 ---
-title: "欢迎使用 WhisperWind Blog"
-publishDate: "2024-04-01"
-slug: "hello-world"
-tags: ["入门", "指南"]
-featuredImage: "/images/hello-world.jpg"
-excerpt: "欢迎来到 WhisperWind Blog - 一个基于Next.js的简洁优雅博客模板，具有吉卜力风格的蓝色主题设计。"
+title: 欢迎使用 WhisperWind Blog
+publishDate: 2024-03-01
+slug: hello-world
+tags:
+  - 入门
+  - 指南
+featuredImage: ""
+excerpt: 欢迎来到 WhisperWind Blog - 一个基于Next.js的简洁优雅博客模板，具有吉卜力风格的蓝色主题设计。
 ---
 
 # 欢迎使用 WhisperWind Blog
