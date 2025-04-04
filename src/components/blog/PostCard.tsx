@@ -5,7 +5,6 @@ import { Button } from '../ui/button'
 import { formatDate } from '@/lib/utils'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../ui/card'
 import Image from 'next/image'
-import { type PostMeta } from '@/lib/content'
 
 interface PostCardProps {
   title: string
