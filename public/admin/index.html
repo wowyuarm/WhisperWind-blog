@@ -33,19 +33,14 @@
 
     <!-- 初始化CMS -->
     <script>
-      // 配置CMS
-      window.CMS_MANUAL_INIT = true;
+      // 设置GitHub Pages路径前缀
+      if (window.location.hostname === 'wowyuarm.github.io') {
+        window.CMS_PATH_PREFIX = '/WhisperWind-blog';
+      }
 
-      // 等待CMS加载完成
-      window.addEventListener('load', function() {
-        // 设置GitHub Pages路径前缀
-        const isGitHubPages = window.location.hostname === 'wowyuarm.github.io';
-        if (isGitHubPages) {
-          window.CMS_PATH_PREFIX = '/WhisperWind-blog';
-        }
-
-        // 初始化CMS配置
-        const config = {
+      // 初始化CMS
+      try {
+        CMS.init({
           backend: {
             name: 'github',
             repo: 'wowyuarm/WhisperWind-blog',
@@ -58,22 +53,17 @@
           media_folder: 'public/uploads',
           public_folder: '/uploads',
           locale: 'zh_Hans'
-        };
+        });
+      } catch (error) {
+        console.error('CMS initialization error:', error);
+      }
 
-        // 初始化CMS
-        try {
-          CMS.init({ config });
-        } catch (error) {
-          console.error('CMS initialization error:', error);
-        }
-
-        // 处理OAuth回调
-        if (window.location.hash && window.location.hash.startsWith('#access_token=')) {
-          const token = window.location.hash.match(/access_token=([\w/\-]+)/)[1];
-          localStorage.setItem('netlify-cms-user', JSON.stringify({ token }));
-          window.location.href = window.location.pathname;
-        }
-      });
+      // 处理OAuth回调
+      if (window.location.hash && window.location.hash.startsWith('#access_token=')) {
+        const token = window.location.hash.match(/access_token=([\w/\-]+)/)[1];
+        localStorage.setItem('netlify-cms-user', JSON.stringify({ token }));
+        window.location.href = window.location.pathname;
+      }
     </script>
   </body>
 </html> 
