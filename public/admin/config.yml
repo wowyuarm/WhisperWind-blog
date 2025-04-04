@@ -4,6 +4,7 @@ backend:
   branch: main
   auth_type: implicit
   app_id: 85bb9693d96ed2c4abd9
+  auth_endpoint: https://github.com/login/oauth/authorize
 
 # Set locale to Simplified Chinese
 locale: 'zh_Hans'

@@ -40,17 +40,38 @@
 
     <!-- 初始化CMS -->
     <script>
+      // 配置CMS
+      window.CMS_MANUAL_INIT = true;
+
       // 等待CMS加载完成
       window.addEventListener('load', function() {
-        // 检查是否在GitHub Pages环境
+        // 设置GitHub Pages路径前缀
         if (window.location.hostname === 'wowyuarm.github.io') {
-          console.log('Running in GitHub Pages environment');
-          
-          // 处理OAuth回调
-          if (window.location.hash && window.location.hash.startsWith('#access_token=')) {
-            console.log('Processing OAuth callback');
-          }
+          window.CMS_PATH_PREFIX = '/WhisperWind-blog';
         }
+
+        // 初始化CMS
+        CMS.init({
+          config: {
+            backend: {
+              name: 'github',
+              repo: 'wowyuarm/WhisperWind-blog',
+              branch: 'main',
+              auth_type: 'implicit',
+              app_id: '85bb9693d96ed2c4abd9',
+              auth_endpoint: 'https://github.com/login/oauth/authorize'
+            }
+          }
+        });
+
+        // 监听认证消息
+        window.addEventListener('message', function(event) {
+          if (event.data.type === 'oauth' && event.data.provider === 'github') {
+            console.log('Received OAuth token');
+            localStorage.setItem('github-token', event.data.token);
+            window.location.reload();
+          }
+        });
       });
     </script>
   </body>
