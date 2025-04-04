@@ -2,8 +2,11 @@ backend:
   name: github
   repo: wowyuarm/WhisperWind-blog # 设置为你的GitHub仓库
   branch: main # 默认分支
-  base_url: https://api.netlify.com # 用于OAuth身份验证
-  auth_endpoint: auth # 用于OAuth身份验证
+  # 删除不正确的netlify认证配置
+  # base_url: https://api.netlify.com
+  # auth_endpoint: auth 
+  # 使用我们自己创建的回调路径
+  auth_endpoint: callback
   open_authoring: true # 允许fork-based的贡献方式
 
 # 媒体文件存储位置

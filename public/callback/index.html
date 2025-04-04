@@ -45,7 +45,6 @@
       to { transform: rotate(360deg); }
     }
   </style>
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
   <div class="container">
@@ -55,20 +54,32 @@
   </div>
 
   <script>
-    // 此脚本将处理OAuth重定向并跳转回admin页面
+    // 此脚本处理GitHub OAuth回调并将令牌发送到CMS
     (function() {
-      // 处理URL中的授权令牌
-      if (window.location.hash) {
-        // 获取GitHub Pages的正确路径
+      // 提取URL中的代码参数
+      const code = new URLSearchParams(window.location.search).get('code');
+      const state = new URLSearchParams(window.location.search).get('state');
+      
+      if (code && state) {
+        console.log("接收到GitHub授权码，准备重定向到管理界面");
+        
+        // 获取正确的base路径
         const basePath = window.location.hostname.includes('github.io') 
           ? '/WhisperWind-blog' 
           : '';
-        const adminPath = `${basePath}/admin/`;
+          
+        // 构建重定向URL，包含授权参数
+        const redirectUrl = `${basePath}/admin/#github-${state}-${code}`;
         
-        // 短暂延迟后重定向到admin页面
-        setTimeout(function() {
-          window.location.href = adminPath;
+        // 短暂延迟后重定向
+        setTimeout(() => {
+          console.log("重定向到:", redirectUrl);
+          window.location.href = redirectUrl;
         }, 1500);
+      } else {
+        console.error("未能获取GitHub授权码");
+        document.querySelector('p').innerHTML = 
+          "授权过程中出现错误。<br>请返回并重试，或联系管理员。";
       }
     })();
   </script>

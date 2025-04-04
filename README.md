@@ -49,6 +49,7 @@ backend:
   name: github
   repo: your-username/your-repo-name # 修改为你的GitHub用户名和仓库名
   branch: main # 你的主分支名称（默认为main）
+  auth_endpoint: callback
 ```
 
 #### 2. 设置GitHub OAuth应用
@@ -59,25 +60,22 @@ backend:
 2. 填写以下信息：
    - **Application name**: 你的博客名称（例如：My WhisperWind Blog）
    - **Homepage URL**: 你部署后的博客URL（例如：`https://your-username.github.io/your-repo-name`）
-   - **Authorization callback URL**: **重要！**这必须是你部署后的域名加上`/callback`（例如：`https://your-username.github.io/your-repo-name/callback`）
+   - **Authorization callback URL**: **重要！**这必须是你部署后的域名加上`/callback/`（例如：`https://your-username.github.io/your-repo-name/callback/`）
 3. 点击**Register application**
 4. 创建后，你会得到**Client ID**。点击**Generate a new client secret**获取**Client Secret**
 
-#### 3. 选择认证方式 - Netlify认证服务（推荐）
+#### 3. 修改CMS配置
 
-最简单的方法是使用Netlify提供的认证服务（你的网站仍然使用GitHub Pages托管）：
+1. 修改`public/admin/config.yml`文件中的repository配置：
+   ```yml
+   backend:
+     name: github
+     repo: your-username/your-repo-name # 改为你的GitHub用户名和仓库名
+     branch: main # 你的主分支名称
+     auth_endpoint: callback
+   ```
 
-1. 注册[Netlify](https://app.netlify.com/)账号（免费）
-2. 创建一个新站点，从你的GitHub仓库导入
-3. 转到站点的**Settings** > **Identity** > 点击**Enable Identity**
-4. 向下滚动到**Registration**，设置为**Invite only**
-5. 转到**Services** > **Git Gateway** > 点击**Enable Git Gateway**
-6. 在**Settings** > **Identity** > **External providers**下：
-   - 点击**Add provider**，选择**GitHub**
-   - 输入前面步骤中获取的**Client ID**和**Client Secret**
-   - 点击**Install provider**
-
-完成上述步骤后，Netlify将为你提供GitHub认证服务，而不影响你的GitHub Pages托管。
+2. 不需要额外的Netlify设置，直接使用GitHub OAuth认证即可访问CMS。
 
 #### 4. 访问CMS管理界面
 
