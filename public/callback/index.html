@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhisperWind Blog - 正在授权...</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f9f5e7;
+      color: #4a4a4a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    .container {
+      max-width: 500px;
+      padding: 30px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 8px;
+      box-shadow: 0 8px 15px -3px rgba(210, 180, 140, 0.12), 0 4px 8px -4px rgba(92, 82, 74, 0.06);
+    }
+    h1 {
+      color: #81896c;
+      margin-bottom: 20px;
+    }
+    p {
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .loading {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      border: 3px solid rgba(129, 137, 108, 0.2);
+      border-radius: 50%;
+      border-top-color: #81896c;
+      animation: spin 1s ease-in-out infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>正在完成授权...</h1>
+    <div class="loading"></div>
+    <p>请稍等，我们正在处理你的GitHub授权请求。<br>完成后将自动跳转到管理界面。</p>
+  </div>
+
+  <script>
+    // 此脚本将处理OAuth重定向并跳转回admin页面
+    (function() {
+      // 处理URL中的授权令牌
+      if (window.location.hash) {
+        // 获取GitHub Pages的正确路径
+        const basePath = window.location.hostname.includes('github.io') 
+          ? '/WhisperWind-blog' 
+          : '';
+        const adminPath = `${basePath}/admin/`;
+        
+        // 短暂延迟后重定向到admin页面
+        setTimeout(function() {
+          window.location.href = adminPath;
+        }, 1500);
+      }
+    })();
+  </script>
+</body>
+</html> 

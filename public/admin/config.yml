@@ -1,86 +1,81 @@
 backend:
   name: github
-  repo: wowyuarm/WhisperWind-blog
-  branch: main
-  site_domain: wowyuarm.github.io
-  base_url: https://api.github.com
+  repo: wowyuarm/WhisperWind-blog # 设置为你的GitHub仓库
+  branch: main # 默认分支
+  base_url: https://api.netlify.com # 用于OAuth身份验证
+  auth_endpoint: auth # 用于OAuth身份验证
+  open_authoring: true # 允许fork-based的贡献方式
 
-# Set locale to Simplified Chinese
-locale: 'zh_Hans'
-
-# GitHub Pages环境配置
-publish_mode: editorial_workflow
-site_url: https://wowyuarm.github.io/WhisperWind-blog/
-display_url: https://wowyuarm.github.io/WhisperWind-blog/
-logo_url: https://wowyuarm.github.io/WhisperWind-blog/images/logo.png
-
-# 媒体和公共路径配置
+# 媒体文件存储位置
 media_folder: public/uploads
 public_folder: /uploads
 
-# 内容集合
+# 站点URL，用于预览
+site_url: https://wowyuarm.github.io/WhisperWind-blog
+display_url: https://wowyuarm.github.io/WhisperWind-blog
+
+# 发布模式：编辑工作流(editorial_workflow)或简单模式(simple)
+publish_mode: editorial_workflow
+
+# 本地化
+locale: 'zh_Hans'
+
+# 内容结构定义
 collections:
   # 博客文章集合
-  - name: "blog"
+  - name: "posts"
     label: "博客文章"
-    folder: "src/content/blog"
+    folder: "src/content/posts"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    slug: "{{slug}}"
     fields:
       - { label: "标题", name: "title", widget: "string" }
-      - { label: "发布日期", name: "publishDate", widget: "datetime" }
-      - { label: "描述", name: "description", widget: "text" }
+      - { label: "发布日期", name: "publishDate", widget: "datetime", format: "YYYY-MM-DD HH:mm:ss" }
+      - { label: "摘要", name: "excerpt", widget: "text", required: false }
       - { label: "特色图片", name: "featuredImage", widget: "image", required: false }
       - { label: "标签", name: "tags", widget: "list", required: false }
-      - { label: "正文", name: "body", widget: "markdown" }
+      - { label: "内容", name: "body", widget: "markdown" }
 
-  # 单页面集合
+  # 静态页面集合
   - name: "pages"
-    label: "页面"
+    label: "静态页面"
     folder: "src/content/pages"
     create: true
     slug: "{{slug}}"
     fields:
       - { label: "标题", name: "title", widget: "string" }
-      - { label: "URL路径", name: "permalink", widget: "string" }
       - { label: "内容", name: "body", widget: "markdown" }
 
-  # 友链数据文件 (Corrected to use 'files')
-  - name: "links"
-    label: "友情链接"
-    files: # Use 'files' list
-      - label: "友情链接列表"
-        name: "friend_links" # Unique name for this file definition
-        file: "src/content/links.json" # The actual file path
+  # 站点配置集合
+  - name: "config"
+    label: "网站配置"
+    files:
+      - label: "基本配置"
+        name: "config"
+        file: "src/content/config.json"
+        fields:
+          - { label: "网站标题", name: "title", widget: "string" }
+          - { label: "网站描述", name: "description", widget: "text" }
+          - { label: "作者", name: "author", widget: "string" }
+          - { label: "Logo", name: "logo", widget: "image", required: false }
+          - label: "社交媒体"
+            name: "social"
+            widget: "object"
+            fields:
+              - { label: "GitHub", name: "github", widget: "string", required: false }
+              - { label: "Twitter", name: "twitter", widget: "string", required: false }
+              - { label: "微博", name: "weibo", widget: "string", required: false }
+              - { label: "知乎", name: "zhihu", widget: "string", required: false }
+
+      - label: "友情链接"
+        name: "links"
+        file: "src/content/links.json"
         fields:
           - label: "链接"
             name: "links"
             widget: "list"
             fields:
               - { label: "名称", name: "name", widget: "string" }
-              - { label: "URL", name: "url", widget: "string" }
-              - { label: "描述", name: "description", widget: "string", required: false }
-              - { label: "图标", name: "icon", widget: "image", required: false }
-
-  # 网站配置 (Corrected to use 'files')
-  - name: "config"
-    label: "网站配置"
-    files: # Use 'files' list
-      - label: "基本配置"
-        name: "site_config" # Unique name for this file definition
-        file: "src/content/config.json" # The actual file path
-        fields:
-          - { label: "网站标题", name: "title", widget: "string" }
-          - { label: "网站描述", name: "description", widget: "text" }
-          - { label: "网站作者", name: "author", widget: "string" }
-          - { label: "网站Logo", name: "logo", widget: "image", required: false }
-          - label: "社交链接"
-            name: "social"
-            widget: "object"
-            fields:
-              [
-                { label: "GitHub", name: "github", widget: "string", required: false },
-                { label: "Twitter", name: "twitter", widget: "string", required: false },
-                { label: "微博", name: "weibo", widget: "string", required: false },
-                { label: "知乎", name: "zhihu", widget: "string", required: false }
-              ] 
+              - { label: "网址", name: "url", widget: "string" }
+              - { label: "描述", name: "description", widget: "text", required: false }
+              - { label: "图标", name: "icon", widget: "string", required: false } 

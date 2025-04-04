@@ -17,6 +17,7 @@
     "framer-motion": "^12.6.3",
     "gray-matter": "^4.0.3",
     "lucide-react": "^0.486.0",
+    "netlify-identity-widget": "^1.9.2",
     "next": "15.2.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
