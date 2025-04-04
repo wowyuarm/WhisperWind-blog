@@ -2,14 +2,8 @@ backend:
   name: github
   repo: wowyuarm/WhisperWind-blog
   branch: main
-  base_url: https://api.netlify.com
-  auth_endpoint: auth
-  commit_messages:
-    create: "创建 {{collection}} '{{slug}}'"
-    update: "更新 {{collection}} '{{slug}}'"
-    delete: "删除 {{collection}} '{{slug}}'"
-    uploadMedia: "上传媒体 {{path}}"
-    deleteMedia: "删除媒体 {{path}}"
+  auth_type: implicit # 使用隐式OAuth流程
+  app_id: 85bb9693d96ed2c4abd9 # 填入您的GitHub OAuth应用的Client ID
 
 # Set locale to Simplified Chinese
 locale: 'zh_Hans'
@@ -18,10 +12,10 @@ locale: 'zh_Hans'
 publish_mode: editorial_workflow
 site_url: https://wowyuarm.github.io/WhisperWind-blog/
 display_url: https://wowyuarm.github.io/WhisperWind-blog/
-logo_url: https://wowyuarm.github.io/WhisperWind-blog/public/images/logo.png
+logo_url: https://wowyuarm.github.io/WhisperWind-blog/images/logo.png
 
 # 媒体和公共路径配置
-media_folder: "public/uploads" # 媒体文件存储的位置 (不使用前导斜杠，避免路径问题)
+media_folder: "public/uploads" # 媒体文件存储的位置
 public_folder: "/uploads" # 访问媒体文件的公共URL路径
 
 # 内容集合

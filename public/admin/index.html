@@ -6,15 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="robots" content="noindex" />
     
-    <!-- 允许更宽松的CSP，解决媒体上传问题 -->
+    <!-- 安全设置 -->
     <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-eval' 'unsafe-inline'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';" />
     
     <title>WhisperWind Blog CMS</title>
     
-    <!-- 更简洁的CSS -->
+    <!-- 样式 -->
     <style>
-      html,
-      body {
+      html, body {
         margin: 0;
         padding: 0;
         height: 100%;
@@ -23,26 +22,12 @@
         height: 100%;
       }
     </style>
-    
-    <!-- GitHub Pages环境处理 -->
-    <script>
-      // 处理GitHub Pages环境中的路径问题
-      if (window.location.hostname.includes('github.io')) {
-        // 定义全局变量，供CMS使用
-        window.CMS_PATH_PREFIX = '/WhisperWind-blog';
-        
-        // 确保正确的路径
-        if (!window.location.pathname.includes('/WhisperWind-blog/admin/')) {
-          window.location.href = '/WhisperWind-blog/admin/';
-        }
-      }
-    </script>
   </head>
   <body>
     <!-- CMS挂载点 -->
     <div id="nc-root"></div>
     
-    <!-- 加载官方稳定版本的CMS -->
+    <!-- 加载CMS -->
     <script src="https://unpkg.com/decap-cms@3.0.12/dist/decap-cms.js"></script>
   </body>
 </html> 
