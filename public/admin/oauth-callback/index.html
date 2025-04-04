@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head>
+  <title>GitHub Authentication Complete</title>
+</head>
+<body>
+  <script>
+    const params = new URLSearchParams(document.location.search);
+    const token = params.get('access_token');
+    
+    if (window.opener) {
+      window.opener.postMessage(
+        'authorization:github:success:' + JSON.stringify({
+          provider: 'github',
+          token: token
+        }),
+        window.location.origin
+      );
+      window.close();
+    }
+  </script>
+  <p>认证成功！此窗口将自动关闭。</p>
+</body>
+</html> 

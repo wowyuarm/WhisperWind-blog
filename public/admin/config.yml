@@ -2,8 +2,8 @@ backend:
   name: github
   repo: wowyuarm/WhisperWind-blog
   branch: main
-  client_id: 85bb9693d96ed2c4abd9
-  auth_type: implicit
+  site_domain: wowyuarm.github.io
+  base_url: https://api.github.com
 
 # Set locale to Simplified Chinese
 locale: 'zh_Hans'
