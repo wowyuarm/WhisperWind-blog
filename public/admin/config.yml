@@ -2,8 +2,8 @@ backend:
   name: github
   repo: wowyuarm/WhisperWind-blog
   branch: main
-  auth_type: implicit # 使用隐式OAuth流程
-  app_id: 85bb9693d96ed2c4abd9 # 填入您的GitHub OAuth应用的Client ID
+  auth_type: implicit
+  app_id: 85bb9693d96ed2c4abd9
 
 # Set locale to Simplified Chinese
 locale: 'zh_Hans'
@@ -15,24 +15,23 @@ display_url: https://wowyuarm.github.io/WhisperWind-blog/
 logo_url: https://wowyuarm.github.io/WhisperWind-blog/images/logo.png
 
 # 媒体和公共路径配置
-media_folder: "public/uploads" # 媒体文件存储的位置
-public_folder: "/uploads" # 访问媒体文件的公共URL路径
+media_folder: public/uploads
+public_folder: /uploads
 
 # 内容集合
 collections:
   # 博客文章集合
   - name: "blog"
     label: "博客文章"
-    folder: "src/content/posts"
+    folder: "src/content/blog"
     create: true
-    slug: "{{slug}}"
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
     fields:
       - { label: "标题", name: "title", widget: "string" }
-      - { label: "发布日期", name: "publishDate", widget: "datetime", format: "YYYY-MM-DD" }
-      - { label: "URL路径", name: "slug", widget: "string" }
-      - { label: "标签", name: "tags", widget: "list", required: false }
+      - { label: "发布日期", name: "publishDate", widget: "datetime" }
+      - { label: "描述", name: "description", widget: "text" }
       - { label: "特色图片", name: "featuredImage", widget: "image", required: false }
-      - { label: "摘要", name: "excerpt", widget: "text", required: false }
+      - { label: "标签", name: "tags", widget: "list", required: false }
       - { label: "正文", name: "body", widget: "markdown" }
 
   # 单页面集合

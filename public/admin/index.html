@@ -7,27 +7,51 @@
     <meta name="robots" content="noindex" />
     
     <!-- 安全设置 -->
-    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-eval' 'unsafe-inline'; connect-src * 'unsafe-inline'; img-src * data: blob: 'unsafe-inline'; frame-src *; style-src * 'unsafe-inline';" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https: 'unsafe-inline' 'unsafe-eval' blob: data:;">
     
     <title>WhisperWind Blog CMS</title>
     
     <!-- 样式 -->
     <style>
-      html, body {
+      /* 自定义样式 */
+      body {
         margin: 0;
         padding: 0;
-        height: 100%;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       }
       #nc-root {
-        height: 100%;
+        height: 100vh;
       }
     </style>
+
+    <!-- 处理GitHub Pages路径 -->
+    <script>
+      if (window.location.hostname === 'wowyuarm.github.io') {
+        window.CMS_PATH_PREFIX = '/WhisperWind-blog';
+      }
+    </script>
   </head>
   <body>
     <!-- CMS挂载点 -->
     <div id="nc-root"></div>
     
     <!-- 加载CMS -->
-    <script src="https://unpkg.com/decap-cms@3.0.12/dist/decap-cms.js"></script>
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+    <!-- 初始化CMS -->
+    <script>
+      // 等待CMS加载完成
+      window.addEventListener('load', function() {
+        // 检查是否在GitHub Pages环境
+        if (window.location.hostname === 'wowyuarm.github.io') {
+          console.log('Running in GitHub Pages environment');
+          
+          // 处理OAuth回调
+          if (window.location.hash && window.location.hash.startsWith('#access_token=')) {
+            console.log('Processing OAuth callback');
+          }
+        }
+      });
+    </script>
   </body>
 </html> 
