@@ -5,6 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WhisperWind Blog - 内容管理</title>
   
+  <!-- 在加载脚本前预先配置API URL -->
+  <script>
+    // 这是关键：在脚本加载前定义全局对象和API URL
+    window.netlifyIdentity = window.netlifyIdentity || {};
+    window.netlifyIdentity.api = {
+      apiURL: "https://tiny-pegasus-ea211b.netlify.app/.netlify/identity",
+      setCookie: false
+    };
+    
+    // 告诉浏览器这个域名可以使用Netlify Identity服务
+    document.cookie = "nf_jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    
+    console.log("预先配置Netlify Identity API URL:", window.netlifyIdentity.api.apiURL);
+  </script>
+  
   <!-- 必须先加载Netlify Identity Widget -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   
@@ -19,26 +34,21 @@
       console.log("配置Netlify Identity Widget...");
       
       if (window.netlifyIdentity) {
-        // 替换默认API端点
-        const originalInit = window.netlifyIdentity.init;
-        
         // 显示详细日志
         console.log("已加载Netlify Identity Widget");
-        console.log("正在替换默认API端点:", API_URL);
         
-        // 拦截和修改初始化过程
-        window.netlifyIdentity.init = function(options) {
-          options = options || {};
-          options.APIUrl = API_URL;
-          console.log("强制设置Netlify Identity API地址:", options.APIUrl);
-          return originalInit.call(this, options);
-        };
-        
-        // 立即初始化以应用设置
-        window.netlifyIdentity.init({
-          APIUrl: API_URL,
-          locale: 'zh'
-        });
+        // 再次确认API URL设置
+        if (window.netlifyIdentity.api && window.netlifyIdentity.api.apiURL) {
+          console.log("当前API URL:", window.netlifyIdentity.api.apiURL);
+        } else {
+          console.error("警告: API URL未设置，尝试重新设置");
+          
+          // 如果预配置失败，尝试通过初始化设置
+          window.netlifyIdentity.init({
+            APIUrl: API_URL,
+            locale: 'zh'
+          });
+        }
         
         // 设置事件监听器
         window.netlifyIdentity.on("init", user => {
