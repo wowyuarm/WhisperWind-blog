@@ -2,7 +2,7 @@ backend:
   name: git-gateway
   branch: main # 默认分支
   # 添加您的Netlify站点URL，这是必须的
-  site_domain: https://tiny-pegasus-ea211b.netlify.app/
+  site_domain: tiny-pegasus-ea211b.netlify.app
 
 # 媒体文件存储位置
 media_folder: public/uploads

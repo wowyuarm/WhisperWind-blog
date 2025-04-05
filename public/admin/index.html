@@ -4,8 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WhisperWind Blog - 内容管理</title>
-  <!-- 用于呈现带有内容的预览 -->
-  <link href="/index.css" rel="stylesheet" />
   <!-- 使用Netlify Identity Widget -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
@@ -15,20 +13,18 @@
   
   <!-- 添加初始化脚本 -->
   <script>
-    // 确保Netlify Identity知道你的Netlify站点URL
-    // 将下面的URL替换为你的Netlify站点URL
+    // Netlify Identity初始化
     if (window.netlifyIdentity) {
-      window.netlifyIdentity.on("init", user => {
-        if (!user) {
-          // 如果用户未登录，指定Netlify站点URL
-          // ⚠️重要：用户需要将这里的URL替换为自己的Netlify站点URL
-          window.netlifyIdentity.on("login", () => {
-            document.location.href = "/admin/";
-          });
-          window.netlifyIdentity.setConfig({
-            APIUrl: "https://tiny-pegasus-ea211b.netlify.app/.netlify/identity"
-          });
-        }
+      // 当用户登录时重定向到管理页面
+      window.netlifyIdentity.on("login", () => {
+        document.location.href = "/admin/";
+      });
+      
+      // 初始化身份小部件
+      window.netlifyIdentity.init({
+        // 指定API URL不能使用setConfig，应该在init时设置
+        APIUrl: "https://tiny-pegasus-ea211b.netlify.app/.netlify/identity",
+        locale: 'zh_Hans' // 可选：设置为中文
       });
     }
   </script>
