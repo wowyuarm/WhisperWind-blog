@@ -4,29 +4,73 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WhisperWind Blog - 内容管理</title>
-  <!-- 使用Netlify Identity Widget -->
+  
+  <!-- 必须在加载CMS前配置Netlify Identity -->
+  <script>
+    // 明确告知Netlify Identity要使用哪个Netlify实例
+    window.netlifyIdentityURLPrefix = "https://tiny-pegasus-ea211b.netlify.app/.netlify/identity";
+  </script>
+  
+  <!-- 加载Netlify Identity Widget -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
-  <!-- 加载Decap CMS -->
+  <!-- 先初始化Netlify Identity -->
+  <script>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on("init", function(user) {
+        console.log("Netlify Identity初始化完成");
+        if (!user) {
+          console.log("用户未登录，显示登录按钮");
+        } else {
+          console.log("用户已登录:", user.email);
+        }
+      });
+
+      window.netlifyIdentity.on("login", function() {
+        console.log("用户登录成功，重定向到管理界面");
+        if (document.location.pathname.endsWith('/admin/')) {
+          console.log("已在管理界面，无需重定向");
+        } else {
+          // 处理GitHub Pages子路径
+          const basePath = window.location.hostname.includes('github.io') 
+            ? '/WhisperWind-blog' 
+            : '';
+          document.location.href = `${basePath}/admin/`;
+        }
+      });
+
+      // 确保使用正确的Netlify实例
+      console.log("初始化Netlify Identity，设置API地址:", window.netlifyIdentityURLPrefix);
+    }
+  </script>
+
+  <!-- 最后加载Decap CMS -->
   <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   
-  <!-- 添加初始化脚本 -->
+  <!-- CMS配置 -->
   <script>
-    // Netlify Identity初始化
-    if (window.netlifyIdentity) {
-      // 当用户登录时重定向到管理页面
-      window.netlifyIdentity.on("login", () => {
-        document.location.href = "/admin/";
-      });
+    // 防止CMS自动初始化，我们需要手动控制
+    window.CMS_MANUAL_INIT = true;
+    
+    // 在页面加载完成后手动初始化CMS
+    window.addEventListener('load', function() {
+      console.log("页面加载完成，初始化CMS");
       
-      // 初始化身份小部件
-      window.netlifyIdentity.init({
-        // 指定API URL不能使用setConfig，应该在init时设置
-        APIUrl: "https://tiny-pegasus-ea211b.netlify.app/.netlify/identity",
-        locale: 'zh_Hans' // 可选：设置为中文
-      });
-    }
+      // 配置Netlify CMS
+      const config = {
+        backend: {
+          name: "git-gateway",
+          repo: "wowyuarm/WhisperWind-blog",
+          branch: "main",
+          site_domain: "tiny-pegasus-ea211b.netlify.app",
+          base_url: "https://tiny-pegasus-ea211b.netlify.app"
+        }
+      };
+      
+      // 初始化CMS
+      window.CMS.init({ config: config });
+    });
   </script>
 </body>
 </html> 

@@ -18,7 +18,7 @@ export function Layout({
   siteConfig
 }: LayoutProps) {
   return (
-    <div className="flex flex-col min-h-screen bg-warm-paper/90 bg-[url('/images/ghibli-bg.png')] bg-fixed bg-cover bg-center overflow-x-hidden">
+    <div className="flex flex-col min-h-screen bg-warm-paper/90 overflow-x-hidden">
       {showHeader && <Header />}
       <PageTransition>
         <main className="flex-1 w-full mx-auto container px-4 pb-12 relative">
