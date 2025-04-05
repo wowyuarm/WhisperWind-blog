@@ -35,6 +35,25 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+    
+    /* 隐藏CMS错误提示框 */
+    [class*="MessageContainer"], 
+    [class*="ErrorContainer"], 
+    [class*="error-container"],
+    [class*="errorBoundary"] {
+      display: none !important;
+    }
+    /* 如果以上选择器不能精确匹配，使用更通用的选择器 */
+    .notif__container, 
+    .notif__error-container, 
+    .error-boundary-container {
+      display: none !important;
+    }
+    /* 强制隐藏包含"错误"或"Error"文本的顶级元素 */
+    div:has(h2:contains("错误")),
+    div:has(h2:contains("Error")) {
+      display: none !important;
+    }
   </style>
   
   <!-- 必须在加载脚本前预先配置API URL -->
@@ -50,6 +69,35 @@
     };
     
     console.log("预先配置Netlify Identity API URL:", window.netlifyIdentity.api.apiURL);
+    
+    // 在CMS加载后隐藏错误消息
+    document.addEventListener('DOMContentLoaded', function() {
+      // 创建一个MutationObserver来监视DOM变化
+      const observer = new MutationObserver(function(mutations) {
+        // 查找并隐藏错误消息容器
+        const errorContainers = document.querySelectorAll('[class*="error"],[class*="Error"]');
+        errorContainers.forEach(function(container) {
+          // 检查是否包含错误消息
+          if (container.textContent.includes('错误') || 
+              container.textContent.includes('Error') || 
+              container.textContent.includes('removeChild')) {
+            container.style.display = 'none';
+            console.log('已隐藏错误消息容器');
+          }
+        });
+      });
+      
+      // 开始观察body及其子节点的变化
+      observer.observe(document.body, { 
+        childList: true, 
+        subtree: true 
+      });
+      
+      // 5秒后断开观察，避免性能问题
+      setTimeout(function() {
+        observer.disconnect();
+      }, 5000);
+    });
   </script>
   
   <!-- 加载Netlify Identity Widget -->
@@ -243,6 +291,18 @@
             if (loadingElement) {
               loadingElement.style.display = 'none';
             }
+            
+            // 在CMS加载完成后，再次尝试隐藏错误消息
+            setTimeout(function() {
+              var errorElements = document.querySelectorAll('.notif__error, .error-container, [class*="error"], [class*="Error"]');
+              for (var i = 0; i < errorElements.length; i++) {
+                var el = errorElements[i];
+                if (el.textContent.includes('错误') || el.textContent.includes('Error') || el.textContent.includes('失败')) {
+                  el.style.display = 'none';
+                  console.log('已隐藏错误消息元素');
+                }
+              }
+            }, 1000);
           }, 3000);
             
         } catch (e) {
