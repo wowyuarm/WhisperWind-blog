@@ -5,50 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WhisperWind Blog - 内容管理</title>
   
-  <!-- 在加载脚本前预先配置API URL -->
+  <!-- 必须在加载脚本前预先配置API URL -->
   <script>
-    // 这是关键：在脚本加载前定义全局对象和API URL
-    window.netlifyIdentity = window.netlifyIdentity || {};
-    window.netlifyIdentity.api = {
-      apiURL: "https://tiny-pegasus-ea211b.netlify.app/.netlify/identity",
-      setCookie: false
-    };
+    // 定义Netlify站点URL - 这里只需要修改这一处即可
+    const NETLIFY_SITE = "tiny-pegasus-ea211b.netlify.app";
     
-    // 告诉浏览器这个域名可以使用Netlify Identity服务
-    document.cookie = "nf_jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    // 预配置Netlify Identity API
+    window.netlifyIdentity = {
+      api: {
+        apiURL: `https://${NETLIFY_SITE}/.netlify/identity`
+      }
+    };
     
     console.log("预先配置Netlify Identity API URL:", window.netlifyIdentity.api.apiURL);
   </script>
   
-  <!-- 必须先加载Netlify Identity Widget -->
+  <!-- 加载Netlify Identity Widget -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   
-  <!-- 强制配置Netlify Identity -->
+  <!-- 初始化和事件监听 -->
   <script>
-    // 等待Netlify Identity Widget加载完成
     document.addEventListener('DOMContentLoaded', function() {
-      // 定义Netlify站点URL
-      const NETLIFY_SITE = "tiny-pegasus-ea211b.netlify.app";
-      const API_URL = `https://${NETLIFY_SITE}/.netlify/identity`;
-      
-      console.log("配置Netlify Identity Widget...");
-      
       if (window.netlifyIdentity) {
-        // 显示详细日志
-        console.log("已加载Netlify Identity Widget");
-        
-        // 再次确认API URL设置
-        if (window.netlifyIdentity.api && window.netlifyIdentity.api.apiURL) {
-          console.log("当前API URL:", window.netlifyIdentity.api.apiURL);
-        } else {
-          console.error("警告: API URL未设置，尝试重新设置");
-          
-          // 如果预配置失败，尝试通过初始化设置
-          window.netlifyIdentity.init({
-            APIUrl: API_URL,
-            locale: 'zh'
-          });
-        }
+        console.log("Netlify Identity Widget已加载");
         
         // 设置事件监听器
         window.netlifyIdentity.on("init", user => {
@@ -68,6 +47,14 @@
             document.location.href = `${basePath}/admin/`;
           }
         });
+        
+        // 确保正确的API URL
+        if (!window.netlifyIdentity.api || !window.netlifyIdentity.api.apiURL) {
+          console.log("重新设置API URL");
+          window.netlifyIdentity.init({
+            APIUrl: `https://${NETLIFY_SITE}/.netlify/identity`
+          });
+        }
       } else {
         console.error("错误: Netlify Identity Widget未能加载!");
       }
@@ -80,9 +67,6 @@
   
   <!-- CMS配置 -->
   <script>
-    // 防止CMS自动初始化
-    window.CMS_MANUAL_INIT = true;
-    
     // 在页面完全加载后初始化CMS
     window.addEventListener('load', function() {
       console.log("页面加载完成，准备初始化CMS");
@@ -91,16 +75,14 @@
       setTimeout(function() {
         console.log("开始初始化CMS...");
         
-        // 强制使用Git Gateway配置
+        // 只提供必要的后端配置，其他配置从config.yml加载
         const config = {
           backend: {
             name: "git-gateway",
-            repo: "wowyuarm/WhisperWind-blog",
             branch: "main",
-            site_domain: "tiny-pegasus-ea211b.netlify.app",
-            base_url: "https://tiny-pegasus-ea211b.netlify.app"
-          },
-          load_config_file: false
+            site_domain: NETLIFY_SITE,
+            base_url: `https://${NETLIFY_SITE}`
+          }
         };
         
         // 初始化CMS
@@ -110,7 +92,7 @@
         } catch (e) {
           console.error("CMS初始化失败:", e);
         }
-      }, 1000); // 给Netlify Identity一些时间完全初始化
+      }, 1000);
     });
   </script>
 </body>
