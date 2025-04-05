@@ -74,7 +74,7 @@ display_url: "https://your-username.github.io/your-repo-name",
 ```
 请将上述URL替换为你自己的GitHub Pages地址，例如`https://your-username.github.io/your-repo-name/`。
 
-> 💡 **重要说明**：本模板使用`index.html`中的JavaScript配置，而不使用`config.yml`文件，这样可以确保在GitHub Pages环境下正确运行。如果需要修改内容类型或其他CMS配置，请直接编辑`index.html`文件中的`config`对象。
+> 💡 **重要说明**：本模板将所有CMS配置直接内嵌在`index.html`文件中，这样可以确保在GitHub Pages环境下正确运行。如果需要修改内容类型或其他CMS配置，请直接编辑`index.html`文件中的`config`对象（约在第70-180行）。
 
 ⚠️ **配置提示：** 这一步非常关键！必须正确配置两种URL：
 1. Netlify站点URL - 用于身份验证（如`your-site-123456.netlify.app`）
@@ -126,8 +126,7 @@ whisperwind-blog/
 ├── .github/                 # GitHub Actions配置
 ├── public/                  # 静态资源
 │   ├── admin/              # Decap CMS配置
-│   │   ├── index.html      # CMS入口页面
-│   │   └── config.yml      # CMS配置文件
+│   │   └── index.html      # CMS入口页面（含完整配置）
 │   ├── uploads/            # 上传的媒体文件
 │   └── images/             # 图片资源
 ├── src/
