@@ -6,10 +6,6 @@
   <title>WhisperWind Blog - 内容管理</title>
   
   <style>
-    /* 隐藏错误提示框 */
-    .error-boundary-container {
-      display: none !important;
-    }
     /* 自定义加载样式 */
     .cms-loading {
       display: flex;
@@ -52,17 +48,6 @@
         apiURL: `https://${NETLIFY_SITE}/.netlify/identity`
       }
     };
-    
-    // 全局错误处理 - 捕获并抑制React DOM错误
-    window.addEventListener('error', function(event) {
-      // 如果是DOM相关的NotFoundError，阻止它显示在控制台和UI上
-      if (event.error && event.error.message && event.error.message.includes('removeChild')) {
-        console.log('已抑制DOM错误:', event.error.message);
-        event.preventDefault();
-        event.stopPropagation();
-        return false;
-      }
-    }, true);
     
     console.log("预先配置Netlify Identity API URL:", window.netlifyIdentity.api.apiURL);
   </script>
@@ -119,27 +104,13 @@
   </div>
 
   <!-- 加载Decap CMS -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js" integrity="" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   
   <!-- CMS配置 -->
   <script>
     // 在页面完全加载后初始化CMS
     window.addEventListener('load', function() {
       console.log("页面加载完成，准备初始化CMS");
-      
-      // 创建一个空的config.yml文件的假响应 - 避免404错误
-      const originalFetch = window.fetch;
-      window.fetch = function(url, options) {
-        if (url && typeof url === 'string' && url.endsWith('config.yml')) {
-          console.log("拦截config.yml请求，返回空配置");
-          return Promise.resolve({
-            ok: true,
-            status: 200,
-            text: () => Promise.resolve('# 空配置文件')
-          });
-        }
-        return originalFetch(url, options);
-      };
       
       // 等待Netlify Identity完全初始化
       setTimeout(function() {
@@ -258,39 +229,29 @@
           // 强制手动初始化CMS
           window.CMS_MANUAL_INIT = true;
           
-          // 初始化CMS，并在成功后隐藏加载指示器
-          window.CMS.init({ config: config })
-            .then(() => {
-              console.log("CMS初始化成功");
-              document.getElementById('cms-loading').style.display = 'none';
-            })
-            .catch(error => {
-              console.error("CMS初始化失败:", error);
-            });
+          // 初始化CMS
+          try {
+            window.CMS.init({ config: config });
+            console.log("CMS初始化成功");
+          } catch (error) {
+            console.error("CMS初始化失败:", error);
+          }
+          
+          // 无论初始化是否成功，都在一段时间后隐藏加载动画
+          setTimeout(function() {
+            var loadingElement = document.getElementById('cms-loading');
+            if (loadingElement) {
+              loadingElement.style.display = 'none';
+            }
+          }, 3000);
             
         } catch (e) {
           console.error("CMS初始化发生错误:", e);
+          // 出错时也隐藏加载动画
+          document.getElementById('cms-loading').style.display = 'none';
         }
       }, 1000);
     });
-    
-    // 添加帮助函数，在控制台中抑制特定类型的错误
-    (function() {
-      const originalConsoleError = console.error;
-      console.error = function(...args) {
-        // 过滤掉已知的无害错误
-        const errorText = args.join(' ');
-        if (
-          errorText.includes('removeChild') ||
-          errorText.includes('Failed to load config.yml') ||
-          errorText.includes('.netlify/git/github/git/trees')
-        ) {
-          console.log('[已抑制错误]', ...args);
-          return;
-        }
-        originalConsoleError.apply(console, args);
-      };
-    })();
   </script>
 </body>
 </html> 
