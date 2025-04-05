@@ -28,39 +28,51 @@
 
 ## 🚀 快速开始
 
-### 使用模板
+### 完整流程：
 
-1. 点击仓库右上角的**Use this template**按钮，创建你自己的仓库
-2. 克隆你的仓库到本地
-3. 安装依赖：`npm install`
-4. 启动开发服务器：`npm run dev`
-5. 在浏览器中打开 [http://localhost:3000](http://localhost:3000)
+1. 点击"Use this template"创建自己的仓库
+2. 在Netlify上创建站点并设置Identity/Git Gateway
+3. 更新两处配置文件，替换为自己的Netlify站点URL（这是关键步骤）
+4. 通过GitHub Actions部署到GitHub Pages
+5. 访问博客，点击"管理"链接，使用Netlify Identity登录CMS
 
 ### 配置Decap CMS
 
 Decap CMS允许你通过Web界面管理博客内容，无需在本地编辑文件并推送到GitHub。以下是完整的配置步骤：
 
-#### 1. 修改配置文件
-
-在你fork的仓库中，找到`public/admin/config.yml`文件，确认以下配置：
-
-```yml
-backend:
-  name: git-gateway
-  branch: main # 确保这里是你的主分支名称
-```
-
-#### 2. 设置Netlify身份验证
+#### 1. 设置Netlify站点和身份验证
 
 虽然博客内容会部署在GitHub Pages上，但我们需要使用Netlify提供的身份验证服务来管理内容：
 
 1. 注册[Netlify](https://app.netlify.com/)账号（免费）
 2. 点击"New site from Git"，选择你的GitHub仓库
 3. 部署设置保持默认值，点击"Deploy site"（这只是为了身份验证，实际博客仍会通过GitHub Pages提供）
-4. 部署完成后，进入站点设置：
-   - 转到**Site settings** > **Identity** > 点击**Enable Identity**
+4. 部署完成后，记下你的Netlify站点名称（例如：your-site-123456.netlify.app）
+5. 进入站点设置：
+   - 转到**Site configuration** > **Identity** > 点击**Enable Identity**
    - 向下滚动到**Registration**，设置为**Invite only**（推荐）或选择开放注册
    - 转到**Services** > **Git Gateway** > 点击**Enable Git Gateway**
+
+#### 2. 修改配置文件指向你的Netlify站点
+
+在你fork的仓库中，需要修改以下文件：
+
+1. 在`public/admin/config.yml`文件中，找到并修改：
+
+```yml
+backend:
+  name: git-gateway
+  branch: main
+  site_domain: your-netlify-site-name.netlify.app  # 修改为你的Netlify站点URL
+```
+
+2. 在`public/admin/index.html`文件中，找到以下代码并修改：
+
+```javascript
+window.netlifyIdentity.setConfig({
+  APIUrl: "https://your-netlify-site-name.netlify.app/.netlify/identity"  // 修改为你的Netlify站点URL
+});
+```
 
 #### 3. 创建管理员账号
 
@@ -72,12 +84,13 @@ backend:
 
 #### 4. 访问CMS管理界面
 
-现在你可以通过以下方式访问CMS管理界面：
+完成上述步骤并部署你的GitHub Pages网站后：
 
 1. 访问你的GitHub Pages站点：`https://your-username.github.io/your-repo-name/`
 2. 点击页面底部的"管理"链接
-3. 使用你在Netlify中设置的邮箱和密码登录
-4. 现在你可以通过友好的界面创建和管理内容了
+3. 点击"Login with Netlify Identity"按钮
+4. 使用你在Netlify中设置的邮箱和密码登录
+5. 登录成功后，你可以通过友好的界面创建和管理内容了
 
 ### 自定义
 
