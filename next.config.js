@@ -10,6 +10,7 @@ const nextConfig = {
   trailingSlash: true, // 确保静态导出时URLs以"/"结尾
   images: {
     unoptimized: true,
+    domains: ['github.com'], // 允许从 GitHub 加载图片
   },
   eslint: {
     ignoreDuringBuilds: true, // 在构建时忽略ESLint错误

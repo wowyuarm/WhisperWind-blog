@@ -1,4 +1,5 @@
 import path from 'path';
+import { useRouter } from 'next/router'
 
 interface SocialLinks {
   github?: string;
@@ -12,9 +13,10 @@ export interface SiteConfig {
   title: string;
   description: string;
   author: string;
-  logo?: string;
-  favicon?: string;
+  logo?: string | null;
+  favicon?: string | null;
   social: SocialLinks;
+  avatar?: string | null;
 }
 
 export interface FriendLink {
@@ -30,7 +32,7 @@ export interface LinksConfig {
 }
 
 // 默认配置，将在客户端和服务端都可用
-const defaultSiteConfig: SiteConfig = {
+export const defaultSiteConfig: SiteConfig = {
   title: '🍃WhisperWind Blog',
   description: '一个具有吉卜力风格的开源博客模板',
   author: '禹创',
@@ -38,39 +40,53 @@ const defaultSiteConfig: SiteConfig = {
   favicon: '/favicon.ico',
   social: {
     github: 'https://github.com/wowyuarm/WhisperWind-blog'
-  }
+  },
+  avatar: '/images/avatar.jpg',
 };
 
 // 默认友情链接
 const defaultFriendLinks: FriendLink[] = [];
 
+let fs: any;
+if (typeof window === 'undefined') {
+  // Only import fs in server-side context
+  fs = require('fs');
+}
+
 /**
  * 获取网站配置
  */
 export function getSiteConfig(): SiteConfig {
-  // 当在浏览器环境中运行时，直接返回默认配置
+  const basePath = process.env.NODE_ENV === 'production' && process.env.GITHUB_REPOSITORY
+    ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}`
+    : '';
+
+  // 处理默认配置
+  const processConfig = (config: SiteConfig) => ({
+    ...config,
+    avatar: config.avatar ? `${basePath}${config.avatar}` : null,
+    favicon: config.favicon ? `${basePath}${config.favicon}` : null,
+  });
+
+  // 当在浏览器环境中运行时，返回处理过的默认配置
   if (typeof window !== 'undefined') {
-    return defaultSiteConfig;
+    return processConfig(defaultSiteConfig);
   }
 
   // 以下代码只在服务器端运行
   try {
-    // 动态导入fs，只在服务器端使用
-    const fs = require('fs');
     const configPath = path.join(process.cwd(), 'src/content/config.json');
     
     if (fs.existsSync(configPath)) {
       const fileContents = fs.readFileSync(configPath, 'utf8');
-      return JSON.parse(fileContents) as SiteConfig;
+      const config = JSON.parse(fileContents) as SiteConfig;
+      return processConfig(config);
     }
     
-    // 如果配置文件不存在，返回默认配置
-    return defaultSiteConfig;
+    return processConfig(defaultSiteConfig);
   } catch (error) {
     console.error('读取配置文件失败:', error);
-    
-    // 返回默认配置
-    return defaultSiteConfig;
+    return processConfig(defaultSiteConfig);
   }
 }
 
@@ -85,8 +101,6 @@ export function getFriendLinks(): FriendLink[] {
 
   // 以下代码只在服务器端运行
   try {
-    // 动态导入fs，只在服务器端使用
-    const fs = require('fs');
     const linksPath = path.join(process.cwd(), 'src/content/links.json');
     
     if (fs.existsSync(linksPath)) {

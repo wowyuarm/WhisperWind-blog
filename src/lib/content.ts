@@ -109,7 +109,18 @@ export function getPostBySlug(slug: string): Post | null {
  * 获取所有文章的元数据
  */
 export function getAllPostMetas(): PostMeta[] {
-  return getAllPosts().map(({ ...meta }) => meta);
+  const basePath = process.env.NODE_ENV === 'production' && process.env.GITHUB_REPOSITORY
+    ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}`
+    : '';
+
+  const posts = getAllPosts();
+  return posts.map(post => {
+    const { content, ...meta } = post;
+    return {
+      ...meta,
+      featuredImage: meta.featuredImage ? `${basePath}${meta.featuredImage}` : undefined,
+    };
+  });
 }
 
 /**

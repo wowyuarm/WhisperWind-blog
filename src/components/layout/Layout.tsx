@@ -1,7 +1,7 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { ReactNode } from "react";
-import { type SiteConfig } from "@/lib/config";
+import { type SiteConfig, defaultSiteConfig } from "@/lib/config";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from 'next/navigation';
 import { ReadingProgressBar } from "@/components/blog/ReadingProgressBar";
@@ -17,13 +17,13 @@ export function Layout({
   children, 
   showHeader = true, 
   showFooter = true,
-  siteConfig
+  siteConfig = defaultSiteConfig
 }: LayoutProps) {
   const pathname = usePathname();
 
   return (
     <div className="flex flex-col min-h-screen bg-warm-paper/90 overflow-x-hidden hand-drawn-bg hand-drawn-edge">
-      {showHeader && <Header />}
+      {showHeader && <Header siteConfig={siteConfig} />}
       <ReadingProgressBar />
       <AnimatePresence mode="wait">
         <motion.main
@@ -37,7 +37,7 @@ export function Layout({
           {children}
         </motion.main>
       </AnimatePresence>
-      {showFooter && <Footer config={siteConfig} />}
+      {showFooter && <Footer siteConfig={siteConfig} />}
     </div>
   );
 } 

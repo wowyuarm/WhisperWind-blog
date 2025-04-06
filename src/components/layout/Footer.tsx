@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { type SiteConfig } from "@/lib/config";
+import { SiteConfig } from '@/lib/config';
 
 // Define props for Footer, making config optional
 interface FooterProps {
-  config?: SiteConfig; // Make config optional
+  siteConfig: SiteConfig;
 }
 
-export function Footer({ config }: FooterProps) { // config can be undefined
+export function Footer({ siteConfig }: FooterProps) { // config can be undefined
   const currentYear = new Date().getFullYear();
   
   // 获取admin链接，直接指向index.html
@@ -15,7 +15,7 @@ export function Footer({ config }: FooterProps) { // config can be undefined
   };
 
   // Handle undefined config gracefully
-  if (!config) {
+  if (!siteConfig) {
     // Render a minimal footer or nothing
     return (
       <footer className="border-t border-secondary/30 backdrop-blur-sm mt-auto bg-warm-paper/90 py-8">
@@ -37,15 +37,15 @@ export function Footer({ config }: FooterProps) { // config can be undefined
               🍃WhisperWind Blog
             </Link>
             <p className="text-sm text-muted-foreground text-center md:text-left max-w-xs">
-              {config.description}
+              {siteConfig.description}
             </p>
           </div>
           
           <div className="flex flex-col items-center md:items-end">
             <div className="flex space-x-4 mb-4">
-              {config.social.github && (
+              {siteConfig.social.github && (
                 <a 
-                  href={config.social.github} 
+                  href={siteConfig.social.github} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors duration-300 p-2 rounded-full hover:bg-primary/5"
@@ -61,9 +61,9 @@ export function Footer({ config }: FooterProps) { // config can be undefined
                   </svg>
                 </a>
               )}
-              {config.social.twitter && (
+              {siteConfig.social.twitter && (
                 <a 
-                  href={config.social.twitter} 
+                  href={siteConfig.social.twitter} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors duration-300 p-2 rounded-full hover:bg-primary/5"

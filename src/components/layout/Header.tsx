@@ -2,10 +2,15 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
+import { SiteConfig } from "@/lib/config";
+
+interface HeaderProps {
+  siteConfig: SiteConfig;
+}
 
 const navLinks = [
   { name: "首页", href: "/" },
@@ -15,18 +20,11 @@ const navLinks = [
   { name: "友链", href: "/links" },
 ];
 
-export function Header() {
+export function Header({ siteConfig }: HeaderProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [logoError, setLogoError] = useState(false);
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const handleLinkClick = () => {
-    setIsMobileMenuOpen(false);
-  };
 
   const handleLogoError = () => {
     console.error("Logo加载失败");
@@ -49,11 +47,11 @@ export function Header() {
           >
             <div className="relative w-8 h-8 mr-2 rounded-full overflow-hidden border-2 border-primary/20 flex items-center justify-center bg-white/70">
               {!logoError ? (
-                <Image 
-                  src="/images/logo.png" 
-                  alt="WhisperWind Logo" 
-                  width={32} 
-                  height={32} 
+                <Image
+                  src={siteConfig.avatar || '/images/logo.png'}
+                  alt="WhisperWind Logo"
+                  width={32}
+                  height={32}
                   className="object-cover rounded-full"
                   priority
                   onError={handleLogoError}
@@ -67,7 +65,7 @@ export function Header() {
               className="font-bold text-primary px-2 py-1 tracking-wide"
               whileHover={{ y: -3, transition: { duration: 0.3 } }}
             >
-              🍃WhisperWind
+              {siteConfig.title.split('Blog')[0]}
             </motion.span>
             <motion.span 
               className="text-secondary-foreground font-medium tracking-wide"
@@ -102,7 +100,7 @@ export function Header() {
           <motion.button 
             className="ml-4 md:hidden text-foreground/80 hover:text-primary transition-colors duration-300 p-2 -mr-2"
             aria-label="Toggle Menu"
-            onClick={toggleMobileMenu}
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
@@ -133,7 +131,7 @@ export function Header() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    onClick={handleLinkClick}
+                    onClick={() => setIsMobileMenuOpen(false)}
                     className={cn(
                       "text-lg text-foreground/80 hover:text-primary transition-colors duration-300 w-full text-center py-2 rounded-md",
                       pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))
