@@ -73,10 +73,10 @@ export default function Home({ recentPosts, siteConfig }: InferGetStaticPropsTyp
       {/* 根据动画状态添加CSS类 */}
       <div className={enableAnimation ? 'animations-enabled' : 'animations-disabled'}>
         {/* 英雄区域 */}
-        <section className="py-16 md:py-24 lg:py-28 relative">
+        <section className="py-12 md:py-16 lg:py-20 relative">
           <div className="max-w-4xl mx-auto text-center content-area opacity-0 animate-fade-in-up">
-            <div className="mb-8 animate-slow-float">
-              <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6 drop-shadow-sm">
+            <div className="mb-6 animate-slow-float">
+              <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4 drop-shadow-sm">
                 <span className="text-primary">WhisperWind</span> Blog
               </h1>
             </div>
@@ -84,13 +84,13 @@ export default function Home({ recentPosts, siteConfig }: InferGetStaticPropsTyp
         </section>
 
         {/* 留出更多空间，让背景图片显现 */}
-        <div className="py-16"></div>
+        <div className="py-8"></div>
 
-        {/* 最新文章 */}
-        <section className="py-12 md:py-16">
+        {/* 主章节 */}
+        <section className="py-6 md:py-10">
           <div className="opacity-0 animate-fade-in-up">
-            <div className="mb-10">
-              <h2 className="text-3xl font-bold mb-4 text-primary">最新文章</h2>
+            <div className="mb-6">
+              <h2 className="text-3xl font-bold mb-3 text-primary">最新文章</h2>
               <div className="w-20 h-1 bg-primary rounded-full"></div>
             </div>
           </div>

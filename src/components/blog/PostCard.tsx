@@ -14,7 +14,7 @@ interface PostCardProps {
   excerpt?: string
   publishDate: string
   tags?: string[]
-  featuredImage?: string // 可选的特色图片
+  featuredImage?: string // 保留属性但不显示图片
 }
 
 export function PostCard({ title, slug, excerpt, publishDate, tags = [], featuredImage }: PostCardProps) {
@@ -64,15 +64,6 @@ export function PostCard({ title, slug, excerpt, publishDate, tags = [], feature
         }}
       >
         <Card className={cardClasses}>
-          {featuredImage && (
-            <div className="relative w-full h-40 overflow-hidden rounded-t-lg">
-              <img 
-                src={featuredImage} 
-                alt={title}
-                className="object-cover w-full h-full"
-              />
-            </div>
-          )}
           <CardHeader className="space-y-2 pt-6 flex-initial">
             <div className="space-y-1.5">
               <CardTitle className="tracking-wide transition-colors duration-200 group-hover:text-primary line-clamp-2 h-[3.5rem]">
