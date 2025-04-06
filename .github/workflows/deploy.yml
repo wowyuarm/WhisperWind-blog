@@ -3,14 +3,13 @@ name: Deploy to GitHub Pages
 on:
   # 当推送到main分支时触发
   push:
-    branches:
-      - main
+    branches: [main]
   # 允许从Actions选项卡手动触发
   workflow_dispatch:
 
 # 设置GITHUB_TOKEN的权限
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -20,41 +19,41 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          cache: 'npm'
+          node-version: 20
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
 
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build
+      - name: Build Project
         run: npm run build
         env:
+          # 确保构建时可以获取到仓库名称
           GITHUB_REPOSITORY: ${{ github.repository }}
           NODE_ENV: production
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
-          cname: ${{ secrets.CNAME }}  # 如果有自定义域名
+          path: ./out
 
   deploy:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build-and-deploy
+    needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
