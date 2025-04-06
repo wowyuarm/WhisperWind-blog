@@ -1,0 +1,569 @@
+@import "tailwindcss";
+@import "./ghibli-font.css";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-ghibli);
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-red-100: var(--color-red-100);   
+  --color-red-500: var(--color-red-500);
+  --color-red-900: var(--color-red-900);
+  --color-blue-100: var(--color-blue-100);
+  --color-blue-500: var(--color-blue-500);
+  --color-blue-900: var(--color-blue-900);
+}
+
+:root {
+  /* 吉卜力风格圆角 - 更加柔和圆润 */
+  --radius: 1.25rem;
+  --radius-sm: 0.75rem;
+  --radius-xs: 0.5rem;
+  
+  /* 自定义字体 */
+  --font-sans: var(--font-ghibli);
+  
+  /* 背景与前景色 - 更温暖的米白色与深灰棕色 */
+  --background: rgba(248, 244, 232, 0.95);
+  --foreground: rgba(92, 82, 74, 1);  /* 增加对比度 */
+  
+  /* 卡片样式 - 米白色纸张感 */
+  --card: rgba(255, 251, 240, 0.98);
+  --card-foreground: rgba(92, 82, 74, 0.95);
+  
+  /* 弹窗样式 */
+  --popover: rgba(255, 251, 240, 0.98);
+  --popover-foreground: rgba(92, 82, 74, 0.95);
+
+  /* 主色 - 鼠尾草绿 */
+  --primary: rgba(143, 170, 143, 0.95);
+  --primary-foreground: rgba(255, 251, 240, 1);
+
+  /* 次要色 - 暖赭石色 */
+  --secondary: rgba(210, 180, 140, 1);
+  --secondary-foreground: rgba(92, 82, 74, 0.95);
+
+  /* 强调色 - 柔和的灰蓝色 */
+  --accent: rgba(153, 175, 186, 0.9);
+  --accent-foreground: rgba(255, 251, 240, 1);
+
+  /* 边框、输入框和环形高亮 - 柔和的米色边框 */
+  --border: rgba(210, 180, 140, 0.3);
+  --input: rgba(255, 251, 240, 0.98);
+  --ring: rgba(143, 170, 143, 0.6);  /* 增加对比度，提高焦点状态可见性 */
+
+  /* 次要文本 - 温暖棕灰色 */
+  --muted: rgba(248, 244, 232, 0.98);
+  --muted-foreground: rgba(128, 117, 108, 0.9);  /* 增加对比度 */
+
+  /* 危险操作色 - 柔和的红棕色 */
+  --destructive: rgba(190, 120, 110, 0.85);
+
+  /* 图表颜色 - 柔和自然的色调 */
+  --chart-1: rgba(230, 220, 210, 1); 
+  --chart-2: rgba(210, 190, 170, 1); 
+  --chart-3: rgba(190, 170, 150, 1); 
+  --chart-4: rgba(170, 150, 130, 1);    
+  --chart-5: rgba(150, 130, 110, 0.9); 
+
+  /* 侧边栏样式 - 温暖米色 */
+  --sidebar: rgba(255, 251, 240, 0.98);
+  --sidebar-foreground: rgba(92, 82, 74, 0.95);
+  --sidebar-primary: rgba(143, 170, 143, 0.95);
+  --sidebar-primary-foreground: rgba(255, 251, 240, 1);
+  --sidebar-accent: rgba(248, 244, 232, 0.98);
+  --sidebar-accent-foreground: rgba(143, 170, 143, 0.95);
+  --sidebar-border: rgba(210, 180, 140, 0.3);
+  --sidebar-ring: rgba(143, 170, 143, 0.6);  /* 与全局 ring 颜色保持一致 */
+
+  /* 辅助颜色 - 暖色调 */
+  --color-red-100: rgba(250, 235, 225, 1);   
+  --color-red-500: rgba(190, 120, 110, 0.85);  
+  --color-red-900: rgba(160, 90, 80, 0.9);
+  --color-blue-100: rgba(230, 240, 245, 1);
+  --color-blue-500: rgba(153, 175, 186, 0.9);   
+  --color-blue-900: rgba(90, 110, 120, 0.9);   
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    font-family: var(--font-ghibli);
+    letter-spacing: 0.025em;
+    @apply bg-background;
+  }
+
+  body {
+    font-family: var(--font-ghibli);
+    @apply bg-background text-foreground;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+    
+    /* 使用CSS生成的纹理代替图片 */
+    background-image: 
+      linear-gradient(
+        to right,
+        rgba(248, 244, 232, 0.95),
+        rgba(255, 251, 240, 0.95)
+      );
+  }
+  
+  /* 增强纸质纹理效果 - 更明显的纸张纹理 */
+  body::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.5;  /* 增加不透明度，使纹理更加明显 */
+    z-index: -1;
+    
+    /* 纸质纹理图案 - 更加明显 */
+    background-image: 
+      radial-gradient(
+        rgba(210, 180, 140, 0.3) 2px,
+        transparent 2px
+      );
+    background-size: 20px 20px;
+  }
+  
+  /* 手绘线条纹理 - 更显著 */
+  body::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.2;  /* 增加不透明度，使效果明显但不过分 */
+    z-index: -1;
+    
+    /* 不规则横线 - 模拟手绘纸张 */
+    background-image: 
+      repeating-linear-gradient(
+        0deg,
+        rgba(92, 82, 74, 0.06),
+        rgba(92, 82, 74, 0.06) 1px,
+        transparent 1px,
+        transparent 30px
+      );
+  }
+  
+  /* 额外的纸张噪点纹理 */
+  .page-container::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    
+    /* 噪点效果 - 使背景更加丰富 */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    opacity: 0.5;  /* 提高不透明度，使纹理效果更明显 */
+  }
+  
+  /* 代码块样式增强 */
+  pre, code {
+    @apply bg-secondary/20 px-3 py-1.5 rounded-[var(--radius-sm)] border border-secondary/30;
+    position: relative;
+    font-family: var(--font-mono);
+  }
+  
+  pre {
+    @apply p-4 my-4 overflow-x-auto;
+  }
+  
+  pre::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      repeating-linear-gradient(
+        -45deg,
+        rgba(210, 180, 140, 0.08),
+        rgba(210, 180, 140, 0.08) 1px,
+        transparent 1px,
+        transparent 10px
+      );
+    opacity: 0.9;
+    z-index: -1;
+  }
+  
+  /* 引用块样式 */
+  blockquote {
+    @apply pl-4 border-l-4 border-primary/70 bg-primary/10 py-2 px-3 rounded-r-[var(--radius-sm)] my-4 italic;
+  }
+  
+  /* 链接样式 */
+  a {
+    @apply text-primary hover:text-primary/80 transition-colors duration-300 underline decoration-primary/30 hover:decoration-primary/60;
+    text-underline-offset: 2px;
+  }
+  
+  /* 列表样式增强 */
+  ul, ol {
+    @apply pl-6 my-3;
+  }
+  
+  li {
+    @apply mb-2;
+  }
+  
+  ul > li::marker {
+    color: var(--primary);
+  }
+  
+  ol > li::marker {
+    color: var(--secondary);
+  }
+}
+
+@layer utilities {
+  /* 吉卜力风格的边框 - 加粗但更柔和 */
+  .border {
+    border-width: 2px;
+  }
+  
+  /* 卡片悬浮效果 - 更柔和的动画 */
+  .card-hover {
+    @apply transition-all duration-500 ease-in-out;
+  }
+  
+  .card-hover:hover {
+    @apply transform -translate-y-1.5;
+    box-shadow: 0 12px 20px -3px rgba(210, 180, 140, 0.12), 0 8px 12px -6px rgba(92, 82, 74, 0.06);
+  }
+  
+  /* 按钮效果 - 更柔和的过渡 */
+  .btn-ghibli {
+    @apply transform transition-all duration-300 ease-in-out rounded-full;
+  }
+  
+  .btn-ghibli:hover {
+    @apply -translate-y-0.5;
+    box-shadow: 0 12px 20px -3px rgba(210, 180, 140, 0.12), 0 8px 12px -6px rgba(92, 82, 74, 0.06);
+  }
+  
+  .btn-ghibli:active {
+    @apply translate-y-0 shadow-sm scale-[0.98];
+  }
+  
+  /* 柔和阴影 */
+  .shadow-ghibli {
+    box-shadow: 0 8px 15px -3px rgba(210, 180, 140, 0.1), 0 4px 8px -4px rgba(92, 82, 74, 0.05);
+  }
+  
+  /* 暖色渐变背景 */
+  .bg-ghibli-gradient {
+    background: linear-gradient(135deg, rgba(255, 251, 240, 0.98) 0%, rgba(248, 244, 232, 0.95) 100%);
+  }
+  
+  /* 暖色调文字 */
+  .text-warm {
+    color: rgba(92, 82, 74, 0.95);
+  }
+  
+  /* 水彩边框效果 - 更明显的实现 */
+  .border-watercolor {
+    @apply relative;
+  }
+  
+  .border-watercolor::after {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: inherit;
+    border: 2px solid rgba(143, 170, 143, 0.7);  /* 增加不透明度，使效果更明显 */
+    opacity: 0.9;  /* 增加不透明度 */
+    pointer-events: none;
+    filter: blur(0.5px);
+  }
+  
+  /* 纸张质感背景 */
+  .bg-warm-paper {
+    background-color: var(--card);
+    position: relative;
+  }
+  
+  .bg-warm-paper::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(
+        rgba(210, 180, 140, 0.2) 1px,
+        transparent 1px
+      );
+    background-size: 10px 10px;
+    opacity: 0.8;
+    z-index: 0;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  /* 淡入并上移动画 */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* 轻微上下漂浮动画 */
+  @keyframes slowFloat {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+
+  /* 动画延迟类 */
+  .animation-delay-100 {
+    animation-delay: 100ms;
+  }
+  .animation-delay-300 {
+    animation-delay: 300ms;
+  }
+  .animation-delay-500 {
+    animation-delay: 500ms;
+  }
+  .animation-delay-700 {
+    animation-delay: 700ms;
+  }
+  .animation-delay-900 {
+    animation-delay: 900ms;
+  }
+
+  /* 淡入并上移动画类 */
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  /* 轻微上下漂浮动画类 */
+  .animate-slow-float {
+    animation: slowFloat 4s ease-in-out infinite;
+  }
+
+  /* 减少动画优先级 */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-fade-in-up {
+      animation: none;
+      opacity: 1;
+    }
+    .animate-slow-float {
+      animation: none;
+    }
+  }
+}
+
+/* 页面容器，预留背景空间 */
+.page-container {
+  @apply py-20 min-h-[calc(100vh-15rem)] relative;
+  /* 增加奶油色的背景暖调 */
+  background-color: rgba(248, 244, 232, 0.6);  /* 增加不透明度 */
+  position: relative;
+  box-shadow: 0 8px 30px rgba(210, 180, 140, 0.15), 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* 透明度调整 - 更偏向奶油色而非纯白 */
+.bg-translucent {
+  background: linear-gradient(to bottom, rgba(255, 251, 240, 0.98) 0%, rgba(248, 244, 232, 0.95) 100%);
+  @apply backdrop-blur-sm;
+}
+
+/* 装饰性元素 */
+.cloud-decoration {
+  @apply absolute pointer-events-none opacity-70 z-0;
+}
+
+/* 确保背景可见的内容区域 */
+.content-area {
+  @apply max-w-4xl mx-auto px-6 py-8 sm:px-6 lg:px-0 leading-loose relative;
+}
+
+/* 内容区域的纸张纹理 */
+.content-area::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    repeating-linear-gradient(
+      -45deg,
+      rgba(210, 180, 140, 0.08),
+      rgba(210, 180, 140, 0.08) 1px,
+      transparent 1px,
+      transparent 14px
+    );
+  opacity: 0.9;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* 吉卜力风格按钮 - 增强温暖感 */
+.button-ghibli {
+  @apply rounded-full border-2 border-primary/30 transition-all duration-300 ease-in-out;
+  box-shadow: 0 8px 15px -3px rgba(210, 180, 140, 0.12), 0 4px 8px -4px rgba(92, 82, 74, 0.06);
+  background: linear-gradient(to bottom, var(--primary) 0%, rgba(123, 150, 123, 0.95) 100%);
+}
+
+.button-ghibli:hover {
+  @apply -translate-y-0.5;
+  box-shadow: 0 12px 20px -3px rgba(210, 180, 140, 0.15), 0 8px 12px -6px rgba(92, 82, 74, 0.08);
+  background: linear-gradient(to bottom, var(--primary) 15%, rgba(123, 150, 123, 0.98) 100%);
+}
+
+/* 卡片阴影 - 更柔和的温暖调 */
+.card-shadow {
+  box-shadow: 0 10px 25px -5px rgba(210, 180, 140, 0.2), 0 8px 12px -6px rgba(92, 82, 74, 0.1);
+}
+
+/* 水彩效果的标题下划线 - 更明显的实现 */
+.watercolor-underline {
+  @apply relative inline-block;
+}
+
+.watercolor-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -0.3em;
+  left: 0;
+  width: 100%;
+  height: 0.2em;
+  background: rgba(143, 170, 143, 0.45);  /* 增加不透明度，使效果更明显 */
+  border-radius: 2px;
+  filter: blur(1px);
+}
+
+/* a11y 增强 - 聚焦状态的视觉反馈 */
+*:focus-visible {
+  @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
+}
+
+/* 手绘感边框 - 更明显的实现 */
+.hand-drawn-border {
+  position: relative;
+  padding: 2px;
+}
+
+.hand-drawn-border::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px solid rgba(210, 180, 140, 0.5);  /* 增加不透明度，使效果更明显 */
+  border-radius: inherit;
+  z-index: -1;
+  transform: translate(2px, 2px);
+}
+
+/* 小组件圆角优化 */
+.btn-sm, .badge, .small-component {
+  border-radius: var(--radius-sm);
+}
+
+.btn-xs, .micro-badge, .mini-component {
+  border-radius: var(--radius-xs);
+}
+
+/* 图标统一样式 */
+svg.icon {
+  @apply text-foreground stroke-2 fill-none transition-colors duration-300;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 主题切换图标特别样式 */
+.theme-toggle svg {
+  @apply text-foreground hover:text-primary transition-colors duration-300;
+  stroke-width: 2px;
+}
+
+/* Card组件通用样式增强 */
+.card {
+  border-width: 2px;
+  position: relative;
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background-image: 
+    radial-gradient(
+      rgba(210, 180, 140, 0.15) 1px,
+      transparent 1px
+    );
+  background-size: 12px 12px;
+  opacity: 0.7;
+  z-index: 0;
+  border-radius: inherit;
+}

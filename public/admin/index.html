@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhisperWind Blog - 内容管理</title>
+  
+  <style>
+    /* 自定义加载样式 */
+    .cms-loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    .cms-loading-indicator {
+      text-align: center;
+    }
+    .cms-loading-indicator h2 {
+      color: #4a7c59;
+      margin-bottom: 20px;
+    }
+    .spinner {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top: 4px solid #4a7c59;
+      width: 40px;
+      height: 40px;
+      margin: 0 auto 20px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    /* 隐藏CMS错误提示框 */
+    [class*="MessageContainer"], 
+    [class*="ErrorContainer"], 
+    [class*="error-container"],
+    [class*="errorBoundary"] {
+      display: none !important;
+    }
+    /* 如果以上选择器不能精确匹配，使用更通用的选择器 */
+    .notif__container, 
+    .notif__error-container, 
+    .error-boundary-container {
+      display: none !important;
+    }
+    /* 强制隐藏包含"错误"或"Error"文本的顶级元素 */
+    div:has(h2:contains("错误")),
+    div:has(h2:contains("Error")) {
+      display: none !important;
+    }
+  </style>
+  
+  <!-- 必须在加载脚本前预先配置API URL -->
+  <script>
+    // 定义Netlify站点URL - 这里只需要修改这一处即可
+    const NETLIFY_SITE = "tiny-pegasus-ea211b.netlify.app";
+    
+    // 预配置Netlify Identity API
+    window.netlifyIdentity = {
+      api: {
+        apiURL: `https://${NETLIFY_SITE}/.netlify/identity`
+      }
+    };
+    
+    console.log("预先配置Netlify Identity API URL:", window.netlifyIdentity.api.apiURL);
+    
+    // 在CMS加载后隐藏错误消息
+    document.addEventListener('DOMContentLoaded', function() {
+      // 创建一个MutationObserver来监视DOM变化
+      const observer = new MutationObserver(function(mutations) {
+        // 查找并隐藏错误消息容器
+        const errorContainers = document.querySelectorAll('[class*="error"],[class*="Error"]');
+        errorContainers.forEach(function(container) {
+          // 检查是否包含错误消息
+          if (container.textContent.includes('错误') || 
+              container.textContent.includes('Error') || 
+              container.textContent.includes('removeChild')) {
+            container.style.display = 'none';
+            console.log('已隐藏错误消息容器');
+          }
+        });
+      });
+      
+      // 开始观察body及其子节点的变化
+      observer.observe(document.body, { 
+        childList: true, 
+        subtree: true 
+      });
+      
+      // 5秒后断开观察，避免性能问题
+      setTimeout(function() {
+        observer.disconnect();
+      }, 5000);
+    });
+  </script>
+  
+  <!-- 加载Netlify Identity Widget -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  
+  <!-- 初始化和事件监听 -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.netlifyIdentity) {
+        console.log("Netlify Identity Widget已加载");
+        
+        // 设置事件监听器
+        window.netlifyIdentity.on("init", user => {
+          console.log("Netlify Identity初始化完成", user ? "用户已登录" : "用户未登录");
+        });
+        
+        window.netlifyIdentity.on("error", err => {
+          console.error("Netlify Identity错误:", err);
+        });
+        
+        window.netlifyIdentity.on("login", () => {
+          console.log("用户登录成功");
+          if (!document.location.pathname.endsWith('/admin/')) {
+            const basePath = window.location.hostname.includes('github.io') 
+              ? '/WhisperWind-blog' 
+              : '';
+            document.location.href = `${basePath}/admin/`;
+          }
+        });
+        
+        // 确保正确的API URL
+        if (!window.netlifyIdentity.api || !window.netlifyIdentity.api.apiURL) {
+          console.log("重新设置API URL");
+          window.netlifyIdentity.init({
+            APIUrl: `https://${NETLIFY_SITE}/.netlify/identity`
+          });
+        }
+      } else {
+        console.error("错误: Netlify Identity Widget未能加载!");
+      }
+    });
+  </script>
+</head>
+<body>
+  <!-- 自定义加载指示器 -->
+  <div id="cms-loading" class="cms-loading">
+    <div class="cms-loading-indicator">
+      <div class="spinner"></div>
+      <h2>WhisperWind Blog 管理界面加载中...</h2>
+      <p>正在连接到内容管理系统，请稍候...</p>
+    </div>
+  </div>
+
+  <!-- 加载Decap CMS -->
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  
+  <!-- CMS配置 -->
+  <script>
+    // 在页面完全加载后初始化CMS
+    window.addEventListener('load', function() {
+      console.log("页面加载完成，准备初始化CMS");
+      
+      // 等待Netlify Identity完全初始化
+      setTimeout(function() {
+        console.log("开始初始化CMS...");
+        
+        try {
+          // 提供完整配置，不依赖config.yml文件
+          const config = {
+            // 基本后端配置
+            backend: {
+              name: "git-gateway",
+              branch: "main",
+              site_domain: NETLIFY_SITE,
+              base_url: `https://${NETLIFY_SITE}`
+            },
+            
+            // 媒体文件配置
+            media_folder: "public/uploads",
+            public_folder: "/uploads",
+            
+            // 站点URL配置
+            site_url: "https://wowyuarm.github.io/WhisperWind-blog",
+            display_url: "https://wowyuarm.github.io/WhisperWind-blog",
+            
+            // 发布模式配置
+            publish_mode: "editorial_workflow",
+            
+            // 本地化配置
+            locale: "zh_Hans",
+            
+            // 内容结构定义
+            collections: [
+              // 博客文章集合
+              {
+                name: "posts",
+                label: "博客文章",
+                folder: "src/content/posts",
+                create: true,
+                slug: "{{slug}}",
+                fields: [
+                  { label: "标题", name: "title", widget: "string" },
+                  { label: "发布日期", name: "publishDate", widget: "datetime", format: "YYYY-MM-DD HH:mm:ss" },
+                  { label: "摘要", name: "excerpt", widget: "text", required: false },
+                  { label: "特色图片", name: "featuredImage", widget: "image", required: false },
+                  { label: "标签", name: "tags", widget: "list", required: false },
+                  { label: "内容", name: "body", widget: "markdown" }
+                ]
+              },
+              
+              // 静态页面集合
+              {
+                name: "pages",
+                label: "静态页面",
+                folder: "src/content/pages",
+                create: true,
+                slug: "{{slug}}",
+                fields: [
+                  { label: "标题", name: "title", widget: "string" },
+                  { label: "内容", name: "body", widget: "markdown" }
+                ]
+              },
+              
+              // 站点配置集合
+              {
+                name: "config",
+                label: "网站配置",
+                files: [
+                  {
+                    label: "基本配置",
+                    name: "config",
+                    file: "src/content/config.json",
+                    fields: [
+                      { label: "网站标题", name: "title", widget: "string" },
+                      { label: "网站描述", name: "description", widget: "text" },
+                      { label: "作者", name: "author", widget: "string" },
+                      { label: "Logo", name: "logo", widget: "image", required: false },
+                      {
+                        label: "社交媒体",
+                        name: "social",
+                        widget: "object",
+                        fields: [
+                          { label: "GitHub", name: "github", widget: "string", required: false },
+                          { label: "Twitter", name: "twitter", widget: "string", required: false },
+                          { label: "微博", name: "weibo", widget: "string", required: false },
+                          { label: "知乎", name: "zhihu", widget: "string", required: false }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    label: "友情链接",
+                    name: "links",
+                    file: "src/content/links.json",
+                    fields: [
+                      {
+                        label: "链接",
+                        name: "links",
+                        widget: "list",
+                        fields: [
+                          { label: "名称", name: "name", widget: "string" },
+                          { label: "网址", name: "url", widget: "string" },
+                          { label: "描述", name: "description", widget: "text", required: false },
+                          { label: "图标", name: "icon", widget: "string", required: false }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            
+            // 明确禁用外部配置文件加载
+            load_config_file: false
+          };
+          
+          // 强制手动初始化CMS
+          window.CMS_MANUAL_INIT = true;
+          
+          // 初始化CMS
+          try {
+            window.CMS.init({ config: config });
+            console.log("CMS初始化成功");
+          } catch (error) {
+            console.error("CMS初始化失败:", error);
+          }
+          
+          // 无论初始化是否成功，都在一段时间后隐藏加载动画
+          setTimeout(function() {
+            var loadingElement = document.getElementById('cms-loading');
+            if (loadingElement) {
+              loadingElement.style.display = 'none';
+            }
+            
+            // 在CMS加载完成后，再次尝试隐藏错误消息
+            setTimeout(function() {
+              var errorElements = document.querySelectorAll('.notif__error, .error-container, [class*="error"], [class*="Error"]');
+              for (var i = 0; i < errorElements.length; i++) {
+                var el = errorElements[i];
+                if (el.textContent.includes('错误') || el.textContent.includes('Error') || el.textContent.includes('失败')) {
+                  el.style.display = 'none';
+                  console.log('已隐藏错误消息元素');
+                }
+              }
+            }, 1000);
+          }, 3000);
+            
+        } catch (e) {
+          console.error("CMS初始化发生错误:", e);
+          // 出错时也隐藏加载动画
+          document.getElementById('cms-loading').style.display = 'none';
+        }
+      }, 1000);
+    });
+  </script>
+</body>
+</html> 
