@@ -7,6 +7,7 @@ import { getSiteConfig, type SiteConfig } from "@/lib/config";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from 'react';
+import { HeadMeta } from '@/components/layout/HeadMeta';
 
 // Define props type
 interface TagPageProps {
@@ -106,7 +107,7 @@ function generateCloudPath(): string {
 // 设置不显示页脚
 TagPage.showFooter = false;
 
-export default function TagPage({ tag, taggedPosts }: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function TagPage({ tag, taggedPosts, siteConfig }: InferGetStaticPropsType<typeof getStaticProps>) {
   const [cloudPaths, setCloudPaths] = useState<string[]>([]);
   
   // 生成装饰云朵
@@ -160,10 +161,11 @@ export default function TagPage({ tag, taggedPosts }: InferGetStaticPropsType<ty
 
   return (
     <>
-      <Head>
-        <title>{tag} - 标签 - WhisperWind Blog</title>
-        <meta name="description" content={`查看所有带有 \"${tag}\" 标签的文章列表`} />
-      </Head>
+      <HeadMeta
+        title={`${tag} - 标签`}
+        description={`查看所有带有 "${tag}" 标签的文章列表`}
+        siteConfig={siteConfig}
+      />
       
       <div className="relative py-6 md:py-10 min-h-[calc(100vh-8rem)]">
         {/* 装饰云朵背景 */}

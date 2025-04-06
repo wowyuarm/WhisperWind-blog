@@ -7,16 +7,12 @@
 ## ✨ 特性
 
 - 🎨 **吉卜力风格设计**：柔和、自然的色彩系统，带来温暖、宁静的视觉体验
-- 📱 **响应式设计**：在任何设备上都有完美的显示效果
 - ✍️ **内容管理系统**：集成Decap CMS，通过Web界面轻松管理内容，无需本地Git命令
 - 🚀 **一键部署**：通过GitHub Actions自动部署到GitHub Pages
-- 🔍 **SEO优化**：搜索引擎优化，让你的博客更容易被发现
-- 📊 **创新标签系统**：
-  - 动态圆形标签云，大小反映文章数量
-  - 交互式悬停效果和平滑动画
-  - 标签筛选功能
+- 📊 **创新标签系统**：动态圆形标签云，大小反映文章数量
 - 📝 **Markdown支持**：使用Markdown编写文章，轻松排版
 - 🌩️ **云朵元素**：整个博客中都融入了精美的云朵动画元素，增强吉卜力风格体验
+- 🔍 **SEO优化**：搜索引擎优化，让你的博客更容易被发现
 
 ## 🖼️ 预览
 
@@ -62,7 +58,7 @@ window.netlifyIdentity = {
   }
 };
 
-// 同时找到并修改站点URL配置（约在90行左右）
+// 同时找到并修改站点URL配置（约在180行左右）
 site_url: "https://your-username.github.io/your-repo-name",
 display_url: "https://your-username.github.io/your-repo-name",
 ```
@@ -103,7 +99,7 @@ display_url: "https://your-username.github.io/your-repo-name",
 
 通过Decap CMS，你可以轻松地管理你的博客内容：
 
-1. 访问你的网站`/admin/`路径（例如：`https://your-username.github.io/your-repo-name/admin/`）
+1. 访问你的主页底部的“管理”链接到认证页面
 2. 使用Netlify Identity账号登录
 3. 使用友好的界面创建和编辑内容：
    - **博客文章**：撰写新文章，设置标签和特色图片
@@ -113,16 +109,6 @@ display_url: "https://your-username.github.io/your-repo-name",
 
 当你保存更改时，CMS会通过Git Gateway创建一个提交，并推送到你的GitHub仓库。GitHub Actions会自动构建和部署更新后的网站。
 
-## 📚 标签系统特性
-
-WhisperWind Blog拥有独特的标签云布局，具备以下特性：
-
-1. **圆形动态布局**：标签以圆形的方式排布，主要标签位于中心位置
-2. **大小反映文章数**：标签大小根据相关文章数量动态调整，让重要标签更显眼
-3. **自适应动画**：根据屏幕尺寸自动调整布局和动画效果
-4. **悬停效果**：鼠标悬停时标签会缩放并显示阴影效果
-5. **流畅过渡**：使用Framer Motion实现丝滑动画，提升用户体验
-6. **标签筛选**：可通过搜索框快速筛选标签
 
 ## 🧩 主要功能
 
@@ -148,3 +134,7 @@ WhisperWind Blog拥有独特的标签云布局，具备以下特性：
 ---
 
 🌟 如果你喜欢这个项目，请给它一个Star！
+
+## 致谢
+
+部分UI设计及风格样式来自开源项目[Ghibli Style Shadcn/ui](https://github.com/cefeng06/Ghibli-Shadcn-Theme)

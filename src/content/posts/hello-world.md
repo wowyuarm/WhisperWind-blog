@@ -31,13 +31,10 @@ WhisperWind Blog 是一个基于 Next.js 的简洁优雅博客模板，具有吉
 ```bash
 # 复制仓库
 git clone https://github.com/yourusername/whisperwind-blog.git
-
 # 进入目录
 cd whisperwind-blog
-
 # 安装依赖
 npm install
-
 # 启动开发服务器
 npm run dev
 ```

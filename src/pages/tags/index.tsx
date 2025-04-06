@@ -5,6 +5,8 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { getAllPostMetas } from '@/lib/content';
+import { getSiteConfig, type SiteConfig } from '@/lib/config';
+import { HeadMeta } from '@/components/layout/HeadMeta';
 
 // 定义标签信息类型
 interface TagInfo {
@@ -21,11 +23,12 @@ interface TagInfo {
 // 定义页面属性类型
 interface TagsIndexPageProps {
   tags: TagInfo[];
+  siteConfig: SiteConfig;
 }
 
 export const getStaticProps: GetStaticProps<TagsIndexPageProps> = async () => {
   try {
-    const posts = getAllPostMetas();
+  const posts = getAllPostMetas();
     
     // 计算每个标签的文章数量
     const tagCounts: Record<string, number> = {};
@@ -46,16 +49,20 @@ export const getStaticProps: GetStaticProps<TagsIndexPageProps> = async () => {
       .filter(tag => tag.name.trim() !== '') // 过滤空标签
       .sort((a, b) => b.count - a.count); // 按文章数量降序排序
     
-    return {
-      props: {
-        tags,
-      },
-    };
+  const siteConfig = getSiteConfig();
+
+  return {
+    props: {
+      tags,
+      siteConfig,
+    },
+  };
   } catch (error) {
     console.error('Error fetching tags:', error);
     return {
       props: {
         tags: [],
+        siteConfig: getSiteConfig(),
       },
     };
   }
@@ -221,7 +228,8 @@ function generateCloudPath(): string {
 TagsIndexPage.showFooter = false;
 
 export default function TagsIndexPage({ 
-  tags 
+  tags,
+  siteConfig
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const [cloudRadius, setCloudRadius] = useState(180);
   const [windowWidth, setWindowWidth] = useState(0);
@@ -250,7 +258,7 @@ export default function TagsIndexPage({
     }
   };
   
-  // 浮动动画设置
+  // 浮动动画设置 - 仅保留位置变化，移除透明度变化
   const floatVariants = {
     float: (i: number) => ({
       y: [0, i % 2 === 0 ? -3 : -5, 0],
@@ -265,15 +273,15 @@ export default function TagsIndexPage({
     })
   };
   
-  // 云朵背景动画
+  // 云朵背景动画 - 保持静态透明度，只移动位置
   const cloudVariants = {
     initial: (i: number) => ({
-      opacity: 0.03 + Math.random() * 0.07,
+      opacity: 0.06,
       x: -20,
       y: -10 + Math.random() * 20
     }),
     animate: (i: number) => ({
-      opacity: 0.06 + Math.random() * 0.08,
+      opacity: 0.06,
       x: 20,
       y: -10 + Math.random() * 20,
       transition: {
@@ -328,10 +336,11 @@ export default function TagsIndexPage({
   
   return (
     <>
-      <Head>
-        <title>标签 - WhisperWind Blog</title>
-        <meta name="description" content="WhisperWind Blog的文章标签" />
-      </Head>
+      <HeadMeta 
+        title="标签" 
+        description="WhisperWind Blog的文章标签" 
+        siteConfig={siteConfig} 
+      />
       
       <div 
         ref={cloudContainerRef}
@@ -365,7 +374,7 @@ export default function TagsIndexPage({
             </motion.svg>
           ))}
         </div>
-        
+
         <div 
           className="absolute inset-0 flex items-center justify-center" 
           style={{ perspective: 1000 }}
@@ -396,7 +405,7 @@ export default function TagsIndexPage({
                 <Link href={`/tags/${tag.name}/`} className="block">
                   <motion.div className={cn(
                     "flex items-center justify-center rounded-full cursor-pointer transition-all",
-                    "bg-warm-paper/90 backdrop-blur-sm border border-primary/20 hover:border-primary/50",
+                    "bg-warm-paper border border-primary/20 hover:border-primary/50",
                     "shadow-sm overflow-hidden relative"
                   )}
                   style={{
@@ -416,12 +425,12 @@ export default function TagsIndexPage({
                       <div className="text-xs text-muted-foreground mt-0.5">{tag.count} 篇</div> {/* 减小上边距 */}
                     </div>
                   </motion.div>
-                </Link>
+              </Link>
               </motion.div>
             );
           })}
-        </div>
+          </div>
       </div>
     </>
   );
-}
+} 

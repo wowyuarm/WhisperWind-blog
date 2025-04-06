@@ -1,5 +1,11 @@
 @import "tailwindcss";
 @import "./ghibli-font.css";
+/* 导入highlight.js的默认样式，用于代码高亮 */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css');
+/* 导入自定义代码块样式 */
+@import "./code-block.css";
+/* 导入手绘风格样式 */
+@import "./hand-drawn.css";
 
 @theme inline {
   --color-background: var(--background);
@@ -118,81 +124,39 @@
   --color-blue-900: rgba(90, 110, 120, 0.9);   
 }
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
-
   html {
-    font-family: var(--font-ghibli);
-    letter-spacing: 0.025em;
-    @apply bg-background;
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
   }
-
   body {
-    font-family: var(--font-ghibli);
     @apply bg-background text-foreground;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    position: relative;
+    font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
     
-    /* 使用CSS生成的纹理代替图片 */
-    background-image: 
-      linear-gradient(
-        to right,
-        rgba(248, 244, 232, 0.95),
-        rgba(255, 251, 240, 0.95)
-      );
-  }
-  
-  /* 增强纸质纹理效果 - 更明显的纸张纹理 */
-  body::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    opacity: 0.5;  /* 增加不透明度，使纹理更加明显 */
-    z-index: -1;
-    
-    /* 纸质纹理图案 - 更加明显 */
-    background-image: 
-      radial-gradient(
-        rgba(210, 180, 140, 0.3) 2px,
-        transparent 2px
-      );
-    background-size: 20px 20px;
-  }
-  
-  /* 手绘线条纹理 - 更显著 */
-  body::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    opacity: 0.2;  /* 增加不透明度，使效果明显但不过分 */
-    z-index: -1;
-    
-    /* 不规则横线 - 模拟手绘纸张 */
+    /* 全局手绘线条纹理背景 */
     background-image: 
       repeating-linear-gradient(
         0deg,
-        rgba(92, 82, 74, 0.06),
-        rgba(92, 82, 74, 0.06) 1px,
-        transparent 1px,
-        transparent 30px
+        var(--hand-drawn-line-color),
+        var(--hand-drawn-line-color) var(--hand-drawn-line-thickness),
+        transparent var(--hand-drawn-line-thickness),
+        transparent var(--hand-drawn-line-spacing)
       );
   }
   
-  /* 额外的纸张噪点纹理 */
-  .page-container::after {
+  /* 手绘感的内容容器 */
+  main, section, .content-container {
+    position: relative;
+  }
+  
+  /* 手绘横线 */
+  main::before, section::before, .content-container::before {
     content: "";
     position: absolute;
     top: 0;
@@ -201,369 +165,383 @@
     height: 100%;
     pointer-events: none;
     z-index: -1;
-    
-    /* 噪点效果 - 使背景更加丰富 */
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    opacity: 0.5;  /* 提高不透明度，使纹理效果更明显 */
+    background-image: 
+      repeating-linear-gradient(
+        0deg,
+        var(--hand-drawn-line-color),
+        var(--hand-drawn-line-color) var(--hand-drawn-line-thickness),
+        transparent var(--hand-drawn-line-thickness),
+        transparent var(--hand-drawn-line-spacing)
+      );
   }
   
-  /* 代码块样式增强 */
-  pre, code {
-    @apply bg-secondary/20 px-3 py-1.5 rounded-[var(--radius-sm)] border border-secondary/30;
+  /* 垂直手绘线 - 更加柔和 */
+  .hand-drawn-vertical-lines {
     position: relative;
-    font-family: var(--font-mono);
   }
   
-  pre {
-    @apply p-4 my-4 overflow-x-auto;
-  }
-  
-  pre::before {
+  .hand-drawn-vertical-lines::after {
     content: "";
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.5;
     background-image: 
       repeating-linear-gradient(
-        -45deg,
-        rgba(210, 180, 140, 0.08),
-        rgba(210, 180, 140, 0.08) 1px,
-        transparent 1px,
-        transparent 10px
+        90deg,
+        var(--hand-drawn-line-color),
+        var(--hand-drawn-line-color) var(--hand-drawn-line-thickness),
+        transparent var(--hand-drawn-line-thickness),
+        transparent calc(var(--hand-drawn-line-spacing) * 3)
       );
-    opacity: 0.9;
-    z-index: -1;
+  }
+}
+
+/* 吉卜力风格按钮 */
+.btn-ghibli {
+  @apply relative overflow-hidden transition-all duration-300;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1), 0px 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* 全局动画相关 */
+.animations-disabled .PostCard,
+.animations-disabled .AnimatedButton {
+  animation: none !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* 性能优化相关 */
+.content-visibility-auto {
+  content-visibility: auto;
+}
+
+/* 防止布局偏移 */
+@media (min-width: 768px) {
+  .grid-cols-2 > * {
+    min-height: 400px;
+  }
+}
+
+/* 提示浏览器对哪些元素进行硬件加速 */
+.animate-fade-in-up,
+.animate-slow-float,
+.will-change-transform {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 淡入上升动画 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animation-delay-300 {
+  animation-delay: 0.3s;
+}
+
+.animation-delay-500 {
+  animation-delay: 0.5s;
+}
+
+.animation-delay-700 {
+  animation-delay: 0.7s;
+}
+
+/* 缓慢浮动动画 */
+@keyframes slowFloat {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.animate-slow-float {
+  animation: slowFloat 4s ease-in-out infinite;
+}
+
+/* 动画性能优化 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
   
-  /* 引用块样式 */
-  blockquote {
-    @apply pl-4 border-l-4 border-primary/70 bg-primary/10 py-2 px-3 rounded-r-[var(--radius-sm)] my-4 italic;
+  .animate-fade-in-up,
+  .animate-slow-float {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+/* 常用阴影类 */
+.shadow-ghibli {
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1), 0px 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.shadow-ghibli-lg {
+  box-shadow: 0 12px 20px -3px rgba(210, 180, 140, 0.15), 0 8px 12px -6px rgba(92, 82, 74, 0.08);
+}
+
+.shadow-ghibli-sm {
+  box-shadow: 0 4px 8px -2px rgba(210, 180, 140, 0.1), 0 2px 4px -2px rgba(92, 82, 74, 0.05);
+}
+
+/* 优化文章阅读体验 */
+@layer components {
+  /* 优化文章的排版和可读性 */
+  .prose {
+    font-family: 'GhibliFontPro', ui-sans-serif, system-ui, sans-serif;
+    line-height: 1.75;
+    max-width: 65ch;
+    margin: 0 auto;
   }
   
-  /* 链接样式 */
-  a {
-    @apply text-primary hover:text-primary/80 transition-colors duration-300 underline decoration-primary/30 hover:decoration-primary/60;
-    text-underline-offset: 2px;
-  }
-  
-  /* 列表样式增强 */
-  ul, ol {
-    @apply pl-6 my-3;
-  }
-  
-  li {
-    @apply mb-2;
-  }
-  
-  ul > li::marker {
+  /* 优化标题层次 */
+  .prose h1 {
+    font-size: 2rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
     color: var(--primary);
   }
   
-  ol > li::marker {
-    color: var(--secondary);
-  }
-}
-
-@layer utilities {
-  /* 吉卜力风格的边框 - 加粗但更柔和 */
-  .border {
-    border-width: 2px;
-  }
-  
-  /* 卡片悬浮效果 - 更柔和的动画 */
-  .card-hover {
-    @apply transition-all duration-500 ease-in-out;
+  .prose h2 {
+    font-size: 1.5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    color: var(--foreground);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.5rem;
   }
   
-  .card-hover:hover {
-    @apply transform -translate-y-1.5;
-    box-shadow: 0 12px 20px -3px rgba(210, 180, 140, 0.12), 0 8px 12px -6px rgba(92, 82, 74, 0.06);
+  .prose h3 {
+    font-size: 1.25rem;
+    margin-top: 1.75rem;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    color: var(--foreground);
   }
   
-  /* 按钮效果 - 更柔和的过渡 */
-  .btn-ghibli {
-    @apply transform transition-all duration-300 ease-in-out rounded-full;
+  /* 段落样式优化 */
+  .prose p {
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    font-size: 1rem;
+    color: var(--foreground);
   }
   
-  .btn-ghibli:hover {
-    @apply -translate-y-0.5;
-    box-shadow: 0 12px 20px -3px rgba(210, 180, 140, 0.12), 0 8px 12px -6px rgba(92, 82, 74, 0.06);
+  /* 引用块样式 */
+  .prose blockquote {
+    border-left: 3px solid var(--primary);
+    padding-left: 1rem;
+    font-style: italic;
+    color: var(--muted-foreground);
+    background-color: rgba(var(--primary-rgb), 0.05);
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
   }
   
-  .btn-ghibli:active {
-    @apply translate-y-0 shadow-sm scale-[0.98];
+  /* 列表样式 */
+  .prose ul {
+    padding-left: 1.5rem;
+    margin: 1.25rem 0;
   }
   
-  /* 柔和阴影 */
-  .shadow-ghibli {
-    box-shadow: 0 8px 15px -3px rgba(210, 180, 140, 0.1), 0 4px 8px -4px rgba(92, 82, 74, 0.05);
+  .prose ol {
+    padding-left: 1.5rem;
+    margin: 1.25rem 0;
   }
   
-  /* 暖色渐变背景 */
-  .bg-ghibli-gradient {
-    background: linear-gradient(135deg, rgba(255, 251, 240, 0.98) 0%, rgba(248, 244, 232, 0.95) 100%);
+  .prose li {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
   }
   
-  /* 暖色调文字 */
-  .text-warm {
-    color: rgba(92, 82, 74, 0.95);
+  /* 链接样式 */
+  .prose a {
+    color: var(--primary);
+    text-decoration: underline;
+    text-decoration-thickness: 0.05em;
+    text-underline-offset: 0.15em;
+    transition: all 0.2s ease;
   }
   
-  /* 水彩边框效果 - 更明显的实现 */
-  .border-watercolor {
-    @apply relative;
+  .prose a:hover {
+    color: rgba(var(--primary-rgb), 0.8);
+    text-decoration-thickness: 0.1em;
   }
   
-  .border-watercolor::after {
-    content: "";
-    position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    border-radius: inherit;
-    border: 2px solid rgba(143, 170, 143, 0.7);  /* 增加不透明度，使效果更明显 */
-    opacity: 0.9;  /* 增加不透明度 */
-    pointer-events: none;
-    filter: blur(0.5px);
+  /* 代码块自定义样式 */
+  .prose pre {
+    background-color: transparent;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
+    overflow-x: visible;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    border: none;
+    box-shadow: none;
   }
   
-  /* 纸张质感背景 */
-  .bg-warm-paper {
-    background-color: var(--card);
-    position: relative;
+  /* 暗色模式下的代码块背景 */
+  .dark .prose pre {
+    background-color: transparent;
+    border-color: transparent;
   }
   
-  .bg-warm-paper::before {
-    content: "";
+  /* 代码块中的语言标记 */
+  .prose pre .language-tag {
     position: absolute;
     top: 0;
-    left: 0;
+    right: 0;
+    color: var(--muted-foreground);
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    background-color: rgba(143, 170, 143, 0.1);
+    border-bottom-left-radius: var(--radius-sm);
+    font-family: var(--font-sans);
+  }
+  
+  /* 行内代码 */
+  .prose :not(pre) > code {
+    background-color: rgba(var(--primary-rgb), 0.08);
+    color: var(--primary);
+    padding: 0.2em 0.4em;
+    border-radius: 0.25rem;
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    white-space: nowrap;
+  }
+  
+  /* 表格样式 */
+  .prose table {
     width: 100%;
-    height: 100%;
-    background-image: 
-      radial-gradient(
-        rgba(210, 180, 140, 0.2) 1px,
-        transparent 1px
-      );
-    background-size: 10px 10px;
-    opacity: 0.8;
-    z-index: 0;
-    border-radius: inherit;
-    pointer-events: none;
+    table-layout: auto;
+    text-align: left;
+    margin: 2rem 0;
+    border-collapse: collapse;
   }
-
-  /* 淡入并上移动画 */
-  @keyframes fadeInUp {
-    from {
-      opacity: 0;
-      transform: translateY(15px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  
+  .prose thead {
+    background-color: rgba(var(--primary-rgb), 0.08);
+    border-bottom: 2px solid var(--border);
   }
-
-  /* 轻微上下漂浮动画 */
-  @keyframes slowFloat {
-    0%, 100% {
-      transform: translateY(0);
-    }
-    50% {
-      transform: translateY(-5px);
-    }
+  
+  .prose th {
+    padding: 0.75rem 1rem;
+    font-weight: 600;
   }
-
-  /* 动画延迟类 */
-  .animation-delay-100 {
-    animation-delay: 100ms;
+  
+  .prose td {
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
   }
-  .animation-delay-300 {
-    animation-delay: 300ms;
+  
+  .prose tbody tr:hover {
+    background-color: rgba(var(--primary-rgb), 0.03);
   }
-  .animation-delay-500 {
-    animation-delay: 500ms;
+  
+  /* 图片样式 */
+  .prose img {
+    margin: 2rem auto;
+    border-radius: var(--radius-sm);
+    max-width: 100%;
+    height: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   }
-  .animation-delay-700 {
-    animation-delay: 700ms;
+  
+  /* 水平线 */
+  .prose hr {
+    border: 0;
+    height: 1px;
+    background-color: var(--border);
+    margin: 2.5rem 0;
   }
-  .animation-delay-900 {
-    animation-delay: 900ms;
+  
+  /* 代码块优化 */
+  .prose pre code {
+    font-family: var(--font-mono);
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    tab-size: 4;
+    hyphens: none;
+    direction: ltr;
+    text-align: left;
+    font-feature-settings: normal;
+    font-variant-ligatures: none;
   }
-
-  /* 淡入并上移动画类 */
-  .animate-fade-in-up {
-    animation: fadeInUp 0.6s ease-out forwards;
+  
+  /* 修复代码块空格和特殊字符显示问题 */
+  .prose pre code .hljs-comment,
+  .prose pre code .comment {
+    white-space: pre-wrap;
   }
-
-  /* 轻微上下漂浮动画类 */
-  .animate-slow-float {
-    animation: slowFloat 4s ease-in-out infinite;
-  }
-
-  /* 减少动画优先级 */
-  @media (prefers-reduced-motion: reduce) {
-    .animate-fade-in-up {
-      animation: none;
-      opacity: 1;
-    }
-    .animate-slow-float {
-      animation: none;
-    }
+  
+  /* 代码块显示优化 */
+  .hljs {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-family: var(--font-mono);
+    color: var(--foreground);
+    font-size: 0.9rem;
+    line-height: 1.6;
   }
 }
 
-/* 页面容器，预留背景空间 */
-.page-container {
-  @apply py-20 min-h-[calc(100vh-15rem)] relative;
-  /* 增加奶油色的背景暖调 */
-  background-color: rgba(248, 244, 232, 0.6);  /* 增加不透明度 */
-  position: relative;
-  box-shadow: 0 8px 30px rgba(210, 180, 140, 0.15), 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-/* 透明度调整 - 更偏向奶油色而非纯白 */
-.bg-translucent {
-  background: linear-gradient(to bottom, rgba(255, 251, 240, 0.98) 0%, rgba(248, 244, 232, 0.95) 100%);
-  @apply backdrop-blur-sm;
-}
-
-/* 装饰性元素 */
-.cloud-decoration {
-  @apply absolute pointer-events-none opacity-70 z-0;
-}
-
-/* 确保背景可见的内容区域 */
-.content-area {
-  @apply max-w-4xl mx-auto px-6 py-8 sm:px-6 lg:px-0 leading-loose relative;
-}
-
-/* 内容区域的纸张纹理 */
-.content-area::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: 
-    repeating-linear-gradient(
-      -45deg,
-      rgba(210, 180, 140, 0.08),
-      rgba(210, 180, 140, 0.08) 1px,
-      transparent 1px,
-      transparent 14px
-    );
-  opacity: 0.9;
-  z-index: -1;
-  pointer-events: none;
-}
-
-/* 吉卜力风格按钮 - 增强温暖感 */
-.button-ghibli {
-  @apply rounded-full border-2 border-primary/30 transition-all duration-300 ease-in-out;
-  box-shadow: 0 8px 15px -3px rgba(210, 180, 140, 0.12), 0 4px 8px -4px rgba(92, 82, 74, 0.06);
-  background: linear-gradient(to bottom, var(--primary) 0%, rgba(123, 150, 123, 0.95) 100%);
-}
-
-.button-ghibli:hover {
-  @apply -translate-y-0.5;
-  box-shadow: 0 12px 20px -3px rgba(210, 180, 140, 0.15), 0 8px 12px -6px rgba(92, 82, 74, 0.08);
-  background: linear-gradient(to bottom, var(--primary) 15%, rgba(123, 150, 123, 0.98) 100%);
-}
-
-/* 卡片阴影 - 更柔和的温暖调 */
-.card-shadow {
-  box-shadow: 0 10px 25px -5px rgba(210, 180, 140, 0.2), 0 8px 12px -6px rgba(92, 82, 74, 0.1);
-}
-
-/* 水彩效果的标题下划线 - 更明显的实现 */
-.watercolor-underline {
-  @apply relative inline-block;
-}
-
-.watercolor-underline::after {
-  content: "";
-  position: absolute;
-  bottom: -0.3em;
-  left: 0;
-  width: 100%;
-  height: 0.2em;
-  background: rgba(143, 170, 143, 0.45);  /* 增加不透明度，使效果更明显 */
-  border-radius: 2px;
-  filter: blur(1px);
-}
-
-/* a11y 增强 - 聚焦状态的视觉反馈 */
-*:focus-visible {
-  @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background;
-}
-
-/* 手绘感边框 - 更明显的实现 */
-.hand-drawn-border {
-  position: relative;
-  padding: 2px;
-}
-
-.hand-drawn-border::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border: 2px solid rgba(210, 180, 140, 0.5);  /* 增加不透明度，使效果更明显 */
-  border-radius: inherit;
-  z-index: -1;
-  transform: translate(2px, 2px);
-}
-
-/* 小组件圆角优化 */
-.btn-sm, .badge, .small-component {
-  border-radius: var(--radius-sm);
-}
-
-.btn-xs, .micro-badge, .mini-component {
-  border-radius: var(--radius-xs);
-}
-
-/* 图标统一样式 */
-svg.icon {
-  @apply text-foreground stroke-2 fill-none transition-colors duration-300;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-/* 主题切换图标特别样式 */
-.theme-toggle svg {
-  @apply text-foreground hover:text-primary transition-colors duration-300;
-  stroke-width: 2px;
-}
-
-/* Card组件通用样式增强 */
-.card {
-  border-width: 2px;
-  position: relative;
-}
-
-.card::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  background-image: 
-    radial-gradient(
-      rgba(210, 180, 140, 0.15) 1px,
-      transparent 1px
-    );
-  background-size: 12px 12px;
-  opacity: 0.7;
-  z-index: 0;
-  border-radius: inherit;
+/* 文章内容区域的响应式排版 */
+@media (max-width: 768px) {
+  .prose {
+    font-size: 0.95rem;
+  }
+  
+  .prose h1 {
+    font-size: 1.85rem;
+  }
+  
+  .prose h2 {
+    font-size: 1.5rem;
+  }
+  
+  .prose h3 {
+    font-size: 1.25rem;
+  }
+  
+  .prose p, .prose li {
+    font-size: 1rem;
+  }
 }

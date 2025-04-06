@@ -27,11 +27,14 @@ export interface Post extends PostMeta {
  * 从Markdown文件中获取元数据和内容
  */
 function parseMarkdownFile(filePath: string): Post {
-  // 读取文件内容
+  // 读取文件内容时明确指定编码为UTF-8
   const fileContents = fs.readFileSync(filePath, 'utf8');
   
+  // 尝试规范化文件内容编码，处理可能存在的BOM等问题
+  const normalizedContent = fileContents.replace(/^\uFEFF/, '');
+  
   // 使用gray-matter解析frontmatter
-  const { data, content } = matter(fileContents);
+  const { data, content } = matter(normalizedContent);
   
   // 提取元数据
   const meta = {

@@ -21,7 +21,7 @@ export function Footer({ config }: FooterProps) { // config can be undefined
       <footer className="border-t border-secondary/30 backdrop-blur-sm mt-auto bg-warm-paper/90 py-8">
         <div className="container mx-auto px-4 text-center">
            <p className="text-xs text-muted-foreground">
-            &copy; {currentYear} WhisperWind Blog. Minimal Footer.
+            &copy; {currentYear} 🍃WhisperWind Blog. Minimal Footer.
           </p>
         </div>
       </footer>
@@ -34,7 +34,7 @@ export function Footer({ config }: FooterProps) { // config can be undefined
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="flex flex-col items-center md:items-start mb-8 md:mb-0">
             <Link href="/" className="font-bold text-primary text-xl tracking-wide mb-2">
-              WhisperWind Blog
+              🍃WhisperWind Blog
             </Link>
             <p className="text-sm text-muted-foreground text-center md:text-left max-w-xs">
               {config.description}
@@ -61,14 +61,13 @@ export function Footer({ config }: FooterProps) { // config can be undefined
                   </svg>
                 </a>
               )}
-              
               {config.social.twitter && (
                 <a 
                   href={config.social.twitter} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary transition-colors duration-300 p-2 rounded-full hover:bg-primary/5"
-                  aria-label="Twitter"
+                  aria-label="X"
                 >
                   <svg
                     className="h-5 w-5 hover:scale-110 transition-transform duration-300"
@@ -76,7 +75,7 @@ export function Footer({ config }: FooterProps) { // config can be undefined
                     fill="currentColor"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5 0-.28-.03-.56-.08-.83A7.72 7.72 0 0023 3z" />
+                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                   </svg>
                 </a>
               )}
@@ -101,28 +100,7 @@ export function Footer({ config }: FooterProps) { // config can be undefined
         
         <div className="border-t border-secondary/20 mt-8 pt-6 flex flex-col items-center">
           <p className="text-xs text-muted-foreground text-center">
-            &copy; {currentYear} {config.author}. All rights reserved.
-          </p>
-          <p className="text-xs text-muted-foreground mt-2 flex items-center">
-            <span>基于</span>
-            <a 
-              href="https://nextjs.org" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-primary mx-1 hover:underline"
-            >
-              Next.js
-            </a>
-            <span>和</span>
-            <a 
-              href="https://tailwindcss.com" 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              className="text-primary mx-1 hover:underline"
-            >
-              Tailwind CSS
-            </a>
-            <span>构建</span>
+            &copy; {currentYear} 🍃WhisperWind Blog. All rights reserved.
           </p>
         </div>
       </div>

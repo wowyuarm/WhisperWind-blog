@@ -4,6 +4,7 @@ import { ReactNode } from "react";
 import { type SiteConfig } from "@/lib/config";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from 'next/navigation';
+import { ReadingProgressBar } from "@/components/blog/ReadingProgressBar";
 
 interface LayoutProps {
   children: ReactNode;
@@ -21,8 +22,9 @@ export function Layout({
   const pathname = usePathname();
 
   return (
-    <div className="flex flex-col min-h-screen bg-warm-paper/90 overflow-x-hidden">
+    <div className="flex flex-col min-h-screen bg-warm-paper/90 overflow-x-hidden hand-drawn-bg hand-drawn-edge">
       {showHeader && <Header />}
+      <ReadingProgressBar />
       <AnimatePresence mode="wait">
         <motion.main
           key={pathname}
@@ -30,7 +32,7 @@ export function Layout({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -15 }}
           transition={{ duration: 0.4, ease: "easeInOut" }}
-          className="flex-1 w-full mx-auto container px-4 pb-12 relative"
+          className="flex-1 w-full mx-auto container px-4 pb-12 relative paper-edge"
         >
           {children}
         </motion.main>

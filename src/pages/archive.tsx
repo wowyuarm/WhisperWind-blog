@@ -3,6 +3,7 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { PostCard } from "@/components/blog/PostCard";
 import { getAllPostMetas, type PostMeta } from "@/lib/content";
 import { getSiteConfig, type SiteConfig } from "@/lib/config";
+import { HeadMeta } from '@/components/layout/HeadMeta';
 
 // Define props type
 interface ArchivePageProps {
@@ -27,13 +28,14 @@ export const getStaticProps: GetStaticProps<ArchivePageProps> = async () => {
 // 设置不显示页脚
 ArchivePage.showFooter = false;
 
-export default function ArchivePage({ posts }: InferGetStaticPropsType<typeof getStaticProps>) {
+export default function ArchivePage({ posts, siteConfig }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <>
-      <Head>
-        <title>文章归档 - WhisperWind Blog</title>
-        <meta name="description" content="浏览WhisperWind Blog的所有文章归档" />
-      </Head>
+      <HeadMeta
+        title="文章归档"
+        description="浏览WhisperWind Blog的所有文章归档"
+        siteConfig={siteConfig}
+      />
       <div className="py-8 md:py-12">
         <div className="mb-10">
           <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">文章归档</h1>

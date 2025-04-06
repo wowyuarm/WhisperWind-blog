@@ -2,14 +2,19 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Head from 'next/head';
 import { motion } from 'framer-motion';
+import { HeadMeta } from "@/components/layout/HeadMeta";
+import { getSiteConfig } from "@/lib/config";
 
 export default function Custom404() {
+  const siteConfig = getSiteConfig();
+  
   return (
     <>
-      <Head>
-        <title>页面未找到 - WhisperWind Blog</title>
-        <meta name="description" content="抱歉，您请求的页面未找到" />
-      </Head>
+      <HeadMeta
+        title="页面未找到"
+        description="抱歉，您请求的页面未找到"
+        siteConfig={siteConfig}
+      />
       <div className="min-h-[60vh] flex flex-col items-center justify-center py-16 text-center px-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}

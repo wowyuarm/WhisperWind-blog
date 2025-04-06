@@ -1,0 +1,170 @@
+/* 手绘风格背景样式 */
+
+/* 变量定义 */
+:root {
+  --primary-line-color: rgba(92, 82, 74, 0.025);
+  --secondary-line-color: rgba(92, 82, 74, 0.015);
+  --accent-line-color: rgba(92, 82, 74, 0.035);
+  --dot-color: rgba(92, 82, 74, 0.02);
+  
+  --base-spacing: 28px;
+  --random-spacing1: 32px;
+  --random-spacing2: 45px;
+  --random-spacing3: 38px;
+  
+  --thin-line: 0.5px;
+  --medium-line: 1px;
+  --thick-line: 1.5px;
+}
+
+.dark {
+  --primary-line-color: rgba(180, 190, 210, 0.025);
+  --secondary-line-color: rgba(180, 190, 210, 0.015);
+  --accent-line-color: rgba(180, 190, 210, 0.035);
+  --dot-color: rgba(180, 190, 210, 0.02);
+}
+
+/* 主手绘背景 - 应用于body */
+.hand-drawn-bg {
+  /* 主要横线 - 变化的间距和粗细 */
+  background-image: 
+    /* 主要水平线 */
+    repeating-linear-gradient(
+      0deg,
+      var(--primary-line-color),
+      var(--primary-line-color) var(--thin-line),
+      transparent var(--thin-line),
+      transparent var(--base-spacing)
+    ),
+    /* 次要水平线 - 不同间距 */
+    repeating-linear-gradient(
+      0deg,
+      var(--secondary-line-color),
+      var(--secondary-line-color) var(--thin-line),
+      transparent var(--thin-line),
+      transparent var(--random-spacing1)
+    ),
+    /* 强调水平线 - 较粗 */
+    repeating-linear-gradient(
+      0deg,
+      var(--accent-line-color),
+      var(--accent-line-color) var(--thick-line),
+      transparent var(--thick-line),
+      transparent var(--random-spacing3)
+    ),
+    /* 垂直线 - 更宽的间距 */
+    repeating-linear-gradient(
+      90deg,
+      var(--secondary-line-color),
+      var(--secondary-line-color) var(--thin-line),
+      transparent var(--thin-line),
+      transparent calc(var(--random-spacing2) * 3)
+    ),
+    /* 点状背景 - 创造纹理感 */
+    radial-gradient(
+      var(--dot-color) 1px,
+      transparent 1px
+    );
+  
+  /* 设置点状背景的尺寸 */
+  background-size: 
+    100% var(--base-spacing),
+    100% var(--random-spacing1),
+    100% var(--random-spacing3),
+    calc(var(--random-spacing2) * 3) 100%,
+    calc(var(--random-spacing1) * 2) calc(var(--random-spacing2) * 2);
+    
+  /* 稍微错开一些元素，增加随机感 */
+  background-position: 
+    0 0,
+    0 1px,
+    0 2px,
+    1px 0,
+    -3px -3px;
+}
+
+/* 页面边缘的手绘装饰效果 */
+.hand-drawn-edge {
+  position: relative;
+}
+
+.hand-drawn-edge::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 60px;
+  pointer-events: none;
+  opacity: 0.5;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--primary-line-color) 85%
+  );
+}
+
+.hand-drawn-edge::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 60px;
+  pointer-events: none;
+  opacity: 0.5;
+  background: linear-gradient(
+    -90deg,
+    transparent,
+    var(--primary-line-color) 85%
+  );
+}
+
+/* 手绘纸张边缘效果 */
+.paper-edge {
+  position: relative;
+  overflow: hidden;
+}
+
+.paper-edge::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  bottom: -5px;
+  left: -5px;
+  z-index: -1;
+  pointer-events: none;
+  background: 
+    radial-gradient(
+      circle at 0% 0%, 
+      transparent 0, 
+      transparent 14px, 
+      var(--accent-line-color) 15px,
+      transparent 16px
+    ),
+    radial-gradient(
+      circle at 100% 0%, 
+      transparent 0, 
+      transparent 14px, 
+      var(--accent-line-color) 15px,
+      transparent 16px
+    ),
+    radial-gradient(
+      circle at 100% 100%, 
+      transparent 0, 
+      transparent 14px, 
+      var(--accent-line-color) 15px,
+      transparent 16px
+    ),
+    radial-gradient(
+      circle at 0% 100%, 
+      transparent 0, 
+      transparent 14px, 
+      var(--accent-line-color) 15px,
+      transparent 16px
+    );
+  background-size: 32px 32px;
+  background-position: 0 0, 100% 0, 100% 100%, 0 100%;
+  background-repeat: no-repeat;
+} 

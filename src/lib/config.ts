@@ -13,6 +13,7 @@ export interface SiteConfig {
   description: string;
   author: string;
   logo?: string;
+  favicon?: string;
   social: SocialLinks;
 }
 
@@ -21,6 +22,7 @@ export interface FriendLink {
   url: string;
   description?: string;
   icon?: string;
+  type?: 'personal' | 'official';
 }
 
 export interface LinksConfig {
@@ -29,9 +31,11 @@ export interface LinksConfig {
 
 // 默认配置，将在客户端和服务端都可用
 const defaultSiteConfig: SiteConfig = {
-  title: 'WhisperWind Blog',
+  title: '🍃WhisperWind Blog',
   description: '一个具有吉卜力风格的开源博客模板',
   author: '禹创',
+  logo: '/images/logo.png',
+  favicon: '/favicon.ico',
   social: {
     github: 'https://github.com/wowyuarm/WhisperWind-blog'
   }

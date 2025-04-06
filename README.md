@@ -7,16 +7,11 @@
 ## ✨ Features
 
 - 🎨 **Ghibli-Inspired Design**: Soft, natural color palette creating a warm and peaceful visual experience
-- 📱 **Responsive Layout**: Perfect display on any device
 - ✍️ **Content Management**: Integrated Decap CMS for easy content management through a web interface
 - 🚀 **One-Click Deploy**: Automatic deployment to GitHub Pages via GitHub Actions
-- 🔍 **SEO Optimized**: Making your blog easily discoverable
-- 📊 **Innovative Tag System**:
-  - Dynamic circular tag cloud with size reflecting article count
-  - Interactive hover effects and smooth animations
-  - Tag filtering functionality
-- 📝 **Markdown Support**: Write articles with easy formatting
+- 📊 **Innovative Tag System**: Dynamic circular tag cloud with size reflecting article count
 - 🌩️ **Cloud Elements**: Beautiful cloud animations throughout the blog enhancing the Ghibli aesthetic
+- 🔍 **SEO Optimized**: Making your blog easily discoverable
 
 ## 🖼️ Preview
 
@@ -62,7 +57,7 @@ window.netlifyIdentity = {
   }
 };
 
-// Also find and modify site URL configuration (around line 90)
+// Also find and modify site URL configuration (around line 180)
 site_url: "https://your-username.github.io/your-repo-name",
 display_url: "https://your-username.github.io/your-repo-name",
 ```
@@ -104,13 +99,13 @@ After completing the steps above and deploying your GitHub Pages website:
 
 With Decap CMS, you can easily manage your blog content:
 
-1. Visit your website's `/admin/` path
+1. Visit the "Admin" link in your site's footer to access the authentication page
 2. Log in with your Netlify Identity account
 3. Create and edit content through a friendly interface:
-   - Blog posts with tags and featured images
-   - Static pages
-   - Friend links
-   - Site configuration
+   - **Blog Posts**: Write new articles, set tags and featured images
+   - **Pages**: Edit static pages like "About"
+   - **Friend Links**: Manage friendship links
+   - **Site Configuration**: Update basic site information
 
 When you save changes, the CMS creates a commit and pushes it to your GitHub repository. GitHub Actions automatically builds and deploys the updated site.
 
@@ -125,12 +120,12 @@ WhisperWind Blog has a unique tag cloud layout with:
 5. **Smooth Transitions**: Silky animations using Framer Motion enhance user experience
 6. **Tag Filtering**: Quickly filter tags via search box
 
-## 🧩 Key Functions
+## 🧩 Main Functions
 
 - **Home Page**: Showcasing latest articles and site introduction
 - **Article Detail Page**: Displaying full article content with Markdown rendering
 - **Archive Page**: Listing all articles by date
-- **Tag Page**: Displaying all tags in a circular cloud layout
+- **Tag Page**: Displaying all tags in a circular cloud layout, click to view related articles
 - **About Page**: Static page about the website
 - **Friend Links Page**: Displaying friendship links
 
@@ -149,3 +144,7 @@ If you have any questions, please contact us through [GitHub Issues](https://git
 ---
 
 🌟 If you like this project, please give it a Star!
+
+## Acknowledgements
+
+Some UI design and style elements are inspired by the open-source project [Ghibli Style Shadcn/ui](https://github.com/cefeng06/Ghibli-Shadcn-Theme)

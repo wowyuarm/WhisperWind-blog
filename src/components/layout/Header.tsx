@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
@@ -17,6 +18,7 @@ const navLinks = [
 export function Header() {
   const pathname = usePathname();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [logoError, setLogoError] = useState(false);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
@@ -24,6 +26,11 @@ export function Header() {
 
   const handleLinkClick = () => {
     setIsMobileMenuOpen(false);
+  };
+
+  const handleLogoError = () => {
+    console.error("Logo加载失败");
+    setLogoError(true);
   };
 
   return (
@@ -40,11 +47,27 @@ export function Header() {
             className="mr-8 flex items-center space-x-2 text-xl font-medium group transition-all duration-300"
             aria-label="WhisperWind Blog"
           >
+            <div className="relative w-8 h-8 mr-2 rounded-full overflow-hidden border-2 border-primary/20 flex items-center justify-center bg-white/70">
+              {!logoError ? (
+                <Image 
+                  src="/images/logo.png" 
+                  alt="WhisperWind Logo" 
+                  width={32} 
+                  height={32} 
+                  className="object-cover rounded-full"
+                  priority
+                  onError={handleLogoError}
+                  unoptimized
+                />
+              ) : (
+                <span className="text-primary font-bold text-xl">W</span>
+              )}
+            </div>
             <motion.span 
               className="font-bold text-primary px-2 py-1 tracking-wide"
               whileHover={{ y: -3, transition: { duration: 0.3 } }}
             >
-              WhisperWind
+              🍃WhisperWind
             </motion.span>
             <motion.span 
               className="text-secondary-foreground font-medium tracking-wide"
