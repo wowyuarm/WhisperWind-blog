@@ -9,13 +9,9 @@ interface FooterProps {
 export function Footer({ config }: FooterProps) { // config can be undefined
   const currentYear = new Date().getFullYear();
   
-  // 获取admin链接，处理GitHub Pages部署情况
+  // 获取admin链接，直接指向index.html
   const getAdminUrl = () => {
-    // 检查是否在Github Pages环境下（通过检查当前URL是否包含仓库名）
-    if (typeof window !== 'undefined' && window.location.hostname.includes('github.io')) {
-      return "/WhisperWind-blog/admin/";
-    }
-    return "/admin/index.html";
+    return "/admin/index.html"; // 直接链接到HTML文件
   };
 
   // Handle undefined config gracefully
