@@ -10,6 +10,13 @@ export default function Document() {
       <Head>
         {/* 在这里可以添加自定义字体链接、全局meta标签等 */}
         {/* 页面特定的metadata和favicon已在各页面HeadMeta组件中设置 */}
+        {/* Favicon配置 */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
+        <meta name="theme-color" content="#ffffff" />
       </Head>
       <body>
         <Main />
