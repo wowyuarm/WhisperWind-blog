@@ -4,8 +4,6 @@
 
 [English](README.md) | 简体中文
 
-![标签云预览](https://i.imgur.com/KgYvFvb.png)
-
 ## ✨ 特性
 
 - 🎨 **吉卜力风格设计**：柔和、自然的色彩系统，带来温暖、宁静的视觉体验

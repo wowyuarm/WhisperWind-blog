@@ -1,10 +1,8 @@
 # WhisperWind Blog
 
-🌬️ A Ghibli-style open-source blog template with tag cloud animation and content management.
+🌬️ Open-source blog template inspired by Ghibli style, with easy content management and unique design & interaction experience
 
 [简体中文](README.zh-CN.md) | English
-
-![Tag Cloud Preview](https://i.imgur.com/KgYvFvb.png)
 
 ## ✨ Features
 
