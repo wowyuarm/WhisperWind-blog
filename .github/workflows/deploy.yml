@@ -39,6 +39,10 @@ jobs:
 
       - name: Build Project
         run: npm run build
+        env:
+          # 确保构建时可以获取到仓库名称
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          NODE_ENV: production
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

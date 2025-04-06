@@ -1,4 +1,6 @@
-/** @type {import('next').NextConfig} */
+/**
+ * @type {import('next').NextConfig}
+ */
 
 // 获取仓库名称以用于basePath
 const repoName = process.env.GITHUB_REPOSITORY ? process.env.GITHUB_REPOSITORY.split('/')[1] : '';
@@ -30,6 +32,6 @@ const nextConfig = {
       // 标签页和文章页在getStaticPaths中处理
     };
   },
-}
+};
 
-module.exports = nextConfig; 
+export default nextConfig;
