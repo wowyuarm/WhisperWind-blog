@@ -6,6 +6,7 @@ import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
 import rehypeStringify from 'rehype-stringify';
 import remarkGfm from 'remark-gfm';
+import { getAssetPath } from './utils';
 
 const postsDirectory = path.join(process.cwd(), 'src/content/posts');
 const pagesDirectory = path.join(process.cwd(), 'src/content/pages');
@@ -109,16 +110,12 @@ export function getPostBySlug(slug: string): Post | null {
  * 获取所有文章的元数据
  */
 export function getAllPostMetas(): PostMeta[] {
-  const basePath = process.env.NODE_ENV === 'production' && process.env.GITHUB_REPOSITORY
-    ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}`
-    : '';
-
   const posts = getAllPosts();
   return posts.map(post => {
     const { content, ...meta } = post;
     return {
       ...meta,
-      featuredImage: meta.featuredImage ? `${basePath}${meta.featuredImage}` : undefined,
+      featuredImage: meta.featuredImage ? getAssetPath(meta.featuredImage) : undefined,
     };
   });
 }

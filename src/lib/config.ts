@@ -1,5 +1,6 @@
 import path from 'path';
 import { useRouter } from 'next/router'
+import { getAssetPath } from './utils';
 
 interface SocialLinks {
   github?: string;
@@ -25,6 +26,7 @@ export interface FriendLink {
   description?: string;
   icon?: string;
   type?: 'personal' | 'official';
+  avatar?: string | null;
 }
 
 export interface LinksConfig {
@@ -57,15 +59,11 @@ if (typeof window === 'undefined') {
  * 获取网站配置
  */
 export function getSiteConfig(): SiteConfig {
-  const basePath = process.env.NODE_ENV === 'production' && process.env.GITHUB_REPOSITORY
-    ? `/${process.env.GITHUB_REPOSITORY.split('/')[1]}`
-    : '';
-
   // 处理默认配置
   const processConfig = (config: SiteConfig) => ({
     ...config,
-    avatar: config.avatar ? `${basePath}${config.avatar}` : null,
-    favicon: config.favicon ? `${basePath}${config.favicon}` : null,
+    avatar: config.avatar ? getAssetPath(config.avatar) : null,
+    favicon: config.favicon ? getAssetPath(config.favicon) : null,
   });
 
   // 当在浏览器环境中运行时，返回处理过的默认配置
@@ -94,24 +92,40 @@ export function getSiteConfig(): SiteConfig {
  * 获取友情链接
  */
 export function getFriendLinks(): FriendLink[] {
-  // 当在浏览器环境中运行时，直接返回默认链接
+  // 当在浏览器环境中运行时，直接返回默认友链
   if (typeof window !== 'undefined') {
-    return defaultFriendLinks;
+    return defaultFriendLinks.map(link => ({
+      ...link,
+      avatar: link.avatar ? getAssetPath(link.avatar) : null,
+    }));
   }
 
   // 以下代码只在服务器端运行
   try {
+    // 动态导入fs，只在服务器端使用
     const linksPath = path.join(process.cwd(), 'src/content/links.json');
     
     if (fs.existsSync(linksPath)) {
       const fileContents = fs.readFileSync(linksPath, 'utf8');
-      const data = JSON.parse(fileContents) as LinksConfig;
-      return data.links || [];
+      const links = JSON.parse(fileContents) as FriendLink[];
+      return links.map(link => ({
+        ...link,
+        avatar: link.avatar ? getAssetPath(link.avatar) : null,
+      }));
     }
     
-    return defaultFriendLinks;
+    // 如果配置文件不存在，返回默认友链
+    return defaultFriendLinks.map(link => ({
+      ...link,
+      avatar: link.avatar ? getAssetPath(link.avatar) : null,
+    }));
   } catch (error) {
     console.error('读取友链文件失败:', error);
-    return defaultFriendLinks;
+    
+    // 返回默认友链
+    return defaultFriendLinks.map(link => ({
+      ...link,
+      avatar: link.avatar ? getAssetPath(link.avatar) : null,
+    }));
   }
 } 
