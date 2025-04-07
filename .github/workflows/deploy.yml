@@ -1,9 +1,11 @@
 name: Deploy to GitHub Pages
 
 on:
-  # 当推送到main分支时触发
+  # 当推送到指定分支时触发
   push:
-    branches: [main]
+    branches: 
+      - main
+      - YuCreate
   # 允许从Actions选项卡手动触发
   workflow_dispatch:
 
@@ -29,6 +31,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'npm'
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -39,8 +42,9 @@ jobs:
       - name: Build Project
         run: npm run build
         env:
-          # 确保构建时可以获取到仓库名称
+          # 确保构建时可以获取到仓库名称和分支信息
           GITHUB_REPOSITORY: ${{ github.repository }}
+          GITHUB_REF: ${{ github.ref }}
           NODE_ENV: production
 
       - name: Upload artifact

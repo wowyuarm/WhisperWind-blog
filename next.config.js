@@ -2,15 +2,17 @@
 
 // 获取仓库名称以用于basePath
 const repoName = process.env.GITHUB_REPOSITORY ? process.env.GITHUB_REPOSITORY.split('/')[1] : '';
+const branchName = process.env.GITHUB_REF ? process.env.GITHUB_REF.split('/').pop() : '';
 const isProduction = process.env.NODE_ENV === 'production';
-const basePath = isProduction && repoName ? `/${repoName}` : '';
+const basePath = isProduction ? `/${repoName}` : '';
 
 const nextConfig = {
   output: 'export',
   trailingSlash: true, // 确保静态导出时URLs以"/"结尾
   images: {
     unoptimized: true,
-    domains: ['github.com'], // 允许从 GitHub 加载图片
+    loader: 'custom',
+    loaderFile: './src/lib/imageLoader.ts',
   },
   eslint: {
     ignoreDuringBuilds: true, // 在构建时忽略ESLint错误
