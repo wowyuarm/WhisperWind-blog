@@ -4,42 +4,42 @@
       "name": "Next.js官网",
       "url": "https://nextjs.org/",
       "description": "React框架，用于构建现代Web应用程序",
-      "icon": "/images/links/nextjs.png",
+      "icon": "/WhisperWind-blog/images/links/nextjs.png",
       "type": "official"
     },
     {
       "name": "Tailwind CSS",
       "url": "https://tailwindcss.com/",
       "description": "实用优先的CSS框架",
-      "icon": "/images/links/tailwind.png",
+      "icon": "/WhisperWind-blog/images/links/tailwind.png",
       "type": "official"
     },
     {
       "name": "shadcn/ui",
       "url": "https://ui.shadcn.com/",
       "description": "精美的React组件库，基于Radix UI构建",
-      "icon": "/images/links/shadcn.png",
+      "icon": "/WhisperWind-blog/images/links/shadcn.png",
       "type": "official"
     },
     {
       "name": "Decap CMS",
       "url": "https://decapcms.org/",
       "description": "面向Git的内容管理系统",
-      "icon": "/images/links/decap.png",
+      "icon": "/WhisperWind-blog/images/links/decap.png",
       "type": "official"
     },
     {
       "name": "禹创",
       "url": "https://github.com/wowyuarm",
       "description": "WhisperWind Blog模板的作者",
-      "icon": "/images/links/yuchuang.png",
+      "icon": "/WhisperWind-blog/images/links/yuchuang.png",
       "type": "personal"
     },
     {
       "name": "吉卜力工作室",
       "url": "https://www.ghibli.jp/",
       "description": "宫崎骏动画工作室官方网站",
-      "icon": "/images/links/ghibli.png",
+      "icon": "/WhisperWind-blog/images/links/ghibli.png",
       "type": "official"
     }
   ]

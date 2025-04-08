@@ -9,8 +9,14 @@ export default function imageLoader({ src, width, quality }: { src: string; widt
     return src;
   }
 
+  // 如果src已经包含仓库名称，直接返回
+  if (isProduction && repoName && src.includes(repoName)) {
+    return src;
+  }
+
   // 如果src是相对路径，添加basePath
   if (src.startsWith('/')) {
+    // 确保basePath非空时，不重复添加斜杠
     return `${basePath}${src}`;
   }
 
