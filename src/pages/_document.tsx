@@ -18,18 +18,32 @@ export default function Document() {
   return (
     <Html lang="zh-CN"> {/* 设置全局语言 */}
       <Head>
-        {/* 设置Base URL以确保所有相对路径正确 */}
-        <base href={baseUrl} />
-        
         {/* 在这里可以添加自定义字体链接、全局meta标签等 */}
         {/* 页面特定的metadata和favicon已在各页面HeadMeta组件中设置 */}
-        {/* Favicon配置 - 使用相对路径 */}
-        <link rel="icon" href="favicon.ico" sizes="any" />
-        <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
-        <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-        <link rel="manifest" href="site.webmanifest" />
+        {/* Favicon配置 - 使用包含basePath的绝对路径 */}
+        <link rel="icon" href={`${basePath}/favicon.ico`} sizes="any" />
+        <link rel="icon" type="image/png" sizes="32x32" href={`${basePath}/favicon-32x32.png`} />
+        <link rel="icon" type="image/png" sizes="16x16" href={`${basePath}/favicon-16x16.png`} />
+        <link rel="apple-touch-icon" href={`${basePath}/apple-touch-icon.png`} />
+        {/* Manifest链接将在客户端动态设置 */}
+        {/* <link rel="manifest" href={`${basePath}/site.webmanifest`} /> */}
         <meta name="theme-color" content="#ffffff" />
+
+        {/* Preload 字体文件，使用带basePath的路径 */}
+        <link
+          rel="preload"
+          href={`${basePath}/fonts/Ghibli.otf`}
+          as="font"
+          type="font/otf"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href={`${basePath}/fonts/Ghibli-Bold.otf`}
+          as="font"
+          type="font/otf"
+          crossOrigin="anonymous"
+        />
       </Head>
       <body>
         <Main />

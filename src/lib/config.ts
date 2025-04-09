@@ -96,8 +96,8 @@ export function getSiteConfig(): SiteConfig {
         return path;
       }
       
-      // 如果已经包含仓库名称，直接返回
-      if (isProduction && repoName && path.includes(repoName)) {
+      // 如果已经包含仓库名称（basePath），直接返回
+      if (isProduction && repoName && path.startsWith(basePath)) {
         return path;
       }
       
@@ -105,7 +105,9 @@ export function getSiteConfig(): SiteConfig {
       const normalizedPath = path.startsWith('/') ? path : `/${path}`;
       
       // 添加basePath前缀
-      return `${basePath}${normalizedPath}`;
+      const finalPath = `${basePath}${normalizedPath}`;
+      console.debug(`[config.processPath] Input path=${path}, finalPath=${finalPath}`);
+      return finalPath;
     };
     
     return {

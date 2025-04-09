@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'GhibliFontPro';
-  src: url('/fonts/Ghibli-Bold.otf') format('opentype');
+  src: url('/WhisperWind-blog/fonts/Ghibli-Bold.otf') format('opentype');
   font-weight: 600, 700;
   font-style: normal;
   font-display: swap;
@@ -8,7 +8,7 @@
 
 @font-face {
   font-family: 'GhibliFontPro';
-  src: url('/fonts/Ghibli.otf') format('opentype');
+  src: url('/WhisperWind-blog/fonts/Ghibli.otf') format('opentype');
   font-weight: 300, 400, 500;
   font-style: normal;
   font-display: swap;
