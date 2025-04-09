@@ -55,7 +55,6 @@ export function Header({ siteConfig }: HeaderProps) {
                   className="object-cover rounded-full"
                   priority
                   onError={handleLogoError}
-                  unoptimized
                 />
               ) : (
                 <span className="text-primary font-bold text-xl">W</span>

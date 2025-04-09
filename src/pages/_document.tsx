@@ -8,11 +8,11 @@ export default function Document() {
   // 获取仓库名称以用于basePath
   const repoName = process.env.GITHUB_REPOSITORY ? process.env.GITHUB_REPOSITORY.split('/')[1] : '';
   const isProduction = process.env.NODE_ENV === 'production';
-  const basePath = isProduction ? `/${repoName}` : '';
+  const basePath = isProduction && repoName ? `/${repoName}` : '';
   
-  // 构建基础URL
-  const baseUrl = isProduction 
-    ? `https://wowyuarm.github.io${basePath}/` 
+  // 构建基础URL，注意结尾的斜杠，<base>标签需要
+  const baseUrl = isProduction && repoName
+    ? `https://wowyuarm.github.io/${repoName}/` 
     : '/';
   
   return (
@@ -23,8 +23,8 @@ export default function Document() {
         
         {/* 在这里可以添加自定义字体链接、全局meta标签等 */}
         {/* 页面特定的metadata和favicon已在各页面HeadMeta组件中设置 */}
-        {/* Favicon配置 - 使用绝对路径而不是依赖base标签 */}
-        <link rel="icon" href="favicon.ico" />
+        {/* Favicon配置 - 使用相对路径 */}
+        <link rel="icon" href="favicon.ico" sizes="any" />
         <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
         <link rel="apple-touch-icon" href="apple-touch-icon.png" />
