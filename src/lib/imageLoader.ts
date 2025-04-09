@@ -12,7 +12,7 @@ export default function imageLoader({ src, width, quality }: { src: string; widt
     const hostname = window.location.hostname;
     isProduction = hostname.includes('github.io');
     
-    if (isProduction && hostname !== 'localhost' && !hostname.includes('127.0.0.1')) {
+    if (isProduction) {
       // 从路径提取仓库名称
       const pathSegments = window.location.pathname.split('/');
       if (pathSegments.length > 1) {
@@ -25,7 +25,7 @@ export default function imageLoader({ src, width, quality }: { src: string; widt
     isProduction = process.env.NODE_ENV === 'production';
   }
   
-  const basePath = isProduction ? `/${repoName}` : '';
+  const basePath = isProduction && repoName ? `/${repoName}` : '';
   
   // 调试日志
   if (isBrowser) {

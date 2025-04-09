@@ -70,7 +70,7 @@ export function getSiteConfig(): SiteConfig {
     const hostname = window.location.hostname;
     isProduction = hostname.includes('github.io');
     
-    if (isProduction && hostname !== 'localhost' && !hostname.includes('127.0.0.1')) {
+    if (isProduction) {
       // 从路径提取仓库名称
       const pathSegments = window.location.pathname.split('/');
       if (pathSegments.length > 1) {
@@ -83,7 +83,7 @@ export function getSiteConfig(): SiteConfig {
     isProduction = process.env.NODE_ENV === 'production';
   }
   
-  const basePath = isProduction ? `/${repoName}` : '';
+  const basePath = isProduction && repoName ? `/${repoName}` : '';
 
   // 处理默认配置
   const processConfig = (config: SiteConfig) => {

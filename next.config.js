@@ -4,7 +4,7 @@
 const repoName = process.env.GITHUB_REPOSITORY ? process.env.GITHUB_REPOSITORY.split('/')[1] : '';
 const branchName = process.env.GITHUB_REF ? process.env.GITHUB_REF.split('/').pop() : '';
 const isProduction = process.env.NODE_ENV === 'production';
-const basePath = isProduction ? `/${repoName}` : '';
+const basePath = isProduction && repoName ? `/${repoName}` : '';
 
 // 日志输出，帮助调试
 if (isProduction) {

@@ -25,14 +25,14 @@
       "name": "Decap CMS",
       "url": "https://decapcms.org/",
       "description": "面向Git的内容管理系统",
-      "icon": "/images/links/decap.png",
+      "icon": "/images/logo.png",
       "type": "official"
     },
     {
       "name": "禹创",
       "url": "https://github.com/wowyuarm",
       "description": "WhisperWind Blog模板的作者",
-      "icon": "/images/links/yuchuang.png",
+      "icon": "/images/avatar.jpg",
       "type": "personal"
     },
     {
