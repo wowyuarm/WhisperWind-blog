@@ -1,23 +1,23 @@
 ---
-title: "WhisperWind Blog 使用指南"
-publishDate: "2024-04-06 12:00:00"
-tags: ["指南", "教程", "配置"]
-excerpt: "全面的 WhisperWind Blog 使用指南，包括如何部署项目、配置 Decap CMS 和个性化定制。"
-featuredImage: "/images/logo.png"
+title: WhisperWind Blog 使用指南
+publishDate: 2024-04-06 12:00:00
+excerpt: 全面的 WhisperWind Blog 使用指南，包括如何部署项目、配置 Decap CMS 和个性化定制。
+featuredImage: /images/logo.png
+tags:
+  - WhisperWind配置
 ---
-
 # 🍃 WhisperWind Blog 使用指南
 
 欢迎使用 WhisperWind Blog！这是一个灵感来自吉卜力风格的静态博客模板，基于 Next.js、TypeScript 和 Tailwind CSS 构建。本指南将帮助你从零开始部署、配置和个性化你的博客。
 
 ## 📋 目录
 
-- [项目部署](#项目部署)
-- [Decap CMS 配置](#decap-cms-配置)
-- [个性化定制](#个性化定制)
-- [绑定自定义域名](#绑定自定义域名)
-- [常见问题](#常见问题)
-- [未来计划](#未来计划)
+* [项目部署](#项目部署)
+* [Decap CMS 配置](#decap-cms-配置)
+* [个性化定制](#个性化定制)
+* [绑定自定义域名](#绑定自定义域名)
+* [常见问题](#常见问题)
+* [未来计划](#未来计划)
 
 ## 🚀 项目部署 {#项目部署}
 
@@ -25,14 +25,16 @@ featuredImage: "/images/logo.png"
 
 1. **使用模板**：访问 [WhisperWind Blog 仓库](https://github.com/wowyuarm/WhisperWind-blog)，点击 "Use this template" > "Create a new repository"
 2. **设置仓库信息**：
-   - 输入你想要的仓库名称
-   - 选择公开仓库
-   - 点击 "Create repository from template"
+
+   * 输入你想要的仓库名称
+   * 选择公开仓库
+   * 点击 "Create repository from template"
 3. **启用 GitHub Pages**：
-   - 进入新创建的仓库
-   - 前往 Settings > Pages
-   - Source 选择 "GitHub Actions"
-   - 系统会自动使用仓库中的 GitHub Actions 工作流进行部署
+
+   * 进入新创建的仓库
+   * 前往 Settings > Pages
+   * Source 选择 "GitHub Actions"
+   * 系统会自动使用仓库中的 GitHub Actions 工作流进行部署
 
 项目会自动通过 GitHub Actions 构建并部署到 GitHub Pages。部署完成后，你可以通过 `https://你的用户名.github.io/仓库名称/` 访问你的博客。
 
@@ -41,23 +43,27 @@ featuredImage: "/images/logo.png"
 如果你想先在本地进行一些修改后再部署：
 
 1. **克隆仓库**：将仓库克隆到本地
+
    ```bash
    git clone https://github.com/你的用户名/仓库名称.git
    cd 仓库名称
    ```
 2. **安装依赖**：
+
    ```bash
    npm install
    # 或使用 yarn 
    yarn install
    ```
 3. **本地开发**：
+
    ```bash
    npm run dev
    # 或
    yarn dev
    ```
 4. **提交并推送**：完成修改后，提交并推送你的更改
+
    ```bash
    git add .
    git commit -m "初始化自定义"
@@ -87,9 +93,10 @@ WhisperWind Blog 集成了 Decap CMS (原 Netlify CMS)，让你能够通过友�
 3. 部署设置保持默认值，点击 "Deploy site"
 4. 部署完成后，记下你的 Netlify 站点名称（例如：your-site-123456.netlify.app）
 5. 进入站点设置：
-   - 转到 **Site configuration** > **Identity** > 点击 **Enable Identity**
-   - 向下滚动到 **Registration**，设置为 **Invite only**（推荐）
-   - 转到 **Services** > **Git Gateway** > 点击 **Enable Git Gateway**
+
+   * 转到 **Site configuration** > **Identity** > 点击 **Enable Identity**
+   * 向下滚动到 **Registration**，设置为 **Invite only**（推荐）
+   * 转到 **Services** > **Git Gateway** > 点击 **Enable Git Gateway**
 
 ### 修改 CMS 配置文件
 
@@ -235,40 +242,43 @@ display_url: "https://你的用户名.github.io/仓库名称",
 ### GitHub Pages 绑定域名
 
 1. **添加 CNAME 文件**：
-   - 在 `public` 目录下创建一个名为 `CNAME` 的文件
-   - 文件内容为你的域名，例如 `blog.example.com`
 
+   * 在 `public` 目录下创建一个名为 `CNAME` 的文件
+   * 文件内容为你的域名，例如 `blog.example.com`
 2. **设置 DNS 记录**：
-   - 如果使用子域名（如 `blog.example.com`），添加一条 CNAME 记录，将子域名指向 `你的用户名.github.io`
-   - 如果使用顶级域名（如 `example.com`），添加以下 A 记录指向 GitHub Pages 的 IP 地址：
+
+   * 如果使用子域名（如 `blog.example.com`），添加一条 CNAME 记录，将子域名指向 `你的用户名.github.io`
+   * 如果使用顶级域名（如 `example.com`），添加以下 A 记录指向 GitHub Pages 的 IP 地址：
+
      ```
      185.199.108.153
      185.199.109.153
      185.199.110.153
      185.199.111.153
      ```
-   - 同时添加一条 CNAME 记录，将 `www` 指向 `你的用户名.github.io`
-
+   * 同时添加一条 CNAME 记录，将 `www` 指向 `你的用户名.github.io`
 3. **在 GitHub 中配置**：
-   - 进入你的仓库
-   - 前往 Settings > Pages
-   - 在 "Custom domain" 部分填入你的域名
-   - 勾选 "Enforce HTTPS"（如果可用）
+
+   * 进入你的仓库
+   * 前往 Settings > Pages
+   * 在 "Custom domain" 部分填入你的域名
+   * 勾选 "Enforce HTTPS"（如果可用）
 
 ### Vercel 或 Netlify 绑定域名
 
 1. **在服务商后台添加域名**：
-   - 进入你的 Vercel/Netlify 项目
-   - 找到域名或自定义域名设置
-   - 添加你的域名
 
+   * 进入你的 Vercel/Netlify 项目
+   * 找到域名或自定义域名设置
+   * 添加你的域名
 2. **设置 DNS 记录**：
-   - 根据平台提供的指导，添加相应的 DNS 记录
-   - 通常需要添加一条 CNAME 记录，将你的域名指向平台提供的值
 
+   * 根据平台提供的指导，添加相应的 DNS 记录
+   * 通常需要添加一条 CNAME 记录，将你的域名指向平台提供的值
 3. **验证域名所有权**：
-   - 按照平台的要求完成域名验证步骤
-   - 可能需要添加 TXT 记录或通过其他方式验证
+
+   * 按照平台的要求完成域名验证步骤
+   * 可能需要添加 TXT 记录或通过其他方式验证
 
 完成上述步骤后，等待 DNS 生效（可能需要几分钟到几小时），然后你就可以通过自定义域名访问你的博客了。
 
@@ -277,12 +287,13 @@ display_url: "https://你的用户名.github.io/仓库名称",
 ### Favicon 没有显示？
 
 确保你已在 `public` 目录下放置了以下文件：
-- `favicon.ico`
-- `favicon-16x16.png`
-- `favicon-32x32.png`
-- `apple-touch-icon.png`
-- `android-chrome-192x192.png`
-- `android-chrome-512x512.png`
+
+* `favicon.ico`
+* `favicon-16x16.png`
+* `favicon-32x32.png`
+* `apple-touch-icon.png`
+* `android-chrome-192x192.png`
+* `android-chrome-512x512.png`
 
 然后清除浏览器缓存，重新加载页面。
 
@@ -291,13 +302,14 @@ display_url: "https://你的用户名.github.io/仓库名称",
 WhisperWind Blog 默认没有集成评论系统，但你可以轻松添加常见的评论服务：
 
 1. **Disqus**：
-   - 注册 [Disqus](https://disqus.com) 账号
-   - 在 `src/components/blog/CommentSection.tsx` 中添加 Disqus 代码
-   - 在文章页面引入评论组件
 
+   * 注册 [Disqus](https://disqus.com) 账号
+   * 在 `src/components/blog/CommentSection.tsx` 中添加 Disqus 代码
+   * 在文章页面引入评论组件
 2. **Giscus (基于 GitHub Discussions)**：
-   - 设置 [Giscus](https://giscus.app) 
-   - 将生成的代码添加到文章模板中
+
+   * 设置 [Giscus](https://giscus.app) 
+   * 将生成的代码添加到文章模板中
 
 ### 如何调整代码高亮样式？
 
@@ -317,18 +329,18 @@ WhisperWind Blog 正在持续改进中，以下是我们近期的开发计划：
 
 ### 即将到来的功能
 
-- **深色/浅色模式切换**：更完善的主题切换功能，包括自动跟随系统设置
-- **代码块显示优化**：改进代码块的显示效果，添加行号、复制按钮等功能
-- **评论功能**：集成轻量级评论系统，方便读者与作者交流
-- **动画效果优化**：改进现有动画效果，增加更多吉卜力风格的动画元素
-- **国际化支持**：添加多语言支持，让更多人能够使用 WhisperWind Blog
-- **性能优化**：继续优化网站性能，提升用户体验
-- **更多主题选项**：提供多种主题风格可供选择
+* **深色/浅色模式切换**：更完善的主题切换功能，包括自动跟随系统设置
+* **代码块显示优化**：改进代码块的显示效果，添加行号、复制按钮等功能
+* **评论功能**：集成轻量级评论系统，方便读者与作者交流
+* **动画效果优化**：改进现有动画效果，增加更多吉卜力风格的动画元素
+* **国际化支持**：添加多语言支持，让更多人能够使用 WhisperWind Blog
+* **性能优化**：继续优化网站性能，提升用户体验
+* **更多主题选项**：提供多种主题风格可供选择
 
 我们欢迎社区贡献！如果你有任何建议或想要参与开发，请访问我们的 [GitHub 仓库](https://github.com/wowyuarm/WhisperWind-blog)。
 
----
+- - -
 
 希望这份指南能帮助你充分利用 WhisperWind Blog 模板的各种功能。如果你有任何问题或需要进一步的帮助，请随时联系我们。
 
-祝你创作愉快！🍃 
+祝你创作愉快！🍃
