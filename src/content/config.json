@@ -1,8 +1,8 @@
 {
   "title": "WhisperWind Blog 🍃",
-  "description": "开源博客模板，灵感来自吉卜力风格，基于Next.js、TypeScript和Tailwind CSS构建",
+  "description": "禹创的个人博客，基于WhisperWind模板构建",
   "author": "禹创",
-  "logo": "/images/logo.png",
+  "logo": "/uploads/83c84f9fa430f81fcd87053fe57d6209.jpg",
   "favicon": "/favicon.ico",
   "social": {
     "github": "https://github.com/wowyuarm/WhisperWind-blog",
@@ -10,4 +10,4 @@
     "weibo": "",
     "zhihu": ""
   }
-} 
+}
