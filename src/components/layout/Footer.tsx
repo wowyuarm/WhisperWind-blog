@@ -9,9 +9,14 @@ interface FooterProps {
 export function Footer({ siteConfig }: FooterProps) { // config can be undefined
   const currentYear = new Date().getFullYear();
   
-  // 获取admin链接，直接指向index.html
+  // 获取admin链接，使用配置中的adminUrl或者默认值
   const getAdminUrl = () => {
-    return "/admin/index.html"; // 直接链接到HTML文件
+    // 如果配置中有adminUrl且不为空，则使用它
+    if (siteConfig?.adminUrl) {
+      return siteConfig.adminUrl;
+    }
+    // 否则使用相对路径
+    return "/admin/index.html";
   };
 
   // Handle undefined config gracefully

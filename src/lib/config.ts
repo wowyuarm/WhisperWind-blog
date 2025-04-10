@@ -15,6 +15,7 @@ export interface SiteConfig {
   author: string;
   logo?: string | null;
   favicon?: string | null;
+  adminUrl?: string;
   social: SocialLinks;
   avatar?: string | null;
 }
@@ -38,6 +39,7 @@ export const defaultSiteConfig: SiteConfig = {
   author: 'Your Name',
   logo: '/images/logo.png',
   favicon: '/favicon.ico',
+  adminUrl: '',
   social: {
     github: 'https://github.com/yourusername/WhisperWind-blog',
   },

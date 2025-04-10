@@ -45,7 +45,9 @@ Decap CMS允许你通过Web界面管理博客内容，无需在本地编辑文�
 
 #### 2. 修改配置文件指向你的Netlify站点
 
-在你fork的仓库中，主要需要修改`public/admin/index.html`文件中的配置：
+在你fork的仓库中，主要需要修改两个配置文件：
+
+1. 首先修改`public/admin/index.html`文件：
 
 ```javascript
 // 定义Netlify站点URL - 这里只需要修改这一处即可
@@ -62,7 +64,27 @@ window.netlifyIdentity = {
 site_url: "https://your-username.github.io/your-repo-name",
 display_url: "https://your-username.github.io/your-repo-name",
 ```
-请将上述URL替换为你自己的GitHub Pages地址，例如`https://your-username.github.io/your-repo-name/`。
+
+2. 然后更新`src/content/config.json`添加管理页面URL：
+
+```json
+{
+  "title": "你的博客标题",
+  "description": "博客描述",
+  "author": "你的名字",
+  "logo": "/images/logo.png",
+  "favicon": "/favicon.ico",
+  "adminUrl": "https://your-netlify-site-name.netlify.app/admin/",
+  "social": {
+    "github": "https://github.com/your-username/your-repo",
+    "twitter": "",
+    "weibo": "",
+    "zhihu": ""
+  }
+}
+```
+
+请将上述URL替换为你自己的GitHub Pages地址（例如`https://your-username.github.io/your-repo-name/`）和你的Netlify站点URL。
 
 > 💡 **重要说明**：本模板将所有CMS配置直接内嵌在`index.html`文件中，这样可以确保在GitHub Pages环境下正确运行。如果需要修改内容类型或其他CMS配置，请直接编辑`index.html`文件中的`config`对象（约在第70-180行）。
 
@@ -70,7 +92,18 @@ display_url: "https://your-username.github.io/your-repo-name",
 1. Netlify站点URL - 用于身份验证（如`your-site-123456.netlify.app`）
 2. GitHub Pages URL - 用于预览和站点显示（如`your-username.github.io/your-repo-name`）
 
-#### 3. 创建管理员账号
+#### 3. 将"管理"链接指向Netlify
+
+博客底部的"管理"链接应该指向你的Netlify管理界面。这在两个地方配置：
+
+1. 在`src/content/config.json`中，确保设置了`adminUrl`字段：
+```json
+"adminUrl": "https://your-netlify-site-name.netlify.app/admin/"
+```
+
+2. 当你点击"管理"链接时，它会直接重定向到你的Netlify托管的管理界面，而不是尝试在GitHub Pages上加载管理界面（这不会起作用，因为身份验证限制）。
+
+#### 4. 创建管理员账号
 
 设置好Identity服务后，你需要创建一个管理员账号：
 
@@ -78,7 +111,7 @@ display_url: "https://your-username.github.io/your-repo-name",
 2. 输入你的邮箱地址并发送邀请
 3. 检查你的邮箱，接受邀请并设置密码
 
-#### 4. 访问CMS管理界面
+#### 5. 访问CMS管理界面
 
 完成上述步骤并部署你的GitHub Pages网站后：
 
@@ -99,7 +132,7 @@ display_url: "https://your-username.github.io/your-repo-name",
 
 通过Decap CMS，你可以轻松地管理你的博客内容：
 
-1. 访问你的主页底部的“管理”链接到认证页面
+1. 访问你的主页底部的"管理"链接到认证页面
 2. 使用Netlify Identity账号登录
 3. 使用友好的界面创建和编辑内容：
    - **博客文章**：撰写新文章，设置标签和特色图片

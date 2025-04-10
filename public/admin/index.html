@@ -59,7 +59,8 @@
   <!-- 必须在加载脚本前预先配置API URL -->
   <script>
     // 定义Netlify站点URL - 这里只需要修改这一处即可
-    const NETLIFY_SITE = "tiny-pegasus-ea211b.netlify.app";
+    // 重要：用户必须将此URL替换为自己的Netlify站点URL
+    const NETLIFY_SITE = "YOUR_NETLIFY_SITE.netlify.app";
     
     // 预配置Netlify Identity API
     window.netlifyIdentity = {
@@ -179,9 +180,12 @@
             media_folder: "public/uploads",
             public_folder: "/uploads",
             
-            // 站点URL配置
-            site_url: "https://wowyuarm.github.io/WhisperWind-blog",
-            display_url: "https://wowyuarm.github.io/WhisperWind-blog",
+            // 站点URL配置 - 替换为您的GitHub Pages网址
+            // 重要：这里需要配置两个URL
+            // 1. 下方的GitHub Pages URL用于内容预览
+            // 2. 页面顶部的NETLIFY_SITE变量用于身份验证
+            site_url: "https://your-username.github.io/your-repo-name",
+            display_url: "https://your-username.github.io/your-repo-name",
             
             // 发布模式配置
             publish_mode: "editorial_workflow",
@@ -235,6 +239,8 @@
                       { label: "网站描述", name: "description", widget: "text" },
                       { label: "作者", name: "author", widget: "string" },
                       { label: "Logo", name: "logo", widget: "image", required: false },
+                      { label: "网站图标", name: "favicon", widget: "string", required: false },
+                      { label: "管理页面URL", name: "adminUrl", widget: "string", hint: "请填写您的Netlify站点管理地址，如: https://your-site.netlify.app/admin/", required: false },
                       {
                         label: "社交媒体",
                         name: "social",

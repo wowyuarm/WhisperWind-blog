@@ -45,7 +45,9 @@ While your blog content will be deployed on GitHub Pages, we need to use Netlify
 
 #### 2. Update Configuration Files with Your Netlify Site URL
 
-In your forked repository, you need to modify the configuration in `public/admin/index.html`:
+In your forked repository, you need to modify two configuration files:
+
+1. First, update `public/admin/index.html`:
 
 ```javascript
 // Define Netlify site URL - you only need to change this one place
@@ -63,7 +65,26 @@ site_url: "https://your-username.github.io/your-repo-name",
 display_url: "https://your-username.github.io/your-repo-name",
 ```
 
-Please replace the above URLs with your own GitHub Pages address, e.g., `https://your-username.github.io/your-repo-name/`.
+2. Then, update `src/content/config.json` to add your admin URL:
+
+```json
+{
+  "title": "Your Blog Title",
+  "description": "Your blog description",
+  "author": "Your Name",
+  "logo": "/images/logo.png",
+  "favicon": "/favicon.ico",
+  "adminUrl": "https://your-netlify-site-name.netlify.app/admin/",
+  "social": {
+    "github": "https://github.com/your-username/your-repo",
+    "twitter": "",
+    "weibo": "",
+    "zhihu": ""
+  }
+}
+```
+
+Please replace the above URLs with your own GitHub Pages address, e.g., `https://your-username.github.io/your-repo-name/` and your Netlify site URL.
 
 > 💡 **Important Note**: This template embeds all CMS configuration directly in the `index.html` file to ensure it works correctly in the GitHub Pages environment. If you need to modify content types or other CMS configuration, edit the `config` object in the `index.html` file (approximately lines 70-180).
 
@@ -71,7 +92,18 @@ Please replace the above URLs with your own GitHub Pages address, e.g., `https:/
 1. Netlify Site URL - for authentication (e.g., `your-site-123456.netlify.app`)
 2. GitHub Pages URL - for preview and site display (e.g., `your-username.github.io/your-repo-name`)
 
-#### 3. Create Admin Account
+#### 3. Redirect "Admin" Link to Netlify
+
+The "Admin" link in the footer of your blog should point to your Netlify admin interface. This is configured in two places:
+
+1. In `src/content/config.json`, make sure to set the `adminUrl` field:
+```json
+"adminUrl": "https://your-netlify-site-name.netlify.app/admin/"
+```
+
+2. When you click the "Admin" link, it will now redirect you directly to your Netlify-hosted admin interface instead of trying to load the admin interface on GitHub Pages (which won't work due to authentication limitations).
+
+#### 4. Create Admin Account
 
 After setting up the Identity service, you need to create an admin account:
 
@@ -79,7 +111,7 @@ After setting up the Identity service, you need to create an admin account:
 2. Enter your email address and send the invitation
 3. Check your email, accept the invitation, and set a password
 
-#### 4. Access CMS Admin Interface
+#### 5. Access CMS Admin Interface
 
 After completing the steps above and deploying your GitHub Pages website:
 

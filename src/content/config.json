@@ -4,6 +4,7 @@
   "author": "禹创",
   "logo": "/images/logo.png",
   "favicon": "/favicon.ico",
+  "adminUrl": "https://yucreate-blog.netlify.app/admin/",
   "social": {
     "github": "https://github.com/wowyuarm/WhisperWind-blog",
     "twitter": "",
