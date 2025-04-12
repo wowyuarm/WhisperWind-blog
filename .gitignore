@@ -96,7 +96,3 @@ logs
 # Generated output
 dist/
 storybook-static/
-
-# 标签云测试生成的数据文件
-test/tags/tag-cloud-test-*.json
-test-results/

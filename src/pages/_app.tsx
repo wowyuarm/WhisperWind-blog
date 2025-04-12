@@ -45,9 +45,17 @@ function MyApp({ Component, pageProps }: MyAppProps) {
           const adminPath = '/admin/';
           if (!window.location.pathname.endsWith(adminPath)) {
             // 获取GitHub Pages的正确路径
-            const basePath = window.location.hostname.includes('github.io') 
-              ? '/WhisperWind-blog' 
-              : '';
+            let basePath = '';
+            
+            // 检测是否在GitHub Pages环境
+            if (window.location.hostname.includes('github.io')) {
+              // 从URL路径中提取仓库名称
+              const pathSegments = window.location.pathname.split('/');
+              if (pathSegments.length > 1) {
+                basePath = `/${pathSegments[1]}`;
+              }
+            }
+            
             window.location.href = `${basePath}${adminPath}`;
           }
         }

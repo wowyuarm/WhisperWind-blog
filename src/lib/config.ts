@@ -116,8 +116,9 @@ export function getSiteConfig(): SiteConfig {
       const normalizedPath = path.startsWith('/') ? path : `/${path}`;
       
       // 添加basePath前缀
-      const finalPath = `${basePath}${normalizedPath}`;
-      console.debug(`[config.processPath] Input path=${path}, finalPath=${finalPath}`);
+      // 确保在GitHub Pages环境中正确添加basePath
+      const finalPath = isProduction && repoName ? `${basePath}${normalizedPath}` : normalizedPath;
+      console.debug(`[config.processPath] Input path=${path}, finalPath=${finalPath}, isProduction=${isProduction}, repoName=${repoName}`);
       return finalPath;
     };
     
