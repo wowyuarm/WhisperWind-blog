@@ -72,7 +72,7 @@ export function Header({ siteConfig }: HeaderProps) {
             </motion.span>
           </Link>
         </div>
-        <div className="flex items-center">
+        <div className="flex items-center justify-end">
           <nav className="hidden md:flex items-center space-x-6">
               {navLinks.map((link) => (
                 <motion.div
@@ -84,8 +84,7 @@ export function Header({ siteConfig }: HeaderProps) {
                     href={link.href}
                     className={cn(
                       'relative rounded-full px-3 py-1.5 text-sm tracking-wide text-foreground/70 transition-colors duration-300 hover:text-primary',
-                      pathname === link.href ||
-                        (link.href !== '/' && pathname.startsWith(link.href))
+                      (pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href)))
                         ? 'font-medium text-primary bg-primary/5 after:absolute after:bottom-0 after:left-1/2 after:h-1.5 after:w-1.5 after:rounded-full after:bg-primary/50 after:transform after:-translate-x-1/2 after:translate-y-1'
                         : 'hover:bg-background/50'
                     )}
@@ -135,7 +134,7 @@ export function Header({ siteConfig }: HeaderProps) {
                     onClick={() => setIsMobileMenuOpen(false)}
                       className={cn(
                         'w-full rounded-md py-2 text-center text-lg text-foreground/80 transition-colors duration-300 hover:text-primary',
-                        pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href))
+                        (pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href)))
                           ? 'font-semibold text-primary bg-primary/10'
                         : "hover:bg-secondary/10"
                     )}

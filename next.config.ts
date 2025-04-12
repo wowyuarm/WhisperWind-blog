@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const repoName = 'WhisperWind-blog'; // Your repository name
+const repoName = process.env.GITHUB_REPOSITORY ? process.env.GITHUB_REPOSITORY.split('/')[1] : ''; // Get repo name from environment variable
 const isGithubActions = process.env.GITHUB_ACTIONS || false;
 
 let assetPrefix = undefined;
