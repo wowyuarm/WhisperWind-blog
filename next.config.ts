@@ -11,6 +11,7 @@ let basePath: string | undefined = `/${repoName}`;
 
 // 如果明确是在本地开发环境且不希望使用前缀，可以取消这些设置
 if (process.env.NODE_ENV === 'development' && process.env.DISABLE_BASE_PATH) {
+  console.log('本地开发环境，禁用basePath和assetPrefix');
   assetPrefix = undefined;
   basePath = undefined;
 }
@@ -33,6 +34,9 @@ const nextConfig: NextConfig = {
     // 添加处理静态资源的规则
     config.module = config.module || {};
     config.module.rules = config.module.rules || [];
+    
+    // 输出webpack配置信息以便调试
+    console.log('Webpack配置: 图片和静态资源处理已配置');
     
     return config;
   },

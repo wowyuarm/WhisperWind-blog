@@ -31,7 +31,9 @@ export function Header({ siteConfig }: HeaderProps) {
     setLogoError(true);
   };
 
-  const logoPath = processImagePath(siteConfig?.avatar || '/images/logo.png');
+  const rawLogoSrc = siteConfig?.logo || '/images/logo.png';
+  const logoPath = processImagePath(rawLogoSrc);
+  console.log("处理后的logo路径:", logoPath, "原始路径:", rawLogoSrc);
 
   return (
     <header className="sticky top-0 z-20 w-full border-b border-secondary/30 bg-background/85 backdrop-blur-sm">

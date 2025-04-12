@@ -40,15 +40,19 @@ export function processImagePath(path: string | undefined | null): string {
   
   // 判断是否在GitHub Pages环境中
   const isBrowser = typeof window !== 'undefined';
+  console.log(`[processImagePath] isBrowser: ${isBrowser}`);
+  
   let repoName = '';
   let isProduction = false;
   
   if (isBrowser) {
     const hostname = window.location.hostname;
     isProduction = hostname.includes('github.io');
+    console.log(`[processImagePath] Browser环境: hostname=${hostname}, isProduction=${isProduction}`);
     
     if (isProduction) {
       const pathSegments = window.location.pathname.split('/');
+      console.log(`[processImagePath] 路径段: ${JSON.stringify(pathSegments)}`);
       if (pathSegments.length > 1) {
         repoName = pathSegments[1];
       }
@@ -57,6 +61,7 @@ export function processImagePath(path: string | undefined | null): string {
     // 服务器端环境
     repoName = process.env.GITHUB_REPOSITORY ? process.env.GITHUB_REPOSITORY.split('/')[1] : '';
     isProduction = process.env.NODE_ENV === 'production';
+    console.log(`[processImagePath] 服务器环境: GITHUB_REPOSITORY=${process.env.GITHUB_REPOSITORY}, repoName=${repoName}, NODE_ENV=${process.env.NODE_ENV}, isProduction=${isProduction}`);
   }
   
   // 确保path以"/"开头
@@ -64,6 +69,7 @@ export function processImagePath(path: string | undefined | null): string {
   
   // 如果路径已经包含仓库名，直接返回
   if (isProduction && repoName && normalizedPath.startsWith(`/${repoName}/`)) {
+    console.log(`[processImagePath] 路径已包含仓库名，直接返回: ${normalizedPath}`);
     return normalizedPath;
   }
   
@@ -71,7 +77,7 @@ export function processImagePath(path: string | undefined | null): string {
   const finalPath = isProduction && repoName ? `/${repoName}${normalizedPath}` : normalizedPath;
   
   // 调试输出
-  console.debug(`[utils.processImagePath] Path: ${path} -> ${finalPath} (isProduction=${isProduction}, repoName=${repoName})`);
+  console.log(`[utils.processImagePath] 输入路径: ${path} -> 最终路径: ${finalPath} (isProduction=${isProduction}, repoName=${repoName})`);
   
   return finalPath;
 } 
