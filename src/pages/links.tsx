@@ -128,6 +128,7 @@ function FriendLinkCard({
           <Link href={link.url} target="_blank" rel="noopener noreferrer" className="hover:underline flex items-center group">
             <div className="relative w-8 h-8 mr-3 rounded-md overflow-hidden flex-shrink-0 bg-white/50 p-1 shadow-sm transition-transform duration-300 group-hover:scale-105">
               {!imageError ? (
+
                 <Image 
                   src={iconSrc}
                   alt={`${link.name} 图标`} 
@@ -137,7 +138,7 @@ function FriendLinkCard({
                   onError={() => setImageError(true)}
                 />
               ) : (
-                <div className={cn(
+                  <div className={cn(
                   "w-full h-full flex items-center justify-center text-white text-sm font-bold",
                   isOfficial ? "bg-secondary" : "bg-primary"
                 )}>

@@ -32,21 +32,21 @@ export function Header({ siteConfig }: HeaderProps) {
   };
 
   return (
-    <header className="border-b border-secondary/30 bg-background/85 backdrop-blur-sm sticky top-0 z-20 w-full">
-      <motion.div 
-        className="container flex h-16 items-center justify-between px-4 md:px-6 relative"
+    <header className="sticky top-0 z-20 w-full border-b border-secondary/30 bg-background/85 backdrop-blur-sm">
+      <motion.div
+        className="container relative flex h-16 items-center justify-between px-4 md:px-6"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
+        transition={{ duration: 0.5, ease: 'easeOut' }}
       >
-        <div className="mr-4 flex">
-          <Link 
-            href="/" 
-            className="mr-8 flex items-center space-x-2 text-xl font-medium group transition-all duration-300"
+        <div className="mr-4 flex items-center">
+          <Link href="/" className="group mr-8 flex items-center space-x-2 text-xl font-medium transition-all duration-300"
             aria-label="WhisperWind Blog"
           >
             <div className="relative w-8 h-8 mr-2 rounded-full overflow-hidden border-2 border-primary/20 flex items-center justify-center bg-white/70">
-              {!logoError ? (
+              {logoError ? (
+                <span className="text-primary font-bold text-xl">W</span>
+              ) : (
                 <Image
                   src={siteConfig.avatar || '/images/logo.png'}
                   alt="WhisperWind Logo"
@@ -55,49 +55,51 @@ export function Header({ siteConfig }: HeaderProps) {
                   className="object-cover rounded-full"
                   priority
                   onError={handleLogoError}
-                />
-              ) : (
-                <span className="text-primary font-bold text-xl">W</span>
+                />                
               )}
             </div>
-            <motion.span 
-              className="font-bold text-primary px-2 py-1 tracking-wide"
+            <motion.span
+              className="px-2 py-1 font-bold text-primary tracking-wide"
               whileHover={{ y: -3, transition: { duration: 0.3 } }}
             >
               {siteConfig.title.split('Blog')[0]}
             </motion.span>
-            <motion.span 
-              className="text-secondary-foreground font-medium tracking-wide"
+            <motion.span
+              className="font-medium text-secondary-foreground tracking-wide"
               whileHover={{ y: -3, transition: { duration: 0.3, delay: 0.05 } }}
             >
               Blog
             </motion.span>
           </Link>
-          <nav className="hidden md:flex items-center space-x-6">
-            {navLinks.map((link) => (
-              <motion.div
-                key={link.href}
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.2 }}
-              >
-                <Link
-                  href={link.href}
-                  className={cn(
-                    "relative text-foreground/70 hover:text-primary transition-colors duration-300 text-sm tracking-wide px-3 py-1.5 rounded-full",
-                    pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))
-                      ? "text-primary font-medium bg-primary/5 after:absolute after:bottom-0 after:left-1/2 after:w-1.5 after:h-1.5 after:bg-primary/50 after:rounded-full after:transform after:-translate-x-1/2 after:translate-y-1" 
-                      : "hover:bg-background/50"
-                  )}
-                >
-                  {link.name}
-                </Link>
-              </motion.div>
-            ))}
-          </nav>
         </div>
         <div className="flex items-center">
-          <motion.button 
-            className="ml-4 md:hidden text-foreground/80 hover:text-primary transition-colors duration-300 p-2 -mr-2"
+          <nav className="hidden md:flex items-center space-x-6">
+              {navLinks.map((link) => (
+                <motion.div
+                  key={link.href}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <Link
+                    href={link.href}
+                    className={cn(
+                      'relative rounded-full px-3 py-1.5 text-sm tracking-wide text-foreground/70 transition-colors duration-300 hover:text-primary',
+                      pathname === link.href ||
+                        (link.href !== '/' && pathname.startsWith(link.href))
+                        ? 'font-medium text-primary bg-primary/5 after:absolute after:bottom-0 after:left-1/2 after:h-1.5 after:w-1.5 after:rounded-full after:bg-primary/50 after:transform after:-translate-x-1/2 after:translate-y-1'
+                        : 'hover:bg-background/50'
+                    )}
+                  >
+                    {link.name}
+                  </Link>
+                </motion.div>
+              ))}
+            </nav>
+            
+          
+          
+          <motion.button
+            className="ml-4 -mr-2 p-2 md:hidden text-foreground/80 transition-colors duration-300 hover:text-primary"
             aria-label="Toggle Menu"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             whileHover={{ scale: 1.1 }}
@@ -117,10 +119,10 @@ export function Header({ siteConfig }: HeaderProps) {
         </div>
 
         <AnimatePresence>
-          {isMobileMenuOpen && (
+            {isMobileMenuOpen && (
             <motion.div
               initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
+              animate={{ opacity: 1, y: 0  }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3, ease: 'easeInOut' }}
               className="absolute top-full left-0 right-0 md:hidden bg-background/95 backdrop-blur-md shadow-lg border-t border-secondary/30 py-4 z-10"
@@ -131,10 +133,10 @@ export function Header({ siteConfig }: HeaderProps) {
                     key={link.href}
                     href={link.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={cn(
-                      "text-lg text-foreground/80 hover:text-primary transition-colors duration-300 w-full text-center py-2 rounded-md",
-                      pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href))
-                        ? "font-semibold text-primary bg-primary/10"
+                      className={cn(
+                        'w-full rounded-md py-2 text-center text-lg text-foreground/80 transition-colors duration-300 hover:text-primary',
+                        pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href))
+                          ? 'font-semibold text-primary bg-primary/10'
                         : "hover:bg-secondary/10"
                     )}
                   >
