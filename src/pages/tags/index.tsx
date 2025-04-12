@@ -284,13 +284,13 @@ export default function TagsIndexPage({
   // 云朵背景动画 - 保持静态透明度，只移动位置
   const cloudVariants = {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    initial: (i: number) => ({
+    initial: (_i: number) => ({
       opacity: 0.06,
       x: -20,
       y: -10 + Math.random() * 20
     }),
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    animate: (i: number) => ({
+    animate: (_i: number) => ({
       opacity: 0.06,
       x: 20,
       y: -10 + Math.random() * 20,
@@ -299,7 +299,7 @@ export default function TagsIndexPage({
         repeat: Infinity,
         repeatType: "reverse" as const,
         ease: "linear",
-        delay: i * 2
+        delay: _i * 2
       }
     })
   };

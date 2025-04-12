@@ -100,33 +100,41 @@ export function getSiteConfig(): SiteConfig {
   const processConfig = (config: SiteConfig) => {
     // 确保路径正确，无论是开发环境还是生产环境
     const processPath = (path: string | null | undefined) => {
-      if (!path) return null;
+      if (!path) return '/images/logo.png'; // 提供默认图片路径，防止空值
       
       // 如果已经是完整URL，直接返回
       if (path.startsWith('http') || path.startsWith('https')) {
         return path;
       }
       
-      // 如果已经包含仓库名称（basePath），直接返回
-      if (isProduction && repoName && path.startsWith(basePath)) {
-        return path;
-      }
-      
       // 确保path以"/"开头
       const normalizedPath = path.startsWith('/') ? path : `/${path}`;
       
+      // 获取仓库名，优先使用环境变量或从window.location获取
+      let repoPrefix = '';
+      
+      // 检查是否在GitHub Pages环境中
+      if (isProduction && repoName) {
+        if (normalizedPath.startsWith(`/${repoName}/`)) {
+          // 如果路径已经包含仓库名，直接返回
+          return normalizedPath;
+        }
+        
+        // 否则添加仓库名前缀
+        repoPrefix = `/${repoName}`;
+      }
+      
       // 添加basePath前缀
-      // 确保在GitHub Pages环境中正确添加basePath
-      const finalPath = isProduction && repoName ? `${basePath}${normalizedPath}` : normalizedPath;
+      const finalPath = `${repoPrefix}${normalizedPath}`;
       console.debug(`[config.processPath] Input path=${path}, finalPath=${finalPath}, isProduction=${isProduction}, repoName=${repoName}`);
       return finalPath;
     };
     
     return {
       ...config,
-      avatar: processPath(config.avatar),
-      favicon: processPath(config.favicon),
-      logo: processPath(config.logo),
+      avatar: processPath(config.avatar || '/images/avatar.jpg'),
+      favicon: processPath(config.favicon || '/favicon.ico'),
+      logo: processPath(config.logo || '/images/logo.png'),
     };
   };
 

@@ -1,35 +1,44 @@
 import type { NextConfig } from "next";
 
-const repoName = process.env.GITHUB_REPOSITORY ? process.env.GITHUB_REPOSITORY.split('/')[1] : ''; // Get repo name from environment variable
+// 确定仓库名称
+const repoName = process.env.GITHUB_REPOSITORY ? process.env.GITHUB_REPOSITORY.split('/')[1] : 'WhisperWind-blog'; // 设置一个默认值，确保本地开发也能正常工作
 const isGithubActions = process.env.GITHUB_ACTIONS || false;
 
-let assetPrefix = undefined;
-let basePath = undefined;
+// 始终设置assetPrefix和basePath，不再只在GitHub Actions中设置
+// 这样即使在本地开发环境也能模拟GitHub Pages的路径结构
+let assetPrefix: string | undefined = `/${repoName}/`;
+let basePath: string | undefined = `/${repoName}`;
 
-if (isGithubActions) {
-  // Set assetPrefix and basePath only when deploying via GitHub Actions
-  assetPrefix = `/${repoName}/`;
-  basePath = `/${repoName}`;
+// 如果明确是在本地开发环境且不希望使用前缀，可以取消这些设置
+if (process.env.NODE_ENV === 'development' && process.env.DISABLE_BASE_PATH) {
+  assetPrefix = undefined;
+  basePath = undefined;
 }
 
-console.log(`Building with: assetPrefix=${assetPrefix}, basePath=${basePath}, isGithubActions=${isGithubActions}, repoName=${repoName}`);
+console.log(`Building with: assetPrefix=${assetPrefix}, basePath=${basePath}, isGithubActions=${isGithubActions}, repoName=${repoName}, NODE_ENV=${process.env.NODE_ENV}`);
 
 const nextConfig: NextConfig = {
   /* config options here */
   output: 'export',
   images: {
     unoptimized: true, // 静态导出时需要设置图片为未优化
-    domains: ['github.io'], // 允许GitHub Pages的图片域名
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**.github.io',
-        pathname: '/**',
-      },
-    ],
+    // domains已不再需要，因为我们使用的是静态资源
   },
-  assetPrefix: assetPrefix, // Add assetPrefix
-  basePath: basePath,       // Add basePath
+  assetPrefix: assetPrefix,
+  basePath: basePath,
+  
+  // 确保静态资源始终使用正确的路径
+  // 通过webpack配置处理资源路径
+  webpack: (config) => {
+    // 添加处理静态资源的规则
+    config.module = config.module || {};
+    config.module.rules = config.module.rules || [];
+    
+    return config;
+  },
+  
+  // 使用trailingSlash可能有助于解决某些路径问题
+  trailingSlash: true,
 };
 
 export default nextConfig;

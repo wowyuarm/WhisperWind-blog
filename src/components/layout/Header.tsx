@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { SiteConfig } from "@/lib/config";
+import { processImagePath } from "@/lib/utils";
 
 interface HeaderProps {
   siteConfig: SiteConfig;
@@ -30,6 +31,8 @@ export function Header({ siteConfig }: HeaderProps) {
     setLogoError(true);
   };
 
+  const logoPath = processImagePath(siteConfig?.avatar || '/images/logo.png');
+
   return (
     <header className="sticky top-0 z-20 w-full border-b border-secondary/30 bg-background/85 backdrop-blur-sm">
       <motion.div
@@ -47,7 +50,7 @@ export function Header({ siteConfig }: HeaderProps) {
                 <span className="text-primary font-bold text-xl">W</span>
               ) : (
                 <Image
-                  src={siteConfig.avatar || '/images/logo.png'}
+                  src={logoPath}
                   alt="WhisperWind Logo"
                   width={32}
                   height={32}

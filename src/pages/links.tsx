@@ -7,6 +7,7 @@ import { AnimatedButton } from '@/components/ui/animated-button';
 import { cn } from '@/lib/utils';
 import { HeadMeta } from '@/components/layout/HeadMeta';
 import { useState } from 'react';
+import { processImagePath } from "@/lib/utils";
 
 // Define props type
 interface LinksPageProps {
@@ -104,8 +105,9 @@ function FriendLinkCard({
   isOfficial?: boolean;
   siteConfig: SiteConfig;
 }) {
-  // 如果未配置图标，则使用网站logo作为默认图标
-  const iconSrc = link.icon || siteConfig.logo || '/images/logo.png';
+  // 使用通用的图片路径处理函数
+  const rawIconSrc = link.icon || siteConfig.logo || '/images/logo.png';
+  const iconSrc = processImagePath(rawIconSrc);
   const [imageError, setImageError] = useState(false);
 
   return (
