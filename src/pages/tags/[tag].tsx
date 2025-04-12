@@ -115,7 +115,7 @@ export default function TagPage({ tag, taggedPosts, siteConfig }: InferGetStatic
     setCloudPaths(paths);
   }, []);
   
-  // 云朵背景动画
+  // 云朵装饰背景动画
   const cloudVariants = {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     initial: (i: number) => ({

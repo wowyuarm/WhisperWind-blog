@@ -2,7 +2,7 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 // import { Layout } from "@/components/layout/Layout"; // Removed unused import
 import { Badge } from "@/components/ui/badge";
 import { getPostBySlug, getAllPostMetas, Post } from "@/lib/content";
-import { formatDate } from "@/lib/utils";
+import { formatDate, processImagePath } from "@/lib/utils";
 import Link from "next/link";
 // import { Suspense } from "react"; // Removed unused import
 import Markdown from "react-markdown";
@@ -10,7 +10,7 @@ import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
 import remarkGfm from "remark-gfm";
 import Image from "next/image";
-import ErrorPage from 'next/error'; // For handling not found in getStaticProps
+// import ErrorPage from 'next/error'; // 删除未使用的导入
 import { getSiteConfig, type SiteConfig } from "@/lib/config"; // Import getSiteConfig
 import { HeadMeta } from '@/components/layout/HeadMeta';
 // import { ReadingProgressBar } from '@/components/blog/ReadingProgressBar'; // 移除导入，因为已在Layout中全局使用
@@ -61,18 +61,19 @@ export const getStaticProps: GetStaticProps<PostPageProps, { slug: string }> = a
 PostPage.showFooter = false;
 
 export default function PostPage({ post, siteConfig }: InferGetStaticPropsType<typeof getStaticProps>) {
-  // Handle case where post is null (though getStaticProps should return notFound: true)
   if (!post) {
-    // This typically won't be reached if fallback: false and getStaticProps returns notFound
-    return <ErrorPage statusCode={404} />;
+    return <div>Post not found</div>; // 或者可以显示一个更友好的404页面
   }
+  
+  // 处理文章特色图片路径，使用通用的图片路径处理函数
+  const featuredImage = processImagePath(post.featuredImage);
 
   return (
     <>
       <HeadMeta
         title={post.title}
-        description={post.excerpt || `阅读文章 ${post.title}`}
-        ogImage={post.featuredImage}
+        description={post.excerpt || post.title}
+        ogImage={featuredImage}
         siteConfig={siteConfig}
       />
       
@@ -158,10 +159,10 @@ export default function PostPage({ post, siteConfig }: InferGetStaticPropsType<t
             </div>
 
             {/* 特色图片 */}
-            {post.featuredImage && (
+            {featuredImage && (
               <div className="mt-6 mb-8 aspect-[21/9] relative overflow-hidden rounded-lg shadow-md">
                 <Image
-                  src={post.featuredImage}
+                  src={featuredImage}
                   alt={post.title}
                   fill
                   priority
