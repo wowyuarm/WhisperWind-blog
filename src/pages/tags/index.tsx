@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import Link from 'next/link';
 import React, { useState, useEffect, useRef } from 'react';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
@@ -24,6 +23,15 @@ interface TagInfo {
 interface TagsIndexPageProps {
   tags: TagInfo[];
   siteConfig: SiteConfig;
+}
+
+// 定义标签位置信息的接口
+interface TagPosition {
+  x: number;
+  y: number;
+  size: number;
+  zOffset: number;
+  floatDelay: number;
 }
 
 export const getStaticProps: GetStaticProps<TagsIndexPageProps> = async () => {
@@ -83,7 +91,7 @@ function getTagSize(count: number, maxCount: number): number {
 }
 
 // 优化的标签位置计算函数
-function calculateTagPositions(tags: TagInfo[], cloudRadius: number): Record<string, any> {
+function calculateTagPositions(tags: TagInfo[], cloudRadius: number): Record<string, TagPosition> {
   // 没有标签时返回空对象
   if (tags.length === 0) return {};
   
@@ -91,7 +99,7 @@ function calculateTagPositions(tags: TagInfo[], cloudRadius: number): Record<str
   const maxCount = tags[0].count;
   
   // 创建保存所有标签位置的对象
-  const positions: Record<string, any> = {};
+  const positions: Record<string, TagPosition> = {};
   
   // 对标签进行深度克隆并按计数降序排序（确保高计数的标签先放置）
   const sortedTags = [...tags].sort((a, b) => b.count - a.count);
@@ -233,7 +241,7 @@ export default function TagsIndexPage({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const [cloudRadius, setCloudRadius] = useState(180);
   const [windowWidth, setWindowWidth] = useState(0);
-  const [tagPositions, setTagPositions] = useState<Record<string, any>>({});
+  const [tagPositions, setTagPositions] = useState<Record<string, TagPosition>>({});
   const cloudContainerRef = useRef<HTMLDivElement>(null);
   const [cloudPaths, setCloudPaths] = useState<string[]>([]);
   
@@ -275,11 +283,13 @@ export default function TagsIndexPage({
   
   // 云朵背景动画 - 保持静态透明度，只移动位置
   const cloudVariants = {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     initial: (i: number) => ({
       opacity: 0.06,
       x: -20,
       y: -10 + Math.random() * 20
     }),
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     animate: (i: number) => ({
       opacity: 0.06,
       x: 20,

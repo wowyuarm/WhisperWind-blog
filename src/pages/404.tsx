@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import Head from 'next/head';
 import { motion } from 'framer-motion';
 import { HeadMeta } from "@/components/layout/HeadMeta";
 import { getSiteConfig } from "@/lib/config";

@@ -1,11 +1,9 @@
-export default function imageLoader({ src, width, quality }: { src: string; width: number; quality?: number }) {
+export default function imageLoader({ src }: { src: string }): string {
   const isBrowser = typeof window !== 'undefined';
   let repoName = '';
   let isProduction = false;
-  let origin = '';
 
   if (isBrowser) {
-    origin = window.location.origin; // 获取当前源，如 https://wowyuarm.github.io
     const hostname = window.location.hostname;
     isProduction = hostname.includes('github.io');
     if (isProduction) {

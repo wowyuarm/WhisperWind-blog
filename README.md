@@ -15,7 +15,6 @@
 
 ## 🖼️ Preview
 
-![WhisperWind Blog Logo](public/images/logo.png)
 Visit the [live demo](https://wowyuarm.github.io/WhisperWind-blog/) to see it in action.
 
 ## 🚀 Quick Start

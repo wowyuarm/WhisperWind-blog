@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 import { PostCard } from "@/components/blog/PostCard";
 import { getAllPostMetas, type PostMeta } from "@/lib/content";
@@ -118,11 +117,13 @@ export default function TagPage({ tag, taggedPosts, siteConfig }: InferGetStatic
   
   // 云朵背景动画
   const cloudVariants = {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     initial: (i: number) => ({
       opacity: 0.03 + Math.random() * 0.07,
       x: -20,
       y: -10 + Math.random() * 20
     }),
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     animate: (i: number) => ({
       opacity: 0.04 + Math.random() * 0.06,
       x: 20,

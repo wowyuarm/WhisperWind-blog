@@ -1,7 +1,5 @@
-import Head from 'next/head';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { PostCard } from "@/components/blog/PostCard";
-import { Button } from "@/components/ui/button";
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAllPostMetas, type PostMeta } from "@/lib/content";
@@ -98,7 +96,7 @@ export default function Home({ recentPosts, siteConfig }: InferGetStaticPropsTyp
           <div className="opacity-0 animate-fade-in-up animation-delay-300">
             {recentPosts.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 content-visibility-auto">
-                {recentPosts.map((post, index) => (
+                {recentPosts.map((post) => (
                   <div 
                     key={post.slug} 
                     className="opacity-0 animate-fade-in-up animation-delay-300 hover:-translate-y-1 transition-transform duration-300"

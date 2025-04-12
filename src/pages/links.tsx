@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { getFriendLinks, getSiteConfig, type FriendLink, type SiteConfig } from "@/lib/config";

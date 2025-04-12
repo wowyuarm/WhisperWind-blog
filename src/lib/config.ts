@@ -1,5 +1,6 @@
 import path from 'path';
-import { useRouter } from 'next/router'
+// 不再从fs导入类型，直接定义我们需要的接口
+// 并改为同步导入fs模块，避免异步导入带来的复杂性
 
 interface SocialLinks {
   github?: string;
@@ -49,10 +50,18 @@ export const defaultSiteConfig: SiteConfig = {
 // 默认友情链接
 const defaultFriendLinks: FriendLink[] = [];
 
-let fs: any;
+// 定义一个简单的类型代替any
+interface FileSystem {
+  existsSync(path: string): boolean;
+  readFileSync(path: string, encoding: string): string;
+}
+
+let fs: FileSystem | undefined;
 if (typeof window === 'undefined') {
   // Only import fs in server-side context
-  fs = require('fs');
+  // 使用类型断言避免TS错误
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  fs = require('fs') as FileSystem;
 }
 
 /**
@@ -128,6 +137,11 @@ export function getSiteConfig(): SiteConfig {
 
   // 以下代码只在服务器端运行
   try {
+    // 如果fs不可用，返回默认配置
+    if (!fs) {
+      return processConfig(defaultSiteConfig);
+    }
+    
     const configPath = path.join(process.cwd(), 'src/content/config.json');
     
     if (fs.existsSync(configPath)) {
@@ -154,6 +168,11 @@ export function getFriendLinks(): FriendLink[] {
 
   // 以下代码只在服务器端运行
   try {
+    // 如果fs不可用，返回默认链接
+    if (!fs) {
+      return defaultFriendLinks;
+    }
+    
     const linksPath = path.join(process.cwd(), 'src/content/links.json');
     
     if (fs.existsSync(linksPath)) {

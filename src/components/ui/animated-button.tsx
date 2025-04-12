@@ -2,8 +2,7 @@
 
 import React from "react"
 import { motion } from "framer-motion"
-import { Button, buttonVariants } from "./button"
-import type { VariantProps } from "class-variance-authority"
+import { Button } from "./button"
 
 // 优化的浮动按钮动画变体 - 性能更好
 const floatVariants = {

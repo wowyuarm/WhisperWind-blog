@@ -1,7 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
 import { Badge } from '../ui/badge'
-import { Button } from '../ui/button'
 import { AnimatedButton } from '../ui/animated-button'
 import { formatDate } from '@/lib/utils'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '../ui/card'
@@ -17,7 +16,7 @@ interface PostCardProps {
   featuredImage?: string // 保留属性但不显示图片
 }
 
-export function PostCard({ title, slug, excerpt, publishDate, tags = [], featuredImage }: PostCardProps) {
+export function PostCard({ title, slug, excerpt, publishDate, tags = [] }: PostCardProps) {
   const formattedDate = formatDate(publishDate)
 
   // 使用cn函数合并类名

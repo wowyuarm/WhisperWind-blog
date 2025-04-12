@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { PostCard } from "@/components/blog/PostCard";
 import { getAllPostMetas, type PostMeta } from "@/lib/content";

@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from 'next';
 // import { Layout } from "@/components/layout/Layout"; // Removed unused import
 import { Badge } from "@/components/ui/badge";
@@ -184,7 +183,7 @@ export default function PostPage({ post, siteConfig }: InferGetStaticPropsType<t
                   const language = match ? match[1] : '';
                   
                   // 智能处理代码内容
-                  const processCodeContent = (content: any): string => {
+                  const processCodeContent = (content: unknown): string => {
                     if (typeof content === 'string') {
                       return content.replace(/\n$/, '');
                     }
@@ -198,7 +197,11 @@ export default function PostPage({ post, siteConfig }: InferGetStaticPropsType<t
                     
                     if (content && typeof content === 'object') {
                       // 如果是React元素或其他特殊对象，尝试获取其文本内容
-                      if ('props' in content && content.props && 'children' in content.props) {
+                      if (content !== null && 
+                          'props' in content && 
+                          content.props && 
+                          typeof content.props === 'object' && 
+                          'children' in content.props) {
                         return processCodeContent(content.props.children);
                       }
                       

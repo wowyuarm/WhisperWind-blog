@@ -114,8 +114,8 @@ export function getAllPostMetas(): PostMeta[] {
     : '';
 
   const posts = getAllPosts();
-  return posts.map(post => {
-    const { content, ...meta } = post;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  return posts.map(({ content: _, ...meta }) => {
     return {
       ...meta,
       featuredImage: meta.featuredImage ? `${basePath}${meta.featuredImage}` : undefined,

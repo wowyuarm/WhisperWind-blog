@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
@@ -22,7 +22,6 @@ const navLinks = [
 
 export function Header({ siteConfig }: HeaderProps) {
   const pathname = usePathname();
-  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [logoError, setLogoError] = useState(false);
 
@@ -39,8 +38,8 @@ export function Header({ siteConfig }: HeaderProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
       >
-        <div className="mr-4 flex items-center">
-          <Link href="/" className="group mr-8 flex items-center space-x-2 text-xl font-medium transition-all duration-300"
+        <div className="flex items-center">
+          <Link href="/" className="group flex items-center space-x-2 text-xl font-medium transition-all duration-300 mr-4"
             aria-label="WhisperWind Blog"
           >
             <div className="relative w-8 h-8 mr-2 rounded-full overflow-hidden border-2 border-primary/20 flex items-center justify-center bg-white/70">
@@ -71,34 +70,33 @@ export function Header({ siteConfig }: HeaderProps) {
               Blog
             </motion.span>
           </Link>
-        </div>
-        <div className="flex items-center justify-end">
-          <nav className="hidden md:flex items-center space-x-6">
-              {navLinks.map((link) => (
-                <motion.div
-                  key={link.href}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.2 }}
+          
+          <nav className="hidden md:flex items-center space-x-4">
+            {navLinks.map((link) => (
+              <motion.div
+                key={link.href}
+                whileHover={{ scale: 1.05 }}
+                transition={{ duration: 0.2 }}
+              >
+                <Link
+                  href={link.href}
+                  className={cn(
+                    'relative rounded-full px-3 py-1.5 text-sm tracking-wide text-foreground/70 transition-colors duration-300 hover:text-primary',
+                    (pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href)))
+                      ? 'font-medium text-primary bg-primary/5 after:absolute after:bottom-0 after:left-1/2 after:h-1.5 after:w-1.5 after:rounded-full after:bg-primary/50 after:transform after:-translate-x-1/2 after:translate-y-1'
+                      : 'hover:bg-background/50'
+                  )}
                 >
-                  <Link
-                    href={link.href}
-                    className={cn(
-                      'relative rounded-full px-3 py-1.5 text-sm tracking-wide text-foreground/70 transition-colors duration-300 hover:text-primary',
-                      (pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href)))
-                        ? 'font-medium text-primary bg-primary/5 after:absolute after:bottom-0 after:left-1/2 after:h-1.5 after:w-1.5 after:rounded-full after:bg-primary/50 after:transform after:-translate-x-1/2 after:translate-y-1'
-                        : 'hover:bg-background/50'
-                    )}
-                  >
-                    {link.name}
-                  </Link>
-                </motion.div>
-              ))}
-            </nav>
-            
-          
-          
+                  {link.name}
+                </Link>
+              </motion.div>
+            ))}
+          </nav>
+        </div>
+        
+        <div className="flex items-center">
           <motion.button
-            className="ml-4 -mr-2 p-2 md:hidden text-foreground/80 transition-colors duration-300 hover:text-primary"
+            className="p-2 md:hidden text-foreground/80 transition-colors duration-300 hover:text-primary"
             aria-label="Toggle Menu"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             whileHover={{ scale: 1.1 }}

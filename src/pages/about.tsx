@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { getPageContent, type Post } from "@/lib/content";
 import { getSiteConfig, type SiteConfig } from "@/lib/config";
@@ -71,7 +70,7 @@ export default function AboutPage({ pageData, siteConfig }: InferGetStaticPropsT
                     const language = match ? match[1] : '';
                     
                     // 智能处理代码内容
-                    const processCodeContent = (content: any): string => {
+                    const processCodeContent = (content: unknown): string => {
                       if (typeof content === 'string') {
                         return content.replace(/\n$/, '');
                       }
@@ -85,7 +84,11 @@ export default function AboutPage({ pageData, siteConfig }: InferGetStaticPropsT
                       
                       if (content && typeof content === 'object') {
                         // 如果是React元素或其他特殊对象，尝试获取其文本内容
-                        if ('props' in content && content.props && 'children' in content.props) {
+                        if (content !== null && 
+                            'props' in content && 
+                            content.props && 
+                            typeof content.props === 'object' && 
+                            'children' in content.props) {
                           return processCodeContent(content.props.children);
                         }
                         

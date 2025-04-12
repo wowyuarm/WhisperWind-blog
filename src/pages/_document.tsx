@@ -1,5 +1,4 @@
 import { Html, Head, Main, NextScript } from 'next/document';
-import { getSiteConfig } from '@/lib/config';
 
 export default function Document() {
   // 注意：_document.tsx中不能使用hooks和React上下文
@@ -9,11 +8,6 @@ export default function Document() {
   const repoName = process.env.GITHUB_REPOSITORY ? process.env.GITHUB_REPOSITORY.split('/')[1] : '';
   const isProduction = process.env.NODE_ENV === 'production';
   const basePath = isProduction && repoName ? `/${repoName}` : '';
-  
-  // 构建基础URL，注意结尾的斜杠，<base>标签需要
-  const baseUrl = isProduction && repoName
-    ? `https://wowyuarm.github.io/${repoName}/` 
-    : '/';
   
   return (
     <Html lang="zh-CN"> {/* 设置全局语言 */}

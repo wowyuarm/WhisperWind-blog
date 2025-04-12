@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>标签云算法可视化测试工具</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    h1, h2 {
+      color: #2c3e50;
+      text-align: center;
+    }
+    
+    .controls {
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .tag-cloud-container {
+      position: relative;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin: 0 auto;
+      padding: 10px;
+      overflow: hidden;
+    }
+    
+    .tag-cloud {
+      position: relative;
+      width: 700px;
+      height: 700px;
+      margin: 0 auto;
+    }
+    
+    .tag {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      background-color: #3498db;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-weight: bold;
+      text-align: center;
+      transition: all 0.3s ease;
+      overflow: hidden;
+      white-space: nowrap;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      cursor: pointer;
+      user-select: none;
+    }
+    
+    .tag:hover {
+      background-color: #2980b9;
+      transform: translate(-50%, -50%) scale(1.05);
+      z-index: 100 !important;
+    }
+    
+    .tag.overlap {
+      background-color: #e74c3c;
+    }
+    
+    .tag.outside {
+      background-color: #f39c12;
+    }
+    
+    .cloud-boundary {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 2px dashed #ccc;
+      border-radius: 50%;
+      z-index: 0;
+    }
+    
+    .stats {
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      margin-top: 20px;
+    }
+    
+    .stats table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .stats th, .stats td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+    
+    .stats th {
+      background-color: #f8f9fa;
+    }
+    
+    .btn {
+      background-color: #3498db;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 5px;
+      transition: background-color 0.3s;
+    }
+    
+    .btn:hover {
+      background-color: #2980b9;
+    }
+    
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    
+    .form-group {
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+    }
+    
+    .form-group label {
+      margin-right: 10px;
+      font-weight: bold;
+    }
+    
+    .form-group input, .form-group select {
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      margin: 0 10px;
+    }
+    
+    .checkbox-group input {
+      margin-right: 5px;
+    }
+    
+    #fileInput {
+      display: none;
+    }
+    
+    .file-upload {
+      display: inline-flex;
+      align-items: center;
+    }
+    
+    .legend {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .legend-item {
+      display: flex;
+      align-items: center;
+      margin-right: 15px;
+    }
+    
+    .legend-color {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      margin-right: 5px;
+    }
+    
+    @media (max-width: 768px) {
+      .tag-cloud {
+        width: 100%;
+        height: 500px;
+      }
+      
+      .controls {
+        flex-direction: column;
+      }
+      
+      .form-group {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>标签云算法可视化测试工具</h1>
+    
+    <div class="controls">
+      <div class="form-group">
+        <label for="tagCount">标签数量:</label>
+        <select id="tagCount">
+          <option value="5">5个标签</option>
+          <option value="10">10个标签</option>
+          <option value="20">20个标签</option>
+          <option value="50" selected>50个标签</option>
+          <option value="100">100个标签</option>
+          <option value="200">200个标签</option>
+          <option value="500">500个标签</option>
+          <option value="custom">自定义...</option>
+        </select>
+        <input type="number" id="customTagCount" min="1" max="1000" value="50" style="display: none; width: 70px; margin-left: 10px;">
+      </div>
+      
+      <div class="form-group">
+        <label for="cloudRadius">云半径:</label>
+        <input type="number" id="cloudRadius" min="100" max="1000" value="300" style="width: 70px;">px
+      </div>
+      
+      <div class="checkbox-group">
+        <input type="checkbox" id="showOverlaps" checked>
+        <label for="showOverlaps">高亮重叠标签</label>
+      </div>
+      
+      <div class="checkbox-group">
+        <input type="checkbox" id="showOutsiders" checked>
+        <label for="showOutsiders">高亮超出边界标签</label>
+      </div>
+      
+      <div class="btn-group">
+        <button id="generateBtn" class="btn">生成标签云</button>
+        <button id="loadTestDataBtn" class="btn">加载测试数据</button>
+        <input type="file" id="fileInput" accept=".json">
+      </div>
+    </div>
+    
+    <div class="tag-cloud-container">
+      <div class="tag-cloud" id="tagCloud">
+        <div class="cloud-boundary" id="cloudBoundary"></div>
+        <!-- 标签将动态生成到这里 -->
+      </div>
+    </div>
+    
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: #3498db;"></div>
+        <span>正常标签</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: #e74c3c;"></div>
+        <span>重叠标签</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="background-color: #f39c12;"></div>
+        <span>超出边界标签</span>
+      </div>
+    </div>
+    
+    <div class="stats" id="statsContainer">
+      <h2>测试统计</h2>
+      <table>
+        <tr>
+          <th>指标</th>
+          <th>数值</th>
+        </tr>
+        <tr>
+          <td>标签总数</td>
+          <td id="totalTags">0</td>
+        </tr>
+        <tr>
+          <td>实际放置标签数</td>
+          <td id="placedTags">0</td>
+        </tr>
+        <tr>
+          <td>重叠标签对数</td>
+          <td id="overlappingPairs">0</td>
+        </tr>
+        <tr>
+          <td>超出边界标签数</td>
+          <td id="outsideBoundary">0</td>
+        </tr>
+        <tr>
+          <td>计算耗时</td>
+          <td id="computeTime">0 ms</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  
+  <script>
+    // 从src代码中复制的计算标签大小的函数
+    function getTagSize(count, maxCount) {
+      // 标签大小与文章数量成正比，但使用对数比例使差异不太极端
+      const minSize = 0.65; // 减小最小尺寸
+      const maxSize = 1.6; // 减小最大尺寸
+      
+      // 优化计算逻辑，使标签大小更均匀分布
+      const normalizedCount = count / maxCount; // 标准化计数 (0-1范围)
+      const logFactor = Math.log(normalizedCount * 9 + 1) / Math.log(10); // 对数缩放 (0-1范围)
+      
+      // 应用最小和最大大小限制
+      return minSize + logFactor * (maxSize - minSize);
+    }
+    
+    // 优化的标签位置计算函数
+    function calculateTagPositions(tags, cloudRadius) {
+      // 没有标签时返回空对象
+      if (tags.length === 0) return {};
+      
+      // 获取最大标签计数
+      const maxCount = tags[0].count;
+      
+      // 创建保存所有标签位置的对象
+      const positions = {};
+      
+      // 对标签进行深度克隆并按计数降序排序（确保高计数的标签先放置）
+      const sortedTags = [...tags].sort((a, b) => b.count - a.count);
+      
+      // 记录已使用的位置，避免标签重叠
+      const usedPositions = [];
+      
+      // 设置中心标签
+      if (sortedTags.length > 0) {
+        const centerTag = sortedTags[0]; // 文章数量最多的标签
+        const size = getTagSize(centerTag.count, maxCount);
+        
+        positions[centerTag.name] = {
+          x: 0, // 正中心
+          y: 0, // 正中心
+          size: size,
+          zOffset: 50, // 最高层级
+          floatDelay: 0
+        };
+        
+        // 记录中心标签的位置和大小
+        const tagRadius = size * 1.6 * 16; // 减小标签半径换算倍数
+        usedPositions.push({x: 0, y: 0, radius: tagRadius});
+        
+        // 移除中心标签，处理其余标签
+        sortedTags.shift();
+      }
+      
+      // 螺旋放置函数 - 根据标签数量从高到低，从中心向外螺旋放置
+      const goldenAngle = Math.PI * (3 - Math.sqrt(5)); // 黄金角
+      let currentAngle = Math.random() * Math.PI * 2; // 随机起始角度
+      let currentIndex = 1;
+      
+      // 处理剩余标签
+      sortedTags.forEach((tag, index) => {
+        const size = getTagSize(tag.count, maxCount);
+        const tagRadius = size * 1.6 * 16; // 减小标签半径换算倍数
+        
+        // 标签应该放置的距离中心的距离，与文章数量成反比
+        // 文章数量越多，越靠近中心
+        const normalizedCount = tag.count / maxCount;
+        // 这里使用平方根函数使分布更加均匀
+        const distanceRatio = Math.sqrt(1 - normalizedCount);
+        
+        // 初始放置距离（根据tag在排序后的位置）
+        // 减小基础距离，使整体更紧凑
+        let distance = cloudRadius * 0.15 + distanceRatio * cloudRadius * 0.65;
+        
+        // 增加角度变化，分散相同数量的标签
+        const angleStep = goldenAngle + (index % 3) * 0.1;
+        currentAngle += angleStep;
+        
+        // 寻找可放置的位置
+        let validPosition = false;
+        let attempts = 0;
+        let x = 0, y = 0;
+        
+        // 尝试找到不重叠的位置
+        while (!validPosition && attempts < 50) {
+          // 计算基于当前角度和距离的位置
+          x = Math.cos(currentAngle) * distance;
+          y = Math.sin(currentAngle) * distance;
+          
+          // 检查与已放置标签的距离
+          validPosition = true;
+          for (const pos of usedPositions) {
+            const dx = x - pos.x;
+            const dy = y - pos.y;
+            const minDistance = tagRadius + pos.radius + 3; // 减小额外间距
+            const actualDistance = Math.sqrt(dx*dx + dy*dy);
+            
+            if (actualDistance < minDistance) {
+              validPosition = false;
+              break;
+            }
+          }
+          
+          // 如果位置无效，稍微调整角度和距离
+          if (!validPosition) {
+            currentAngle += 0.2; // 微调角度
+            distance += 5; // 稍微增加距离
+            attempts++;
+          }
+        }
+        
+        // 添加位置
+        positions[tag.name] = {
+          x: x,
+          y: y,
+          size: size,
+          zOffset: 40 - currentIndex, // 确保高计数标签显示在上层
+          floatDelay: currentIndex,
+          attempts: attempts // 记录尝试次数
+        };
+        
+        // 记录已使用的位置
+        usedPositions.push({x, y, radius: tagRadius});
+        currentIndex++;
+      });
+      
+      return positions;
+    }
+    
+    // 生成测试标签数据
+    function generateTestTags(tagCount) {
+      const tags = [];
+      for (let i = 1; i <= tagCount; i++) {
+        tags.push({
+          name: `标签${i}`,
+          count: Math.max(1, Math.floor(100 / Math.sqrt(i))) // 模拟标签数量分布
+        });
+      }
+      return tags.sort((a, b) => b.count - a.count); // 按计数降序排序
+    }
+    
+    // 检查标签重叠与边界
+    function checkTagOverlapsAndBoundaries(positions, cloudRadius) {
+      const result = {
+        overlappingPairs: [],
+        outsideBoundary: []
+      };
+      
+      const positionEntries = Object.entries(positions);
+      for (let i = 0; i < positionEntries.length; i++) {
+        const [tagName1, pos1] = positionEntries[i];
+        const size1 = pos1.size * 1.6 * 16; // 标签1的尺寸
+        
+        // 检查是否超出边界
+        const distanceFromCenter = Math.sqrt(pos1.x * pos1.x + pos1.y * pos1.y);
+        if (distanceFromCenter > cloudRadius) {
+          result.outsideBoundary.push(tagName1);
+        }
+        
+        // 检查与其他标签的重叠
+        for (let j = i + 1; j < positionEntries.length; j++) {
+          const [tagName2, pos2] = positionEntries[j];
+          const size2 = pos2.size * 1.6 * 16; // 标签2的尺寸
+          
+          const dx = pos1.x - pos2.x;
+          const dy = pos1.y - pos2.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          const minDistance = size1 + size2 + 3; // 最小安全距离
+          
+          if (distance < minDistance) {
+            result.overlappingPairs.push([tagName1, tagName2]);
+          }
+        }
+      }
+      
+      return result;
+    }
+    
+    // 可视化标签云
+    function visualizeTagCloud(positions, cloudRadius, checkResults) {
+      const tagCloud = document.getElementById('tagCloud');
+      const cloudBoundary = document.getElementById('cloudBoundary');
+      
+      // 清空现有标签
+      const existingTags = tagCloud.querySelectorAll('.tag');
+      existingTags.forEach(tag => tag.remove());
+      
+      // 设置云边界
+      cloudBoundary.style.width = `${cloudRadius * 2}px`;
+      cloudBoundary.style.height = `${cloudRadius * 2}px`;
+      
+      // 获取是否高亮显示问题标签
+      const showOverlaps = document.getElementById('showOverlaps').checked;
+      const showOutsiders = document.getElementById('showOutsiders').checked;
+      
+      // 创建标签元素
+      Object.entries(positions).forEach(([tagName, position]) => {
+        const tagElement = document.createElement('div');
+        tagElement.className = 'tag';
+        tagElement.textContent = tagName;
+        
+        // 设置标签位置和大小
+        tagElement.style.left = `${position.x + tagCloud.clientWidth / 2}px`;
+        tagElement.style.top = `${position.y + tagCloud.clientHeight / 2}px`;
+        tagElement.style.fontSize = `${position.size}em`;
+        tagElement.style.zIndex = position.zOffset;
+        
+        // 添加浮动动画
+        const floatDuration = 3 + Math.random() * 2; // 3-5秒随机持续时间
+        const floatAmount = 8 + Math.random() * 7; // 8-15px随机浮动幅度
+        tagElement.style.animation = `float ${floatDuration}s ease-in-out ${position.floatDelay * 0.2}s infinite alternate`;
+        
+        // 设置样式：重叠或超出边界
+        if (showOverlaps && checkResults.overlappingPairs.some(pair => pair.includes(tagName))) {
+          tagElement.classList.add('overlap');
+        }
+        
+        if (showOutsiders && checkResults.outsideBoundary.includes(tagName)) {
+          tagElement.classList.add('outside');
+        }
+        
+        // 添加标签的信息提示
+        tagElement.title = `标签: ${tagName}
+尝试次数: ${position.attempts || 0}
+位置: (${position.x.toFixed(2)}, ${position.y.toFixed(2)})
+大小: ${position.size.toFixed(2)}em`;
+        
+        tagCloud.appendChild(tagElement);
+      });
+      
+      // 添加浮动动画样式
+      const styleElement = document.createElement('style');
+      styleElement.textContent = `
+        @keyframes float {
+          0% {
+            transform: translate(-50%, -50%) translateY(-5px);
+          }
+          100% {
+            transform: translate(-50%, -50%) translateY(5px);
+          }
+        }
+      `;
+      document.head.appendChild(styleElement);
+    }
+    
+    // 更新统计信息
+    function updateStats(tags, positions, checkResults, computeTime) {
+      document.getElementById('totalTags').textContent = tags.length;
+      document.getElementById('placedTags').textContent = Object.keys(positions).length;
+      document.getElementById('overlappingPairs').textContent = checkResults.overlappingPairs.length;
+      document.getElementById('outsideBoundary').textContent = checkResults.outsideBoundary.length;
+      document.getElementById('computeTime').textContent = `${computeTime} ms`;
+    }
+    
+    // 生成标签云
+    function generateCloud() {
+      // 获取用户设置
+      let tagCount;
+      if (document.getElementById('tagCount').value === 'custom') {
+        tagCount = parseInt(document.getElementById('customTagCount').value);
+      } else {
+        tagCount = parseInt(document.getElementById('tagCount').value);
+      }
+      
+      const cloudRadius = parseInt(document.getElementById('cloudRadius').value);
+      
+      // 生成标签数据
+      const startTime = performance.now();
+      const tags = generateTestTags(tagCount);
+      const positions = calculateTagPositions(tags, cloudRadius);
+      const endTime = performance.now();
+      const computeTime = (endTime - startTime).toFixed(2);
+      
+      // 检查标签重叠和边界
+      const checkResults = checkTagOverlapsAndBoundaries(positions, cloudRadius);
+      
+      // 可视化标签云
+      visualizeTagCloud(positions, cloudRadius, checkResults);
+      
+      // 更新统计信息
+      updateStats(tags, positions, checkResults, computeTime);
+    }
+    
+    // 加载测试数据
+    function loadTestData(data) {
+      const cloudRadius = data.cloudRadius || 300;
+      document.getElementById('cloudRadius').value = cloudRadius;
+      
+      // 解析位置数据
+      const positions = data.positions || {};
+      
+      // 检查标签重叠和边界
+      const checkResults = checkTagOverlapsAndBoundaries(positions, cloudRadius);
+      
+      // 可视化标签云
+      visualizeTagCloud(positions, cloudRadius, checkResults);
+      
+      // 更新统计信息
+      const tags = Object.keys(positions).map(name => ({ name }));
+      const stats = data.stats || { overlappingPairs: checkResults.overlappingPairs.length, outsideBoundary: checkResults.outsideBoundary.length };
+      document.getElementById('totalTags').textContent = data.tags || tags.length;
+      document.getElementById('placedTags').textContent = tags.length;
+      document.getElementById('overlappingPairs').textContent = stats.overlappingPairs;
+      document.getElementById('outsideBoundary').textContent = stats.outsideBoundary;
+      document.getElementById('computeTime').textContent = data.computeTime || "N/A";
+    }
+    
+    // 在文档加载完成后绑定事件
+    document.addEventListener('DOMContentLoaded', function() {
+      // 标签数量选择变化事件
+      document.getElementById('tagCount').addEventListener('change', function() {
+        const customInput = document.getElementById('customTagCount');
+        if (this.value === 'custom') {
+          customInput.style.display = 'inline-block';
+        } else {
+          customInput.style.display = 'none';
+        }
+      });
+      
+      // 生成按钮点击事件
+      document.getElementById('generateBtn').addEventListener('click', generateCloud);
+      
+      // 加载测试数据按钮点击事件
+      document.getElementById('loadTestDataBtn').addEventListener('click', function() {
+        document.getElementById('fileInput').click();
+      });
+      
+      // 文件输入变化事件
+      document.getElementById('fileInput').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            try {
+              const data = JSON.parse(event.target.result);
+              loadTestData(data);
+            } catch (error) {
+              alert('无法解析测试数据文件: ' + error.message);
+              console.error('解析测试数据文件时出错:', error);
+            }
+          };
+          reader.readAsText(file);
+        }
+      });
+      
+      // 高亮设置变化事件
+      document.getElementById('showOverlaps').addEventListener('change', function() {
+        generateCloud();
+      });
+      
+      document.getElementById('showOutsiders').addEventListener('change', function() {
+        generateCloud();
+      });
+      
+      // 初始生成标签云
+      generateCloud();
+    });
+  </script>
+</body>
+</html> 
