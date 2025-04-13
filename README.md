@@ -20,10 +20,11 @@ Visit the [live demo](https://wowyuarm.github.io/WhisperWind-blog/) to see it in
 ## 🚀 Quick Start
 
 1. Click "Use this template" to create your own repository
-2. Set up a Netlify site and configure Identity/Git Gateway
-3. Update configuration files with your Netlify site URL
-4. Deploy to GitHub Pages via GitHub Actions
-5. Access your blog and log in to the CMS
+2. **Important**: Go to your repository's Settings > Pages, and change the "Source" to "GitHub Actions" (this is crucial for deploying correctly)
+3. Set up a Netlify site and configure Identity/Git Gateway
+4. Update configuration files with your Netlify site URL
+5. Deploy to GitHub Pages via GitHub Actions
+6. Access your blog and log in to the CMS
 
 ### Setting Up Decap CMS
 
