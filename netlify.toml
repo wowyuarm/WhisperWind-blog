@@ -1,10 +1,15 @@
 [build]
-  command = "npm run build"
+  # 最小化构建命令，只复制身份验证所需的文件
+  command = "mkdir -p out/admin && cp -r public/admin/* out/admin/ && cp public/identity.html out/ && cp public/index.html out/ && cp public/_redirects out/"
   publish = "out"
 
 [build.environment]
   NODE_ENV = "production"
   DISABLE_BASE_PATH = "true"
+
+# 禁用自动检测的插件
+[plugins]
+  package = []
 
 # 这个重定向处理正常的SPA路由
 [[redirects]]
@@ -23,13 +28,8 @@
   to = "/admin/index.html"
   status = 200
   
-# 确保身份验证回调能正确工作
+# 确保身份验证页面正确加载
 [[redirects]]
-  from = "/.netlify/identity"
-  to = "/.netlify/identity"
-  status = 200
-
-[[redirects]]
-  from = "/.netlify/identity/*"
-  to = "/.netlify/identity/:splat"
+  from = "/identity"
+  to = "/identity.html"
   status = 200 

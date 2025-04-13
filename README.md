@@ -43,7 +43,7 @@ While your blog content will be deployed on GitHub Pages, we need to use Netlify
    - Scroll down to **Registration** and set it to **Invite only** (recommended) or choose open registration
    - Go to **Services** > **Git Gateway** > click **Enable Git Gateway**
 
-> ⚠️ **Important Note About Netlify Deployment**: You might notice that the deployed site on Netlify shows a blank page with resource loading errors. This is normal and expected, as the template is designed to publish content to GitHub Pages, not directly on Netlify. Netlify is only used for its authentication service. To view your actual website, please use your GitHub Pages URL.
+> ⚠️ **Important Note About Netlify Deployment**: The template uses a minimalist deployment approach for Netlify. Only the authentication-related files (admin interface and identity page) are deployed to Netlify, not the entire blog. This is intentional, as the main blog content is served through GitHub Pages, while Netlify provides only the authentication service.
 
 #### 2. Update Configuration Files with Your Netlify Site URL
 
@@ -62,7 +62,7 @@ window.netlifyIdentity = {
   }
 };
 
-// Also find and modify site URL configuration (around line 180)
+// Also find and modify site URL configuration (around line 230)
 site_url: "https://your-username.github.io/your-repo-name",
 display_url: "https://your-username.github.io/your-repo-name",
 ```

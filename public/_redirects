@@ -1,5 +1,4 @@
 # 特定的身份验证处理
-/.netlify/identity/*  /.netlify/identity/:splat 200
 /identity  /identity.html 200
 
 # 确保admin路径正确加载
