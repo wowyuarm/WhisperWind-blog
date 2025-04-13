@@ -1,0 +1,35 @@
+[build]
+  command = "npm run build"
+  publish = "out"
+
+[build.environment]
+  NODE_ENV = "production"
+  DISABLE_BASE_PATH = "true"
+
+# 这个重定向处理正常的SPA路由
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  
+# 这些重定向确保Netlify Identity能正常工作
+[[redirects]]
+  from = "/admin"
+  to = "/admin/index.html"
+  status = 200
+
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/index.html"
+  status = 200
+  
+# 确保身份验证回调能正确工作
+[[redirects]]
+  from = "/.netlify/identity"
+  to = "/.netlify/identity"
+  status = 200
+
+[[redirects]]
+  from = "/.netlify/identity/*"
+  to = "/.netlify/identity/:splat"
+  status = 200 

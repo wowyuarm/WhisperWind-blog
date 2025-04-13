@@ -43,6 +43,8 @@ While your blog content will be deployed on GitHub Pages, we need to use Netlify
    - Scroll down to **Registration** and set it to **Invite only** (recommended) or choose open registration
    - Go to **Services** > **Git Gateway** > click **Enable Git Gateway**
 
+> ⚠️ **Important Note About Netlify Deployment**: You might notice that the deployed site on Netlify shows a blank page with resource loading errors. This is normal and expected, as the template is designed to publish content to GitHub Pages, not directly on Netlify. Netlify is only used for its authentication service. To view your actual website, please use your GitHub Pages URL.
+
 #### 2. Update Configuration Files with Your Netlify Site URL
 
 In your forked repository, you need to modify two configuration files:
@@ -65,7 +67,14 @@ site_url: "https://your-username.github.io/your-repo-name",
 display_url: "https://your-username.github.io/your-repo-name",
 ```
 
-2. Then, update `src/content/config.json` to add your admin URL:
+2. Similarly, update the same URL in `public/identity.html`:
+
+```javascript
+// Define site URL
+const NETLIFY_SITE = "your-netlify-site-name.netlify.app"; // Replace with your Netlify site name
+```
+
+3. Then, update `src/content/config.json` to add your admin URL:
 
 ```json
 {
@@ -92,7 +101,19 @@ Please replace the above URLs with your own GitHub Pages address, e.g., `https:/
 1. Netlify Site URL - for authentication (e.g., `your-site-123456.netlify.app`)
 2. GitHub Pages URL - for preview and site display (e.g., `your-username.github.io/your-repo-name`)
 
-#### 3. Redirect "Admin" Link to Netlify
+#### 3. Troubleshooting Identity Issues
+
+If you encounter issues with Netlify identity (such as problems setting up your password or login):
+
+1. When receiving invitation emails, make sure you click the link and it opens the `identity.html` page
+2. If you see a blank page or errors when trying to set up your password:
+   - Manually go to your Netlify site URL followed by `/identity.html` (e.g., `your-site-123456.netlify.app/identity.html`)
+   - Use the "Open Login Window" button to manually trigger the authentication
+   - Copy-paste your invite token from the email URL to your browser's address bar after `/identity.html#invite_token=`
+
+3. If issues persist, check the browser console for specific errors, and ensure all URLs in your configuration match your actual Netlify domain
+
+#### 4. Redirect "Admin" Link to Netlify
 
 The "Admin" link in the footer of your blog should point to your Netlify admin interface. This is configured in two places:
 
@@ -103,7 +124,7 @@ The "Admin" link in the footer of your blog should point to your Netlify admin i
 
 2. When you click the "Admin" link, it will now redirect you directly to your Netlify-hosted admin interface instead of trying to load the admin interface on GitHub Pages (which won't work due to authentication limitations).
 
-#### 4. Create Admin Account
+#### 5. Create Admin Account
 
 After setting up the Identity service, you need to create an admin account:
 
@@ -111,7 +132,7 @@ After setting up the Identity service, you need to create an admin account:
 2. Enter your email address and send the invitation
 3. Check your email, accept the invitation, and set a password
 
-#### 5. Access CMS Admin Interface
+#### 6. Access CMS Admin Interface
 
 After completing the steps above and deploying your GitHub Pages website:
 

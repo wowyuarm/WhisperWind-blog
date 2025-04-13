@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhisperWind Blog - 账户验证</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f5f5f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .container {
+      max-width: 500px;
+      width: 100%;
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    h1 {
+      color: #4a7c59;
+      margin-top: 0;
+    }
+    p {
+      color: #555;
+      line-height: 1.5;
+    }
+    .buttons {
+      margin-top: 20px;
+    }
+    button {
+      background: #4a7c59;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      margin: 0 5px;
+    }
+    button:hover {
+      background: #3d6a4b;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>账户验证</h1>
+    <p>这个页面用于处理Netlify身份验证流程。您将在此设置密码或确认登录。</p>
+    <p>如果页面没有自动处理验证过程，请点击下方按钮。</p>
+    
+    <div class="buttons">
+      <button id="login-button">打开登录窗口</button>
+      <button id="admin-button">前往管理页面</button>
+      <button id="home-button">返回博客首页</button>
+    </div>
+  </div>
+
+  <!-- 加载Netlify Identity Widget -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  
+  <script>
+    // 定义站点URL
+    const NETLIFY_SITE = "YOUR_NETLIFY_SITE.netlify.app"; // 替换为您的Netlify站点名称
+    
+    // 按钮事件处理
+    document.getElementById('login-button').addEventListener('click', function() {
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.open();
+      } else {
+        alert('Netlify Identity窗口无法加载，请刷新页面重试。');
+      }
+    });
+    
+    document.getElementById('admin-button').addEventListener('click', function() {
+      window.location.href = '/admin/';
+    });
+    
+    document.getElementById('home-button').addEventListener('click', function() {
+      const homeUrl = window.location.hostname.includes('github.io') 
+        ? '/WhisperWind-blog/' 
+        : '/';
+      window.location.href = homeUrl;
+    });
+    
+    // 页面加载时自动处理身份验证
+    document.addEventListener('DOMContentLoaded', function() {
+      if (window.netlifyIdentity) {
+        console.log("Netlify Identity Widget已加载");
+        
+        // 设置API URL
+        if (!window.netlifyIdentity.api || !window.netlifyIdentity.api.apiURL) {
+          window.netlifyIdentity.init({
+            APIUrl: `https://${NETLIFY_SITE}/.netlify/identity`
+          });
+        }
+        
+        // 监听事件
+        window.netlifyIdentity.on("init", user => {
+          console.log("身份验证初始化完成", user ? "用户已登录" : "用户未登录");
+          const hash = document.location.hash;
+          
+          // 处理身份验证回调
+          if (hash && (hash.includes('#invite_token=') || hash.includes('#recovery_token='))) {
+            console.log("检测到验证令牌，自动打开身份验证窗口");
+            
+            // 给系统一点时间初始化
+            setTimeout(() => {
+              window.netlifyIdentity.open();
+            }, 500);
+          }
+        });
+        
+        window.netlifyIdentity.on("login", () => {
+          console.log("用户登录成功，重定向到管理页面");
+          setTimeout(() => {
+            window.location.href = '/admin/';
+          }, 1000);
+        });
+        
+        window.netlifyIdentity.on("error", err => {
+          console.error("身份验证错误:", err);
+          alert("身份验证过程中发生错误，请重试或联系管理员。");
+        });
+        
+        // 自动处理链接中的令牌
+        const hash = document.location.hash;
+        if (hash && (hash.includes('#invite_token=') || hash.includes('#recovery_token='))) {
+          console.log("检测到令牌，准备处理...");
+        }
+      } else {
+        console.error("Netlify Identity Widget未能加载!");
+      }
+    });
+  </script>
+</body>
+</html> 

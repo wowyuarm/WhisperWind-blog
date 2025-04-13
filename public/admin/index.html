@@ -54,7 +54,38 @@
     div:has(h2:contains("Error")) {
       display: none !important;
     }
+    
+    /* 添加自定义错误处理UI */
+    #identity-error {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 20px;
+      background-color: #f8d7da;
+      color: #721c24;
+      border-bottom: 1px solid #f5c6cb;
+      z-index: 9999;
+      text-align: center;
+    }
+    #identity-error button {
+      background: #721c24;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
   </style>
+  
+  <!-- 自定义错误处理UI -->
+  <div id="identity-error">
+    Netlify身份验证服务连接错误。
+    <button onclick="retryIdentity()">重试</button>
+    <button onclick="goToIdentityPage()">转到验证页面</button>
+  </div>
   
   <!-- 必须在加载脚本前预先配置API URL -->
   <script>
@@ -71,6 +102,19 @@
     
     console.log("预先配置Netlify Identity API URL:", window.netlifyIdentity.api.apiURL);
     
+    // 错误处理函数
+    function showIdentityError() {
+      document.getElementById('identity-error').style.display = 'block';
+    }
+    
+    function retryIdentity() {
+      location.reload();
+    }
+    
+    function goToIdentityPage() {
+      window.location.href = '/identity.html';
+    }
+    
     // 在CMS加载后隐藏错误消息
     document.addEventListener('DOMContentLoaded', function() {
       // 创建一个MutationObserver来监视DOM变化
@@ -84,6 +128,8 @@
               container.textContent.includes('removeChild')) {
             container.style.display = 'none';
             console.log('已隐藏错误消息容器');
+            // 显示我们自己的错误处理UI
+            showIdentityError();
           }
         });
       });
@@ -94,10 +140,10 @@
         subtree: true 
       });
       
-      // 5秒后断开观察，避免性能问题
+      // 10秒后断开观察，避免性能问题
       setTimeout(function() {
         observer.disconnect();
-      }, 5000);
+      }, 10000);
     });
   </script>
   
@@ -117,6 +163,7 @@
         
         window.netlifyIdentity.on("error", err => {
           console.error("Netlify Identity错误:", err);
+          showIdentityError();
         });
         
         window.netlifyIdentity.on("login", () => {
@@ -138,6 +185,7 @@
         }
       } else {
         console.error("错误: Netlify Identity Widget未能加载!");
+        showIdentityError();
       }
     });
   </script>
@@ -173,7 +221,8 @@
               name: "git-gateway",
               branch: "main",
               site_domain: NETLIFY_SITE,
-              base_url: `https://${NETLIFY_SITE}`
+              base_url: `https://${NETLIFY_SITE}`,
+              auth_endpoint: "/identity"
             },
             
             // 媒体文件配置
