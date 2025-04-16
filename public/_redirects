@@ -1,8 +1,0 @@
-# 特定的身份验证处理
-/identity  /identity.html 200
-
-# 确保admin路径正确加载
-/admin/*  /admin/index.html 200
-
-# 处理SPA路由的通用回退
-/*  /index.html 200 

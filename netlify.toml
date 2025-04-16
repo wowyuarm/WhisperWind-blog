@@ -1,35 +1,10 @@
 [build]
-  # 最小化构建命令，只复制身份验证所需的文件
-  command = "mkdir -p out/admin && cp -r public/admin/* out/admin/ && cp public/identity.html out/ && cp public/index.html out/ && cp public/_redirects out/"
-  publish = "out"
+  command = "npm run build"
+  # publish目录由Netlify Next.js插件自动处理
 
 [build.environment]
   NODE_ENV = "production"
-  DISABLE_BASE_PATH = "true"
+  # 可以保留这个，如果本地开发需要模拟路径
+  # DISABLE_BASE_PATH = "true" 
 
-# 禁用自动检测的插件
-[plugins]
-  package = []
-
-# 这个重定向处理正常的SPA路由
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-  
-# 这些重定向确保Netlify Identity能正常工作
-[[redirects]]
-  from = "/admin"
-  to = "/admin/index.html"
-  status = 200
-
-[[redirects]]
-  from = "/admin/*"
-  to = "/admin/index.html"
-  status = 200
-  
-# 确保身份验证页面正确加载
-[[redirects]]
-  from = "/identity"
-  to = "/identity.html"
-  status = 200 
+# 移除所有重定向，让Next.js插件处理 

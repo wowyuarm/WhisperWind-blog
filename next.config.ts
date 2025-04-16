@@ -21,9 +21,8 @@ console.log(`Building with: assetPrefix=${assetPrefix}, basePath=${basePath}, is
 
 const nextConfig: NextConfig = {
   /* config options here */
-  output: 'export',
   images: {
-    unoptimized: true, // 静态导出时需要设置图片为未优化
+    unoptimized: true, // 在Netlify上可以考虑移除这个，让Netlify处理优化
     // domains已不再需要，因为我们使用的是静态资源
   },
   assetPrefix: assetPrefix,

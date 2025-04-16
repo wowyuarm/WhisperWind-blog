@@ -84,7 +84,6 @@
   <div id="identity-error">
     Netlify身份验证服务连接错误。
     <button onclick="retryIdentity()">重试</button>
-    <button onclick="goToIdentityPage()">转到验证页面</button>
   </div>
   
   <!-- 必须在加载脚本前预先配置API URL -->
@@ -109,10 +108,6 @@
     
     function retryIdentity() {
       location.reload();
-    }
-    
-    function goToIdentityPage() {
-      window.location.href = '/identity.html';
     }
     
     // 在CMS加载后隐藏错误消息
@@ -222,7 +217,7 @@
               branch: "main",
               site_domain: NETLIFY_SITE,
               base_url: `https://${NETLIFY_SITE}`,
-              auth_endpoint: "/identity"
+              auth_endpoint: "/.netlify/identity"
             },
             
             // 媒体文件配置

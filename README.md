@@ -8,51 +8,44 @@
 
 - 🎨 **Ghibli-Inspired Design**: Soft, natural color palette creating a warm and peaceful visual experience
 - ✍️ **Content Management**: Integrated Decap CMS for easy content management through a web interface
-- 🚀 **One-Click Deploy**: Automatic deployment to GitHub Pages via GitHub Actions
+- 🚀 **One-Click Deploy**: Optimized for easy deployment on Netlify
 - 📊 **Innovative Tag System**: Dynamic circular tag cloud with size reflecting article count
 - 🌩️ **Cloud Elements**: Beautiful cloud animations throughout the blog enhancing the Ghibli aesthetic
 - 🔍 **SEO Optimized**: Making your blog easily discoverable
 
 ## 🖼️ Preview
 
-Visit the [live demo](https://wowyuarm.github.io/WhisperWind-blog/) to see it in action.
+Visit the [live demo](https://your-netlify-site-name.netlify.app/) (Replace with your Netlify URL) to see it in action.
 
 ## 🚀 Quick Start
 
-1. Click "Use this template" to create your own repository
-2. **Important**: Go to your repository's Settings > Pages, and change the "Source" to "GitHub Actions" (this is crucial for deploying correctly)
-3. Set up a Netlify site and configure Identity/Git Gateway
-4. Update configuration files with your Netlify site URL
-5. Deploy to GitHub Pages via GitHub Actions
-6. Access your blog and log in to the CMS
+1. Click "Use this template" to create your own repository.
+2. Sign up for a [Netlify](https://app.netlify.com/) account (free).
+3. Click "New site from Git" on Netlify and select your GitHub repository.
+4. Configure Netlify Identity and Git Gateway (see below).
+5. Update configuration files with your Netlify site URL (see below).
+6. Netlify will automatically build and deploy your site.
+7. Access your blog at your Netlify URL and log in to the CMS.
 
-### Setting Up Decap CMS
+### Setting Up Decap CMS with Netlify Identity
 
-Decap CMS allows you to manage your blog content through a web interface without editing files locally and pushing to GitHub. Here's how to set it up:
+Decap CMS allows you to manage your blog content through a web interface. Netlify Identity provides the necessary authentication.
 
 #### 1. Set Up Netlify Site and Authentication
 
-While your blog content will be deployed on GitHub Pages, we need to use Netlify's authentication service for content management:
-
-1. Sign up for a [Netlify](https://app.netlify.com/) account (free)
-2. Click "New site from Git" and select your GitHub repository
-3. Keep the deployment settings as default and click "Deploy site" (this is just for authentication, your actual blog will still be served through GitHub Pages)
-4. Once deployed, note your Netlify site name (e.g., your-site-123456.netlify.app)
-5. Go to site settings:
-   - Navigate to **Site configuration** > **Identity** > click **Enable Identity**
-   - Scroll down to **Registration** and set it to **Invite only** (recommended) or choose open registration
-   - Go to **Services** > **Git Gateway** > click **Enable Git Gateway**
-
-> ⚠️ **Important Note About Netlify Deployment**: The template uses a minimalist deployment approach for Netlify. Only the authentication-related files (admin interface and identity page) are deployed to Netlify, not the entire blog. This is intentional, as the main blog content is served through GitHub Pages, while Netlify provides only the authentication service.
+1. After creating your site on Netlify (Step 3 above), go to site settings:
+   - Navigate to **Site configuration** > **Identity** > click **Enable Identity**.
+   - Scroll down to **Registration** and set it to **Invite only** (recommended) or choose open registration.
+   - Go to **Services** > **Git Gateway** > click **Enable Git Gateway**.
 
 #### 2. Update Configuration Files with Your Netlify Site URL
 
-In your forked repository, you need to modify two configuration files:
+In your repository, you need to modify two configuration files:
 
 1. First, update `public/admin/index.html`:
 
 ```javascript
-// Define Netlify site URL - you only need to change this one place
+// Define Netlify site URL - replace with your actual Netlify site name
 const NETLIFY_SITE = "your-netlify-site-name.netlify.app";
 
 // Pre-configure Netlify Identity API
@@ -62,28 +55,21 @@ window.netlifyIdentity = {
   }
 };
 
-// Also find and modify site URL configuration (around line 230)
-site_url: "https://your-username.github.io/your-repo-name",
-display_url: "https://your-username.github.io/your-repo-name",
+// Update site_url and display_url to your Netlify site URL (around line 180)
+site_url: "https://your-netlify-site-name.netlify.app",
+display_url: "https://your-netlify-site-name.netlify.app",
 ```
 
-2. Similarly, update the same URL in `public/identity.html`:
-
-```javascript
-// Define site URL
-const NETLIFY_SITE = "your-netlify-site-name.netlify.app"; // Replace with your Netlify site name
-```
-
-3. Then, update `src/content/config.json` to add your admin URL:
+2. Then, update `src/content/config.json` to add your admin URL:
 
 ```json
 {
   "title": "Your Blog Title",
   "description": "Your blog description",
   "author": "Your Name",
-  "logo": "/images/logo.png",
+  "logo": "/images/logo.png", // Ensure paths are correct for Netlify
   "favicon": "/favicon.ico",
-  "adminUrl": "https://your-netlify-site-name.netlify.app/admin/",
+  "adminUrl": "https://your-netlify-site-name.netlify.app/admin/", // Points to the admin interface
   "social": {
     "github": "https://github.com/your-username/your-repo",
     "twitter": "",
@@ -93,75 +79,39 @@ const NETLIFY_SITE = "your-netlify-site-name.netlify.app"; // Replace with your 
 }
 ```
 
-Please replace the above URLs with your own GitHub Pages address, e.g., `https://your-username.github.io/your-repo-name/` and your Netlify site URL.
+Please replace all instances of `your-netlify-site-name.netlify.app` with your actual Netlify site URL.
 
-> 💡 **Important Note**: This template embeds all CMS configuration directly in the `index.html` file to ensure it works correctly in the GitHub Pages environment. If you need to modify content types or other CMS configuration, edit the `config` object in the `index.html` file (approximately lines 70-180).
+> 💡 **Important Note**: This template embeds all CMS configuration directly in the `admin/index.html` file. If you need to modify content types or other CMS configuration, edit the `config` object within this file.
 
-⚠️ **Configuration Tip:** This step is crucial! You must configure two types of URLs correctly:
-1. Netlify Site URL - for authentication (e.g., `your-site-123456.netlify.app`)
-2. GitHub Pages URL - for preview and site display (e.g., `your-username.github.io/your-repo-name`)
+#### 3. Create Admin Account
 
-#### 3. Troubleshooting Identity Issues
+After setting up the Identity service:
 
-If you encounter issues with Netlify identity (such as problems setting up your password or login):
+1. In the Netlify dashboard, go to **Identity** > **Invite users**.
+2. Enter your email address and send the invitation.
+3. Check your email, click the acceptance link (which should take you to your Netlify site's admin page or prompt login), and set a password.
 
-1. When receiving invitation emails, make sure you click the link and it opens the `identity.html` page
-2. If you see a blank page or errors when trying to set up your password:
-   - Manually go to your Netlify site URL followed by `/identity.html` (e.g., `your-site-123456.netlify.app/identity.html`)
-   - Use the "Open Login Window" button to manually trigger the authentication
-   - Copy-paste your invite token from the email URL to your browser's address bar after `/identity.html#invite_token=`
+#### 4. Access CMS Admin Interface
 
-3. If issues persist, check the browser console for specific errors, and ensure all URLs in your configuration match your actual Netlify domain
-
-#### 4. Redirect "Admin" Link to Netlify
-
-The "Admin" link in the footer of your blog should point to your Netlify admin interface. This is configured in two places:
-
-1. In `src/content/config.json`, make sure to set the `adminUrl` field:
-```json
-"adminUrl": "https://your-netlify-site-name.netlify.app/admin/"
-```
-
-2. When you click the "Admin" link, it will now redirect you directly to your Netlify-hosted admin interface instead of trying to load the admin interface on GitHub Pages (which won't work due to authentication limitations).
-
-#### 5. Create Admin Account
-
-After setting up the Identity service, you need to create an admin account:
-
-1. In the Netlify dashboard, go to **Identity** > **Invite users**
-2. Enter your email address and send the invitation
-3. Check your email, accept the invitation, and set a password
-
-#### 6. Access CMS Admin Interface
-
-After completing the steps above and deploying your GitHub Pages website:
-
-1. Visit your GitHub Pages site: `https://your-username.github.io/your-repo-name/`
-2. Click the "Admin" link in the page footer
-3. Click the "Login with Netlify Identity" button
-4. Log in with your Netlify email and password
-5. Once logged in, you can create and manage content through the friendly interface
+1. Visit your Netlify site URL: `https://your-netlify-site-name.netlify.app/`
+2. Click the "Admin" link in the page footer (or go directly to `/admin/`).
+3. Click the "Login with Netlify Identity" button.
+4. Log in with your Netlify email and password.
+5. Manage your content.
 
 ### Customization
 
-- **Content**: Manage through CMS or directly edit files in the `src/content` directory
-- **Styles**: Modify `tailwind.config.ts` and `src/styles/globals.css`
-- **Components**: Customize components in the `src/components` directory
-- **Configuration**: Update site information in `src/content/config.json`
+- **Content**: Manage through CMS or directly edit files in the `src/content` directory.
+- **Styles**: Modify `tailwind.config.ts` and `src/styles/globals.css`.
+- **Components**: Customize components in the `src/components` directory.
+- **Configuration**: Update site information in `src/content/config.json`.
 
 ## 📝 Using the CMS
 
-With Decap CMS, you can easily manage your blog content:
-
-1. Visit the "Admin" link in your site's footer to access the authentication page
-2. Log in with your Netlify Identity account
-3. Create and edit content through a friendly interface:
-   - **Blog Posts**: Write new articles, set tags and featured images
-   - **Pages**: Edit static pages like "About"
-   - **Friend Links**: Manage friendship links
-   - **Site Configuration**: Update basic site information
-
-When you save changes, the CMS creates a commit and pushes it to your GitHub repository. GitHub Actions automatically builds and deploys the updated site.
+- Access the CMS via the "Admin" link or by going to `/admin/` on your Netlify site.
+- Log in using Netlify Identity.
+- Create/edit posts, pages, links, and site configuration.
+- Changes saved in the CMS will trigger a new build and deployment on Netlify.
 
 ## 📚 Tag System Features
 
