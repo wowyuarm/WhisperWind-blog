@@ -1,5 +1,6 @@
 [build]
-  command = "npm run build"
+  # 先执行npm install确保所有依赖（包括dev）被安装，然后再构建
+  command = "npm install && npm run build"
   # publish目录由Netlify Next.js插件自动处理
 
 [build.environment]
