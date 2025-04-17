@@ -1,6 +1,7 @@
 [build]
-  # 先执行npm install确保所有依赖（包括dev）被安装，然后再构建
-  command = "npm install && npm run build"
+  # 使用 npm ci 进行干净安装（包括dev依赖），然后再构建
+  command = "npm ci --include=dev && npm run build"
+  publish = ".next"
   # publish目录由Netlify Next.js插件自动处理
 
 [build.environment]
@@ -8,4 +9,28 @@
   # 可以保留这个，如果本地开发需要模拟路径
   # DISABLE_BASE_PATH = "true" 
 
-# 移除所有重定向，让Next.js插件处理 
+# 移除所有重定向，让Next.js插件处理
+# (或者根据需要在此处添加特定规则，但先移除旧的)
+
+# [[redirects]]
+#   from = "/*"
+#   to = "/index.html"
+#   status = 200
+  
+# [[redirects]]
+#   from = "/admin"
+#   to = "/admin/index.html"
+#   status = 200
+
+# [[redirects]]
+#   from = "/admin/*"
+#   to = "/admin/index.html"
+#   status = 200
+  
+# [[redirects]]
+#   from = "/identity"
+#   to = "/identity.html"
+#   status = 200 
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs" 

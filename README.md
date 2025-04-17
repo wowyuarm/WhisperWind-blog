@@ -45,20 +45,9 @@ In your repository, you need to modify two configuration files:
 1. First, update `public/admin/index.html`:
 
 ```javascript
-// Define Netlify site URL - replace with your actual Netlify site name
-const NETLIFY_SITE = "your-netlify-site-name.netlify.app";
+// Define Netlify site URL - **MUST** replace with your actual Netlify site name
+const NETLIFY_SITE = "YOUR_NETLIFY_SITE.netlify.app";
 
-// Pre-configure Netlify Identity API
-window.netlifyIdentity = {
-  api: {
-    apiURL: `https://${NETLIFY_SITE}/.netlify/identity`
-  }
-};
-
-// Update site_url and display_url to your Netlify site URL (around line 180)
-site_url: "https://your-netlify-site-name.netlify.app",
-display_url: "https://your-netlify-site-name.netlify.app",
-```
 
 2. Then, update `src/content/config.json` to add your admin URL:
 
@@ -69,7 +58,7 @@ display_url: "https://your-netlify-site-name.netlify.app",
   "author": "Your Name",
   "logo": "/images/logo.png", // Ensure paths are correct for Netlify
   "favicon": "/favicon.ico",
-  "adminUrl": "https://your-netlify-site-name.netlify.app/admin/", // Points to the admin interface
+  "adminUrl": "", // **MUST** be manually set to: https://your-netlify-site-name.netlify.app/admin/
   "social": {
     "github": "https://github.com/your-username/your-repo",
     "twitter": "",
@@ -79,9 +68,9 @@ display_url: "https://your-netlify-site-name.netlify.app",
 }
 ```
 
-Please replace all instances of `your-netlify-site-name.netlify.app` with your actual Netlify site URL.
+**Important:** Replace `YOUR_NETLIFY_SITE.netlify.app` in both files with your actual Netlify site URL.
 
-> 💡 **Important Note**: This template embeds all CMS configuration directly in the `admin/index.html` file. If you need to modify content types or other CMS configuration, edit the `config` object within this file.
+> 💡 **Note**: This template embeds all CMS configuration directly in the `admin/index.html` file. If you need to modify content types or other CMS configuration, edit the `config` object within this file.
 
 #### 3. Create Admin Account
 

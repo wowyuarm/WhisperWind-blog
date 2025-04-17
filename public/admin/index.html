@@ -224,12 +224,10 @@
             media_folder: "public/uploads",
             public_folder: "/uploads",
             
-            // 站点URL配置 - 替换为您的GitHub Pages网址
-            // 重要：这里需要配置两个URL
-            // 1. 下方的GitHub Pages URL用于内容预览
-            // 2. 页面顶部的NETLIFY_SITE变量用于身份验证
-            site_url: "https://your-username.github.io/your-repo-name",
-            display_url: "https://your-username.github.io/your-repo-name",
+            // 站点URL配置 - **必须**替换为您的Netlify站点URL
+            // 这用于CMS的内容预览和链接生成
+            site_url: `https://${NETLIFY_SITE}`,
+            display_url: `https://${NETLIFY_SITE}`,
             
             // 发布模式配置
             publish_mode: "editorial_workflow",

@@ -545,3 +545,13 @@
     font-size: 1rem;
   }
 }
+
+/* Add scrollbar hiding styles */
+body::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+}
+
+body {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}

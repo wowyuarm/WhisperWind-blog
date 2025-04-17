@@ -46,20 +46,9 @@ Decap CMS允许你通过Web界面管理博客内容。Netlify Identity提供必�
 1. 首先修改`public/admin/index.html`文件：
 
 ```javascript
-// 定义Netlify站点URL - 请替换为你的实际Netlify站点名称
-const NETLIFY_SITE = "your-netlify-site-name.netlify.app";
+// 定义Netlify站点URL - **必须**替换为你的实际Netlify站点名称
+const NETLIFY_SITE = "YOUR_NETLIFY_SITE.netlify.app";
 
-// 预配置Netlify Identity API
-window.netlifyIdentity = {
-  api: {
-    apiURL: `https://${NETLIFY_SITE}/.netlify/identity`
-  }
-};
-
-// 更新site_url和display_url为你的Netlify站点URL（约在180行左右）
-site_url: "https://your-netlify-site-name.netlify.app",
-display_url: "https://your-netlify-site-name.netlify.app",
-```
 
 2. 然后更新`src/content/config.json`添加管理页面URL：
 
@@ -70,7 +59,7 @@ display_url: "https://your-netlify-site-name.netlify.app",
   "author": "你的名字",
   "logo": "/images/logo.png", // 确保路径对于Netlify是正确的
   "favicon": "/favicon.ico",
-  "adminUrl": "https://your-netlify-site-name.netlify.app/admin/", // 指向管理界面
+  "adminUrl": "", // **必须**手动设置为: https://your-netlify-site-name.netlify.app/admin/
   "social": {
     "github": "https://github.com/your-username/your-repo",
     "twitter": "",
@@ -80,9 +69,9 @@ display_url: "https://your-netlify-site-name.netlify.app",
 }
 ```
 
-请将所有`your-netlify-site-name.netlify.app`替换为你实际的Netlify站点URL。
+**重要提示：** 请将 `public/admin/index.html` 中的 `YOUR_NETLIFY_SITE.netlify.app` 替换为您实际的Netlify站点URL，并**手动**在 `src/content/config.json` 中设置正确的 `adminUrl`。
 
-> 💡 **重要说明**：本模板将所有CMS配置直接内嵌在`admin/index.html`文件中。如果需要修改内容类型或其他CMS配置，请直接编辑此文件中的`config`对象。
+> 💡 **说明**：本模板将所有CMS配置直接内嵌在`admin/index.html`文件中。如果需要修改内容类型或其他CMS配置，请直接编辑此文件中的`config`对象。
 
 #### 3. 创建管理员账号
 

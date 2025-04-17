@@ -1,12 +1,12 @@
 {
-  "title": "WhisperWind Blog 🍃",
-  "description": "开源博客模板，灵感来自吉卜力风格，基于Next.js、TypeScript和Tailwind CSS构建",
-  "author": "禹创",
+  "title": "Your Blog Title 🍃",
+  "description": "An open-source blog template inspired by Ghibli style, built with Next.js, TypeScript, and Tailwind CSS",
+  "author": "Your Name",
   "logo": "/images/logo.png",
   "favicon": "/favicon.ico",
-  "adminUrl": "https://yucreate-blog.netlify.app/admin/",
+  "adminUrl": "",
   "social": {
-    "github": "https://github.com/wowyuarm/WhisperWind-blog",
+    "github": "https://github.com/your-username/your-repo",
     "twitter": "",
     "weibo": "",
     "zhihu": ""
