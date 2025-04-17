@@ -81,10 +81,12 @@
   </style>
   
   <!-- 自定义错误处理UI -->
+  <!-- 
   <div id="identity-error">
     Netlify身份验证服务连接错误。
     <button onclick="retryIdentity()">重试</button>
   </div>
+  -->
   
   <!-- 必须在加载脚本前预先配置API URL -->
   <script>
@@ -110,7 +112,8 @@
     
     console.log("预先配置Netlify Identity API URL:", window.netlifyIdentity.api.apiURL);
     
-    // 错误处理函数
+    // 错误处理函数 (移除)
+    /*
     function showIdentityError() {
       document.getElementById('identity-error').style.display = 'block';
     }
@@ -118,8 +121,10 @@
     function retryIdentity() {
       location.reload();
     }
+    */
     
-    // 在CMS加载后隐藏错误消息
+    // 在CMS加载后隐藏错误消息 (移除)
+    /*
     document.addEventListener('DOMContentLoaded', function() {
       // 创建一个MutationObserver来监视DOM变化
       const observer = new MutationObserver(function(mutations) {
@@ -132,8 +137,8 @@
               container.textContent.includes('removeChild')) {
             container.style.display = 'none';
             console.log('已隐藏错误消息容器');
-            // 显示我们自己的错误处理UI
-            showIdentityError();
+            // 显示我们自己的错误处理UI (移除调用)
+            // showIdentityError(); 
           }
         });
       });
@@ -149,6 +154,7 @@
         observer.disconnect();
       }, 10000);
     });
+    */
   </script>
   
   <!-- 加载Netlify Identity Widget -->
@@ -167,7 +173,7 @@
         
         window.netlifyIdentity.on("error", err => {
           console.error("Netlify Identity错误:", err);
-          showIdentityError();
+          // showIdentityError(); // (移除调用)
         });
         
         window.netlifyIdentity.on("login", () => {
@@ -189,7 +195,7 @@
         }
       } else {
         console.error("错误: Netlify Identity Widget未能加载!");
-        showIdentityError();
+        // showIdentityError(); // (移除调用)
       }
     });
   </script>
@@ -213,8 +219,8 @@
     window.addEventListener('load', function() {
       console.log("页面加载完成，准备初始化CMS");
       
-      // 等待Netlify Identity完全初始化
-      setTimeout(function() {
+      // 等待Netlify Identity完全初始化 (移除 setTimeout)
+      // setTimeout(function() {
         console.log("开始初始化CMS...");
         
         try {
@@ -234,13 +240,19 @@
             
             // 媒体文件配置
             // !! 注意 !! 
-            // 使用此模板, 媒体文件 (如图片) 将直接存储在您的 Git 仓库中。
-            // 请确保您的 Git 提供商 (如 GitHub) 对仓库大小没有严格限制, 或定期清理不再使用的媒体文件。
-            // media_folder: 指定文件存储在仓库中的路径。
-            // public_folder: 指定文件在网站上通过哪个 URL 路径访问。
+            // 默认配置下, 媒体文件将直接存储在 Git 仓库中。
+            // 但为了满足 CMS 配置要求, 下方添加了 media_library 占位符。
+            // 您通常无需修改此 media_library 部分, 除非您想切换到外部媒体库。
             media_folder: "public/uploads", // 媒体文件存储在仓库的位置
             public_folder: "/uploads",     // 媒体文件在网站上的访问路径
-            // (注意: 当使用 git-gateway 直接将媒体存入仓库时, 不需要配置 media_library)
+            // (即使媒体存入 Git, CMS v3.x 似乎仍需要此字段存在)
+            media_library: {
+              name: "git", // 使用 "git" 或保留 "uploadcare" 占位符都可以, git-gateway 会优先处理
+              config: {
+                 // (如果 name 设置为 "uploadcare" 或 "cloudinary", 则需要配置 publicKey 或 cloud_name/api_key)
+                 // publicKey: "YOUR_UPLOADCARE_PUBLIC_KEY" 
+              }
+            },
             
             // 站点URL配置 (通常无需修改, 会自动使用上面的 NETLIFY_SITE)
             site_url: `https://${NETLIFY_SITE}`,
@@ -345,16 +357,21 @@
             load_config_file: false
           };
           
-          // 强制手动初始化CMS
-          window.CMS_MANUAL_INIT = true;
+          // !! 移除: 不再在 JS 中定义 config
           
-          // 初始化CMS
-          try {
-            window.CMS.init({ config: config });
-            console.log("CMS初始化成功");
-          } catch (error) {
-            console.error("CMS初始化失败:", error);
-          }
+          // !! 移除: 不再打印 config
+          // console.log("将传递给 CMS.init 的配置:", JSON.stringify(config, null, 2));
+
+          // !! 移除: 不再强制手动初始化
+          // window.CMS_MANUAL_INIT = true;
+          
+          // !! 移除: 不再手动调用 init
+          // try {
+          //   window.CMS.init({ config: config });
+          //   console.log("CMS初始化成功");
+          // } catch (error) {
+          //   console.error("CMS初始化失败:", error);
+          // }
           
           // 无论初始化是否成功，都在一段时间后隐藏加载动画
           setTimeout(function() {
@@ -381,7 +398,7 @@
           // 出错时也隐藏加载动画
           document.getElementById('cms-loading').style.display = 'none';
         }
-      }, 1000);
+      // }, 1000); // (移除 setTimeout)
     });
   </script>
 </body>
