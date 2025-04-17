@@ -30,16 +30,16 @@ export const ReadingProgressBar = () => {
   }, [isClient]);
   
   return isClient ? (
-    // 只保留右侧进度条
-    <div className="fixed right-0 top-0 bottom-0 w-2 bg-primary/20 z-50">
+    // 修改为顶部进度条
+    <div className="fixed left-0 top-0 right-0 h-2 bg-primary/20 z-50">
       <motion.div 
-        className="absolute right-0 top-0 w-full bg-primary z-[51]"
+        className="absolute left-0 top-0 h-full bg-primary z-[51]"
         style={{ 
-          height: `${progress}%`,
-          originY: 0
+          width: `${progress}%`,
+          originX: 0
         }}
-        initial={{ height: "0%" }}
-        animate={{ height: `${progress}%` }}
+        initial={{ width: "0%" }}
+        animate={{ width: `${progress}%` }}
         transition={{ duration: 0.1 }}
       />
     </div>

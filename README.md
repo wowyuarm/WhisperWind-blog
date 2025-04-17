@@ -23,13 +23,13 @@ Visit the [live demo](https://your-netlify-site-name.netlify.app/) (Replace with
 2. Sign up for a [Netlify](https://app.netlify.com/) account (free).
 3. Click "New site from Git" on Netlify and select your GitHub repository.
 4. Configure Netlify Identity and Git Gateway (see below).
-5. Update configuration files with your Netlify site URL (see below).
+5. Update the **single required configuration** in `public/admin/index.html` with your Netlify site URL (see below).
 6. Netlify will automatically build and deploy your site.
-7. Access your blog at your Netlify URL and log in to the CMS.
+7. Access your blog at your Netlify URL and log in to the CMS via the "Admin" link or `/admin/`.
 
 ### Setting Up Decap CMS with Netlify Identity
 
-Decap CMS allows you to manage your blog content through a web interface. Netlify Identity provides the necessary authentication.
+Decap CMS allows you to manage your blog content through a web interface. Netlify Identity provides the necessary authentication, and Git Gateway allows the CMS to commit changes directly to your repository.
 
 #### 1. Set Up Netlify Site and Authentication
 
@@ -38,39 +38,31 @@ Decap CMS allows you to manage your blog content through a web interface. Netlif
    - Scroll down to **Registration** and set it to **Invite only** (recommended) or choose open registration.
    - Go to **Services** > **Git Gateway** > click **Enable Git Gateway**.
 
-#### 2. Update Configuration Files with Your Netlify Site URL
+#### 2. Update the Required Configuration
 
-In your repository, you need to modify two configuration files:
-
-1. First, update `public/admin/index.html`:
+In your repository, you **must** modify **one place** in `public/admin/index.html`:
 
 ```javascript
-// Define Netlify site URL - **MUST** replace with your actual Netlify site name
-const NETLIFY_SITE = "YOUR_NETLIFY_SITE.netlify.app";
+// **********************************************************
+// ** User Configuration Area (Start) **
+// **********************************************************
 
+// !! IMPORTANT !!
+// Replace "YOUR_NETLIFY_SITE.netlify.app" below with the actual domain name 
+// of your site deployed on Netlify.
+// Example: const NETLIFY_SITE = "my-awesome-blog.netlify.app";
+const NETLIFY_SITE = "YOUR_NETLIFY_SITE.netlify.app"; 
 
-2. Then, update `src/content/config.json` to add your admin URL:
-
-```json
-{
-  "title": "Your Blog Title",
-  "description": "Your blog description",
-  "author": "Your Name",
-  "logo": "/images/logo.png", // Ensure paths are correct for Netlify
-  "favicon": "/favicon.ico",
-  "adminUrl": "", // **MUST** be manually set to: https://your-netlify-site-name.netlify.app/admin/
-  "social": {
-    "github": "https://github.com/your-username/your-repo",
-    "twitter": "",
-    "weibo": "",
-    "zhihu": ""
-  }
-}
+// **********************************************************
+// ** User Configuration Area (End) **
+// **********************************************************
 ```
 
-**Important:** Replace `YOUR_NETLIFY_SITE.netlify.app` in both files with your actual Netlify site URL.
+**That's the only mandatory configuration needed to get the CMS running!**
 
-> 💡 **Note**: This template embeds all CMS configuration directly in the `admin/index.html` file. If you need to modify content types or other CMS configuration, edit the `config` object within this file.
+> 💡 **Media Storage**: This template is configured to store media files (like images) directly in your Git repository under the `public/uploads` directory. This simplifies setup as no external media library is needed. Be mindful of your Git provider's repository size limits.
+
+> 💡 **Further Customization (Optional)**: If you need to change the main Git branch (`main` by default), content folder paths (`src/content/posts`, etc.), or CMS content fields, you can edit the `config` object within the `public/admin/index.html` file. Look for comments indicating these optional configuration points.
 
 #### 3. Create Admin Account
 
@@ -90,16 +82,17 @@ After setting up the Identity service:
 
 ### Customization
 
-- **Content**: Manage through CMS or directly edit files in the `src/content` directory.
+- **Content**: Manage through CMS (via `/admin/`) or directly edit files in the `src/content` directory.
 - **Styles**: Modify `tailwind.config.ts` and `src/styles/globals.css`.
 - **Components**: Customize components in the `src/components` directory.
-- **Configuration**: Update site information in `src/content/config.json`.
+- **Site Configuration**: Update site title, description, author, social links etc. within the CMS under "Website Configuration" > "Basic Configuration", which edits `src/content/config.json`.
+- **CMS Configuration**: Modify content types, fields, or backend settings directly within the `config` object in `public/admin/index.html`.
 
 ## 📝 Using the CMS
 
-- Access the CMS via the "Admin" link or by going to `/admin/` on your Netlify site.
+- Access the CMS via the "Admin" link in the footer or by going to `/admin/` on your Netlify site.
 - Log in using Netlify Identity.
-- Create/edit posts, pages, links, and site configuration.
+- Create/edit posts, pages, links, and site configuration. **Media files will be uploaded directly to your Git repository.**
 - Changes saved in the CMS will trigger a new build and deployment on Netlify.
 
 ## 📚 Tag System Features

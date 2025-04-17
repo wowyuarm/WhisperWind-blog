@@ -24,13 +24,13 @@
 2. 注册[Netlify](https://app.netlify.com/)账号（免费）。
 3. 在Netlify上点击"New site from Git"，选择你的GitHub仓库。
 4. 配置Netlify Identity和Git Gateway（见下文）。
-5. 更新配置文件，替换为自己的Netlify站点URL（见下文）。
+5. 更新`public/admin/index.html`中**唯一必需的配置**：你的Netlify站点URL（见下文）。
 6. Netlify将自动构建和部署你的站点。
-7. 通过你的Netlify URL访问博客，并登录CMS管理内容。
+7. 通过你的Netlify URL访问博客，并通过页面底部的"管理"链接或直接访问`/admin/`来登录CMS。
 
 ### 配置Decap CMS与Netlify Identity
 
-Decap CMS允许你通过Web界面管理博客内容。Netlify Identity提供必要的身份验证。
+Decap CMS允许你通过Web界面管理博客内容。Netlify Identity提供必要的身份验证，而Git Gateway则允许CMS直接向你的仓库提交更改。
 
 #### 1. 设置Netlify站点和身份验证
 
@@ -39,39 +39,30 @@ Decap CMS允许你通过Web界面管理博客内容。Netlify Identity提供必�
    - 向下滚动到**Registration**，设置为**Invite only**（推荐）或选择开放注册。
    - 转到**Services** > **Git Gateway** > 点击**Enable Git Gateway**。
 
-#### 2. 修改配置文件指向你的Netlify站点
+#### 2. 更新必需的配置
 
-在你的仓库中，主要需要修改两个配置文件：
-
-1. 首先修改`public/admin/index.html`文件：
+在你的仓库中，你**必须**修改`public/admin/index.html`文件中的**一处地方**：
 
 ```javascript
-// 定义Netlify站点URL - **必须**替换为你的实际Netlify站点名称
-const NETLIFY_SITE = "YOUR_NETLIFY_SITE.netlify.app";
+// **********************************************************
+// ** 用户配置区域 (开始) **
+// **********************************************************
 
+// !! 重要 !!
+// 请将下面的 "YOUR_NETLIFY_SITE.netlify.app" 替换为您在 Netlify 上部署此站点的实际域名。
+// 例如：const NETLIFY_SITE = "my-awesome-blog.netlify.app";
+const NETLIFY_SITE = "YOUR_NETLIFY_SITE.netlify.app"; 
 
-2. 然后更新`src/content/config.json`添加管理页面URL：
-
-```json
-{
-  "title": "你的博客标题",
-  "description": "博客描述",
-  "author": "你的名字",
-  "logo": "/images/logo.png", // 确保路径对于Netlify是正确的
-  "favicon": "/favicon.ico",
-  "adminUrl": "", // **必须**手动设置为: https://your-netlify-site-name.netlify.app/admin/
-  "social": {
-    "github": "https://github.com/your-username/your-repo",
-    "twitter": "",
-    "weibo": "",
-    "zhihu": ""
-  }
-}
+// **********************************************************
+// ** 用户配置区域 (结束) **
+// **********************************************************
 ```
 
-**重要提示：** 请将 `public/admin/index.html` 中的 `YOUR_NETLIFY_SITE.netlify.app` 替换为您实际的Netlify站点URL，并**手动**在 `src/content/config.json` 中设置正确的 `adminUrl`。
+**这是让CMS正常运行所需的唯一强制性配置！**
 
-> 💡 **说明**：本模板将所有CMS配置直接内嵌在`admin/index.html`文件中。如果需要修改内容类型或其他CMS配置，请直接编辑此文件中的`config`对象。
+> 💡 **媒体文件存储**: 此模板配置为将媒体文件（如图片）直接存储在您的Git仓库的`public/uploads`目录下。这简化了初始设置，因为不需要外部媒体库。请留意您的Git提供商对仓库大小的限制。
+
+> 💡 **进一步定制 (可选)**: 如果您需要更改主要的Git分支（默认为`main`）、内容文件夹路径（如`src/content/posts`等）或CMS的内容字段，您可以编辑`public/admin/index.html`文件中的`config`对象。请查找指示这些可选配置点的注释。
 
 #### 3. 创建管理员账号
 
@@ -91,16 +82,17 @@ const NETLIFY_SITE = "YOUR_NETLIFY_SITE.netlify.app";
 
 ### 自定义
 
-- **内容**：通过CMS或直接编辑`src/content`目录中的文件。
+- **内容**：通过CMS（访问`/admin/`）或直接编辑`src/content`目录中的文件。
 - **样式**：修改`tailwind.config.ts`和`src/styles/globals.css`。
 - **组件**：自定义`src/components`目录中的组件。
-- **配置**：更新`src/content/config.json`中的网站信息。
+- **网站配置**：在CMS的"网站配置">"基本配置"中更新网站标题、描述、作者、社交链接等，这将编辑`src/content/config.json`文件。
+- **CMS配置**：直接在`public/admin/index.html`的`config`对象中修改内容类型、字段或后端设置。
 
 ## 📝 使用CMS发布内容
 
-- 通过你的Netlify站点上的"管理"链接或直接访问`/admin/`来进入CMS。
+- 通过你的Netlify站点页脚的"管理"链接或直接访问`/admin/`来进入CMS。
 - 使用Netlify Identity登录。
-- 创建/编辑文章、页面、友链和网站配置。
+- 创建/编辑文章、页面、友链和网站配置。**媒体文件将直接上传到您的Git仓库。**
 - 在CMS中保存的更改将触发Netlify上的新构建和部署。
 
 ## 🧩 主要功能
