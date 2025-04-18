@@ -280,7 +280,14 @@
                   { label: "发布日期", name: "publishDate", widget: "datetime", format: "YYYY-MM-DD HH:mm:ss" },
                   { label: "摘要", name: "excerpt", widget: "text", required: false },
                   { label: "特色图片", name: "featuredImage", widget: "image", required: false },
-                  { label: "标签", name: "tags", widget: "list", required: false },
+                  { 
+                    label: "标签", 
+                    name: "tags", 
+                    widget: "list", 
+                    required: false,
+                    hint: "每行一个标签。如需同时输入多个标签，请点击\"添加标签\"按钮多次添加。单标签内包含顿号'、'或英文逗号','时会自动拆分为多个标签。",
+                    delimiter: "、" // 使用中文顿号作为默认分隔符
+                  },
                   { label: "内容", name: "body", widget: "markdown" }
                 ]
               },

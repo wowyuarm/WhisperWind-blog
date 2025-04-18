@@ -47,6 +47,11 @@ export const getStaticProps: GetStaticProps<PostPageProps, { slug: string }> = a
     return { notFound: true }; // Return 404 if post not found
   }
 
+  // 确保post.publishDate是字符串而不是Date对象，防止序列化错误
+  if (typeof post.publishDate !== 'string') {
+    post.publishDate = String(post.publishDate);
+  }
+
   const siteConfig = getSiteConfig(); // Get site config
 
   return {
