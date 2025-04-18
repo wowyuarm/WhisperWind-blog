@@ -82,8 +82,12 @@
   
   <!-- 自定义错误处理UI -->
   <div id="identity-error">
-    Netlify身份验证服务连接错误。
-    <button onclick="retryIdentity()">重试</button>
+    Netlify身份验证服务连接错误。<br>
+    请确认：<br>
+    1. 您已在Netlify控制面板启用了Identity服务<br>
+    2. 您的Netlify站点URL正确：<span id="site-url"></span><br>
+    <button onclick="retryIdentity()">重试连接</button>
+    <button onclick="hideError()">关闭提示</button>
   </div>
   
   <!-- 必须在加载脚本前预先配置API URL -->
@@ -95,11 +99,16 @@
     // !! 重要 !!
     // 请将下面的 "YOUR_NETLIFY_SITE.netlify.app" 替换为您在 Netlify 上部署此站点的实际域名。
     // 例如：const NETLIFY_SITE = "my-awesome-blog.netlify.app";
-    const NETLIFY_SITE = "YOUR_NETLIFY_SITE.netlify.app"; 
+    const NETLIFY_SITE = "yucreate.netlify.app"; 
 
     // **********************************************************
     // ** 用户配置区域 (结束) **
     // **********************************************************
+    
+    // 显示正在使用的站点URL
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('site-url').textContent = NETLIFY_SITE;
+    });
     
     // 预配置Netlify Identity API
     window.netlifyIdentity = {
@@ -113,6 +122,10 @@
     // 错误处理函数
     function showIdentityError() {
       document.getElementById('identity-error').style.display = 'block';
+    }
+    
+    function hideError() {
+      document.getElementById('identity-error').style.display = 'none';
     }
     
     function retryIdentity() {
@@ -132,8 +145,13 @@
               container.textContent.includes('removeChild')) {
             container.style.display = 'none';
             console.log('已隐藏错误消息容器');
-            // 显示我们自己的错误处理UI
-            showIdentityError();
+            // 只在特定类型的错误时显示自定义错误处理UI
+            if (container.textContent.includes('Identity') || 
+                container.textContent.includes('identity') || 
+                container.textContent.includes('认证') || 
+                container.textContent.includes('身份验证')) {
+              showIdentityError();
+            }
           }
         });
       });
@@ -218,170 +236,46 @@
         console.log("开始初始化CMS...");
         
         try {
-          // 提供完整配置，不依赖config.yml文件
-          const config = {
-            // 基本后端配置
-            backend: {
-              name: "git-gateway",
-              // !! 重要 !!
-              // 如果您的 Git 仓库主分支不是 'main', 请在此处修改为您实际的分支名 (例如 'master')
-              branch: "main",
-              // -- 以下通常无需修改 --
-              site_domain: NETLIFY_SITE, 
-              base_url: `https://${NETLIFY_SITE}`,
-              auth_endpoint: "/.netlify/identity"
-            },
-            
-            // 媒体文件配置
-            // !! 注意 !! 
-            // 使用此模板, 媒体文件 (如图片) 将直接存储在您的 Git 仓库中。
-            // 请确保您的 Git 提供商 (如 GitHub) 对仓库大小没有严格限制, 或定期清理不再使用的媒体文件。
-            // media_folder: 指定文件存储在仓库中的路径。
-            // public_folder: 指定文件在网站上通过哪个 URL 路径访问。
-            media_folder: "public/uploads", // 媒体文件存储在仓库的位置
-            public_folder: "/uploads",     // 媒体文件在网站上的访问路径
-            // (注意: 当使用 git-gateway 直接将媒体存入仓库时, 不需要配置 media_library)
-            
-            // 站点URL配置 (通常无需修改, 会自动使用上面的 NETLIFY_SITE)
-            site_url: `https://${NETLIFY_SITE}`,
-            display_url: `https://${NETLIFY_SITE}`,
-            
-            // 发布模式配置
-            publish_mode: "editorial_workflow",
-            
-            // 本地化配置
-            locale: "zh_Hans",
-            
-            // 内容结构定义
-            collections: [
-              // 博客文章集合
-              {
-                name: "posts",
-                label: "博客文章",
-                // !! 重要 !!
-                // 如果您的博客 Markdown 文件存储在不同位置, 请修改此路径。
-                folder: "src/content/posts", 
-                create: true,
-                slug: "{{slug}}", // 文件名格式
-                fields: [ // 定义文章元数据字段
-                  { label: "标题", name: "title", widget: "string" },
-                  { label: "发布日期", name: "publishDate", widget: "datetime", format: "YYYY-MM-DD HH:mm:ss" },
-                  { label: "摘要", name: "excerpt", widget: "text", required: false },
-                  { label: "特色图片", name: "featuredImage", widget: "image", required: false },
-                  { label: "标签", name: "tags", widget: "list", required: false },
-                  { label: "内容", name: "body", widget: "markdown" }
-                ]
-              },
-              
-              // 静态页面集合
-              {
-                name: "pages",
-                label: "静态页面",
-                // !! 重要 !!
-                // 如果您的静态页面 Markdown 文件存储在不同位置, 请修改此路径。
-                folder: "src/content/pages", 
-                create: true,
-                slug: "{{slug}}",
-                fields: [
-                  { label: "标题", name: "title", widget: "string" },
-                  { label: "内容", name: "body", widget: "markdown" }
-                ]
-              },
-              
-              // 站点配置集合 (通常路径固定)
-              {
-                name: "config",
-                label: "网站配置",
-                files: [
-                  {
-                    label: "基本配置",
-                    name: "config",
-                    // !! 注意 !! 文件路径通常固定
-                    file: "src/content/config.json", 
-                    fields: [
-                      { label: "网站标题", name: "title", widget: "string" },
-                      { label: "网站描述", name: "description", widget: "text" },
-                      { label: "作者", name: "author", widget: "string" },
-                      { label: "Logo", name: "logo", widget: "image", required: false },
-                      { label: "网站图标", name: "favicon", widget: "string", required: false },
-                      { label: "管理页面URL", name: "adminUrl", widget: "string", hint: "请填写您的Netlify站点管理地址，如: https://your-site.netlify.app/admin/", required: false },
-                      {
-                        label: "社交媒体",
-                        name: "social",
-                        widget: "object",
-                        fields: [
-                          { label: "GitHub", name: "github", widget: "string", required: false },
-                          { label: "Twitter", name: "twitter", widget: "string", required: false },
-                          { label: "微博", name: "weibo", widget: "string", required: false },
-                          { label: "知乎", name: "zhihu", widget: "string", required: false }
-                        ]
-                      }
-                    ]
-                  },
-                  {
-                    label: "友情链接",
-                    name: "links",
-                    // !! 注意 !! 文件路径通常固定
-                    file: "src/content/links.json", 
-                    fields: [
-                      {
-                        label: "链接",
-                        name: "links",
-                        widget: "list",
-                        fields: [
-                          { label: "名称", name: "name", widget: "string" },
-                          { label: "网址", name: "url", widget: "string" },
-                          { label: "描述", name: "description", widget: "text", required: false },
-                          { label: "图标", name: "icon", widget: "string", required: false }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              }
-            ],
-            
-            // 明确禁用外部配置文件加载
-            load_config_file: false
-          };
+          // !! 修改 CMS 初始化调用，让它默认加载 config.yml !!
+          // window.CMS.init({ config }); // 删除这一行
+          window.CMS.init(); // 使用这一行来加载 config.yml
           
-          // 强制手动初始化CMS
-          window.CMS_MANUAL_INIT = true;
+          console.log("CMS 已配置为加载 config.yml"); // 修改日志信息
           
-          // 初始化CMS
-          try {
-            window.CMS.init({ config: config });
-            console.log("CMS初始化成功");
-          } catch (error) {
-            console.error("CMS初始化失败:", error);
+          // 隐藏加载指示器
+          const loadingIndicator = document.getElementById('cms-loading');
+          if (loadingIndicator) {
+            loadingIndicator.style.display = 'none';
           }
           
-          // 无论初始化是否成功，都在一段时间后隐藏加载动画
+          // 尝试隐藏任何残留的错误消息元素，但避免隐藏普通UI元素
+          const errorElements = document.querySelectorAll('.notif__error, .notif__error-container, [class*="errorBoundary"], [class*="ReactModal__Content"] [class*="error"]');
+          errorElements.forEach(el => {
+            el.style.display = 'none';
+            console.log("已隐藏错误消息元素");
+          });
+
+          // 设置正常显示元素的时间，以避免闪烁
           setTimeout(function() {
-            var loadingElement = document.getElementById('cms-loading');
-            if (loadingElement) {
-              loadingElement.style.display = 'none';
-            }
-            
-            // 在CMS加载完成后，再次尝试隐藏错误消息
-            setTimeout(function() {
-              var errorElements = document.querySelectorAll('.notif__error, .error-container, [class*="error"], [class*="Error"]');
-              for (var i = 0; i < errorElements.length; i++) {
-                var el = errorElements[i];
-                if (el.textContent.includes('错误') || el.textContent.includes('Error') || el.textContent.includes('失败')) {
-                  el.style.display = 'none';
-                  console.log('已隐藏错误消息元素');
-                }
-              }
-            }, 1000);
+            // 重置可能被错误隐藏的UI元素
+            document.getElementById('identity-error').style.display = 'none';
           }, 3000);
-            
-        } catch (e) {
-          console.error("CMS初始化发生错误:", e);
-          // 出错时也隐藏加载动画
-          document.getElementById('cms-loading').style.display = 'none';
+
+        } catch (error) {
+          console.error("CMS 初始化失败:", error);
+          // 显示错误给用户
+          const errorContainer = document.getElementById('identity-error');
+          if (errorContainer) {
+            errorContainer.innerHTML = `CMS 初始化失败: ${error.message} <button onclick="retryIdentity()">重试</button>`;
+            errorContainer.style.display = 'block';
+          }
+          // 隐藏加载指示器
+          const loadingIndicator = document.getElementById('cms-loading');
+          if (loadingIndicator) {
+            loadingIndicator.style.display = 'none';
+          }
         }
-      }, 1000);
+      }, 1000); // 延迟1秒确保Netlify Identity有足够时间加载
     });
   </script>
 </body>
