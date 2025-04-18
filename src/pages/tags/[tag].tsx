@@ -51,16 +51,9 @@ export const getStaticProps: GetStaticProps<TagPageProps, { tag: string }> = asy
   console.log(`Getting posts for tag: ${tag}`); // 调试信息
 
   const allPosts = getAllPostMetas();
-  
-  // 确保taggedPosts中的每个post的publishDate都是字符串类型，而不是Date对象
   const taggedPosts = allPosts
     .filter(post => post.tags && Array.isArray(post.tags) && post.tags.includes(tag))
-    .sort((a, b) => {
-      // 使用字符串比较或将Date对象转换回字符串
-      const dateA = new Date(b.publishDate).getTime();
-      const dateB = new Date(a.publishDate).getTime();
-      return dateA - dateB;
-    });
+    .sort((a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime());
 
   if (taggedPosts.length === 0) {
     console.log(`No posts found for tag: ${tag}`); // 调试信息
@@ -69,18 +62,12 @@ export const getStaticProps: GetStaticProps<TagPageProps, { tag: string }> = asy
 
   console.log(`Found ${taggedPosts.length} posts for tag: ${tag}`); // 调试信息
 
-  // 确保所有帖子的publishDate都是字符串
-  const safeTaggedPosts = taggedPosts.map(post => ({
-    ...post,
-    publishDate: typeof post.publishDate === 'string' ? post.publishDate : String(post.publishDate)
-  }));
-
   const siteConfig = getSiteConfig();
 
   return {
     props: {
       tag,
-      taggedPosts: safeTaggedPosts,
+      taggedPosts,
       siteConfig,
     },
   };

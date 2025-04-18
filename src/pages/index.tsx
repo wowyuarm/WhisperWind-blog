@@ -16,20 +16,9 @@ interface HomePageProps {
 
 export const getStaticProps: GetStaticProps<HomePageProps> = async () => {
   // 获取最新的4篇文章
-  const posts = getAllPostMetas()
-    .sort((a, b) => {
-      // 确保使用字符串日期进行比较
-      const dateA = new Date(b.publishDate).getTime();
-      const dateB = new Date(a.publishDate).getTime();
-      return dateA - dateB;
-    })
+  const recentPosts = getAllPostMetas()
+    .sort((a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime())
     .slice(0, 4);
-  
-  // 确保所有文章的publishDate都是字符串
-  const recentPosts = posts.map(post => ({
-    ...post,
-    publishDate: typeof post.publishDate === 'string' ? post.publishDate : String(post.publishDate)
-  }));
   
   const siteConfig = getSiteConfig();
   

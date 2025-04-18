@@ -12,19 +12,9 @@ interface ArchivePageProps {
 
 export const getStaticProps: GetStaticProps<ArchivePageProps> = async () => {
   // 获取所有文章的元数据并按日期排序
-  const allPosts = getAllPostMetas().sort((a, b) => {
-    // 确保使用字符串日期进行比较
-    const dateA = new Date(b.publishDate).getTime();
-    const dateB = new Date(a.publishDate).getTime();
-    return dateA - dateB;
+  const posts = getAllPostMetas().sort((a, b) => {
+    return new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime();
   });
-
-  // 确保所有文章的publishDate都是字符串
-  const posts = allPosts.map(post => ({
-    ...post,
-    publishDate: typeof post.publishDate === 'string' ? post.publishDate : String(post.publishDate)
-  }));
-  
   const siteConfig = getSiteConfig();
   return {
     props: {
