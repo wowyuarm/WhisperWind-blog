@@ -13,83 +13,66 @@ featuredImage: "/images/logo.png"
 ## 📋 目录
 
 - [项目部署](#项目部署)
-- [Decap CMS 配置](#decap-cms-配置)
+- [Decap-CMS-配置](#decap-cms-配置)
 - [个性化定制](#个性化定制)
 - [绑定自定义域名](#绑定自定义域名)
 - [常见问题](#常见问题)
 - [未来计划](#未来计划)
 
-## 🚀 项目部署 {#项目部署}
+## 🚀 项目部署
 
-### 方式一：直接使用模板 (最简单)
+### 方式一：使用 Netlify (推荐)
 
-1. **使用模板**：访问 [WhisperWind Blog 仓库](https://github.com/wowyuarm/WhisperWind-blog)，点击 "Use this template" > "Create a new repository"
-2. **设置仓库信息**：
-   - 输入你想要的仓库名称
-   - 选择公开仓库
-   - 点击 "Create repository from template"
-3. **启用 GitHub Pages**：
-   - 进入新创建的仓库
-   - 前往 Settings > Pages
-   - Source 选择 "GitHub Actions"
-   - 系统会自动使用仓库中的 GitHub Actions 工作流进行部署
+这是最推荐的部署方式，可以完整使用 Decap CMS 功能。
 
-项目会自动通过 GitHub Actions 构建并部署到 GitHub Pages。部署完成后，你可以通过 `https://你的用户名.github.io/仓库名称/` 访问你的博客。
+1.  **使用模板创建仓库**: 访问 [WhisperWind Blog 仓库](https://github.com/wowyuarm/WhisperWind-blog)，点击 "Use this template" > "Create a new repository"。
+2.  **注册 Netlify**: 注册 [Netlify](https://app.netlify.com/) 账号（免费）。
+3.  **连接仓库**: 在 Netlify 上点击 "New site from Git" (或 "Add new site" > "Import an existing project")，选择你刚刚创建的 GitHub 仓库。
+4.  **配置部署设置**: 
+    *   构建命令通常会自动检测 (或设为 `npm run build` / `yarn build`)。
+    *   发布目录 (Publish directory) 设置为 `.next`。
+5.  **部署站点**: 点击 "Deploy site" (或类似按钮)。
+6.  **配置身份验证**: 部署完成后，按照下一章节 "[Decap CMS 配置](#decap-cms-配置)" 中的步骤启用 Netlify Identity 和 Git Gateway。
+7.  **配置站点 URL**: 同样在下一章节中，修改 `public/admin/index.html` 文件中的 `NETLIFY_SITE`。
+8.  **访问站点**: 部署和配置完成后，你可以通过 Netlify 提供的 URL (例如 `your-site-name.netlify.app`) 访问你的博客和 CMS。
 
-### 方式二：本地开发后部署
+### 方式二：本地开发后部署到 Netlify
 
-如果你想先在本地进行一些修改后再部署：
+1.  **克隆仓库**: `git clone https://github.com/你的用户名/你的仓库名.git`
+2.  **安装依赖**: `cd 你的仓库名 && npm install` (或 `yarn install`)
+3.  **本地开发**: `npm run dev` (或 `yarn dev`)
+4.  **修改配置**: 在 `public/admin/index.html` 中修改 `NETLIFY_SITE` 占位符（可以使用一个临时的 Netlify 站点名，部署后再改为最终的）。
+5.  **提交并推送**: `git add . && git commit -m "你的修改" && git push`
+6.  **连接 Netlify**: 按照 "方式一" 中的步骤 2-8 将你的仓库连接到 Netlify 并完成配置。
 
-1. **克隆仓库**：将仓库克隆到本地
-   ```bash
-   git clone https://github.com/你的用户名/仓库名称.git
-   cd 仓库名称
-   ```
-2. **安装依赖**：
-   ```bash
-   npm install
-   # 或使用 yarn 
-   yarn install
-   ```
-3. **本地开发**：
-   ```bash
-   npm run dev
-   # 或
-   yarn dev
-   ```
-4. **提交并推送**：完成修改后，提交并推送你的更改
-   ```bash
-   git add .
-   git commit -m "初始化自定义"
-   git push
-   ```
+### 方式三：部署到 Vercel (CMS 功能可能受限)
 
-GitHub Actions 会自动构建并部署你的网站。在 GitHub 仓库的 Actions 标签下可以查看部署进度。
+Vercel 也可以部署 Next.js 项目，但 Decap CMS 依赖 Netlify 的 Identity 和 Git Gateway 服务。如果部署到 Vercel：
 
-### 方式三：使用 Vercel 或 Netlify
+1.  按照类似 Netlify 的方式导入和部署项目 (输出目录为 `.next`)。
+2.  你将无法使用基于 Netlify Identity 的 CMS 登录和内容管理功能。你需要寻找替代的 CMS 方案或直接在本地编辑 Markdown 文件。
 
-1. 在 [Vercel](https://vercel.com) 或 [Netlify](https://netlify.com) 上注册账号
-2. 导入你的 GitHub 仓库
-3. **构建命令** 通常会自动检测 (或设为 `npm run build` / `yarn build`)
-4. **输出目录** (Publish directory) 设置为 `.next`
-5. 点击部署
+### (可选) 部署到 GitHub Pages (CMS 功能不可用)
 
-## 🔧 Decap CMS 配置 {#decap-cms-配置}
+如果你不需要 CMS 功能，只想展示静态博客，可以按照模板原有的 GitHub Actions 流程部署到 GitHub Pages。
+
+1.  **使用模板创建仓库** (同方式一)。
+2.  **启用 GitHub Pages**: 前往 Settings > Pages > Source 选择 "GitHub Actions"。
+3.  **注意**: 此方式下 `/admin` 路径将无法访问或登录。
+
+## 🔧 Decap CMS 配置
+
+本章节假设你已按照 "[项目部署](#项目部署)" 中的 **方式一** 或 **方式二** 将项目部署到了 **Netlify**。
 
 WhisperWind Blog 集成了 Decap CMS (原 Netlify CMS)，让你能够通过友好的 Web 界面管理博客内容，而无需直接编辑代码文件。
 
 ### 配置 Netlify 身份验证
 
-虽然你的博客可能部署在 GitHub Pages 上，但我们需要使用 Netlify 提供的身份验证服务：
-
-1. 注册 [Netlify](https://app.netlify.com/) 账号（免费）
-2. 点击 "New site from Git"，选择你的 GitHub 仓库
-3. 部署设置保持默认值，点击 "Deploy site"
-4. 部署完成后，记下你的 Netlify 站点名称（例如：your-site-123456.netlify.app）
-5. 进入站点设置：
-   - 转到 **Site configuration** > **Identity** > 点击 **Enable Identity**
-   - 向下滚动到 **Registration**，设置为 **Invite only**（推荐）
-   - 转到 **Services** > **Git Gateway** > 点击 **Enable Git Gateway**
+1.  登录你的 Netlify 账号，进入你部署好的站点。
+2.  进入站点设置：
+    *   转到 **Site configuration** > **Identity** > 点击 **Enable Identity**。
+    *   向下滚动到 **Registration**，设置为 **Invite only**（推荐）。
+    *   转到 **Services** > **Git Gateway** > 点击 **Enable Git Gateway**。
 
 ### 修改 CMS 配置文件
 
@@ -114,6 +97,8 @@ const NETLIFY_SITE = "YOUR_NETLIFY_SITE.netlify.app";
 
 **将 `"YOUR_NETLIFY_SITE.netlify.app"` 替换为你自己真实的 Netlify 站点域名是让 CMS 正常工作的关键！**
 
+提交此修改并等待 Netlify 重新部署。
+
 > **重要说明:** 
 > *   本模板使用 `public/admin/config.yml` 文件来定义 CMS 的内容结构和设置。如果你需要修改可管理的内容类型、字段等，请编辑 `config.yml` 文件。
 > *   媒体文件（如图片）将通过 Git Gateway **直接存储在你的 Git 仓库** 的 `public/uploads` 目录下。这简化了设置，但请留意仓库大小。
@@ -122,18 +107,19 @@ const NETLIFY_SITE = "YOUR_NETLIFY_SITE.netlify.app";
 
 设置好 Identity 服务后，创建管理员账号：
 
-1. 在 Netlify 后台，转到 **Identity** > **Invite users**
-2. 输入你的邮箱地址并发送邀请
-3. 检查你的邮箱，接受邀请并设置密码
+1.  在 Netlify 后台，转到 **Identity** > **Invite users**
+2.  输入你的邮箱地址并发送邀请。
+3.  检查你的邮箱，点击接受链接（通常会跳转到你的 Netlify 站点 `/admin/`），并设置密码。
 
 ### 访问 CMS 管理界面
 
-1. 访问你的博客站点：`https://你的用户名.github.io/仓库名称/`
-2. 点击页面底部的 "管理" 链接
-3. 使用你在 Netlify 中设置的邮箱和密码登录
-4. 登录成功后，你可以通过界面创建和管理内容了
+1.  访问你的 **Netlify 站点 URL** (例如 `https://your-site-name.netlify.app/`)。
+2.  点击页面底部的 "管理" 链接，或直接访问 `/admin/`。
+3.  点击 "Login with Netlify Identity" 按钮。
+4.  使用你在 Netlify 中设置的邮箱和密码登录。
+5.  登录成功后，你可以通过界面创建和管理内容了。
 
-## 🎨 个性化定制 {#个性化定制}
+## 🎨 个性化定制
 
 ### 基本网站信息
 
@@ -227,49 +213,27 @@ const NETLIFY_SITE = "YOUR_NETLIFY_SITE.netlify.app";
 
 页脚显示内容可以在 `src/components/layout/Footer.tsx` 文件中修改。
 
-## 🌐 绑定自定义域名 {#绑定自定义域名}
+## 🌐 绑定自定义域名
 
-如果你有自己的域名，可以将其绑定到你的 WhisperWind Blog：
+如果你有自己的域名，可以将其绑定到部署在 **Netlify** 上的 WhisperWind Blog：
 
-### GitHub Pages 绑定域名
+### Netlify 绑定域名
 
-1. **添加 CNAME 文件**：
-   - 在项目根目录下的 `public` 文件夹中创建一个名为 `CNAME` 的文件 (确保它被复制到构建输出中)
-2. **设置 DNS 记录**：
-   - 如果使用子域名（如 `blog.example.com`），添加一条 CNAME 记录，将子域名指向 `你的用户名.github.io`
-   - 如果使用顶级域名（如 `example.com`），添加以下 A 记录指向 GitHub Pages 的 IP 地址：
-     ```
-     185.199.108.153
-     185.199.109.153
-     185.199.110.153
-     185.199.111.153
-     ```
-   - 同时添加一条 CNAME 记录，将 `www` 指向 `你的用户名.github.io`
+1.  **在 Netlify 后台添加域名**: 进入 Netlify 站点设置 > **Domain management** > **Domains** > 点击 **Add custom domain**。
+2.  **输入你的域名** 并验证。
+3.  **设置 DNS 记录**: 根据 Netlify 提供的指导，在你的域名注册商处添加相应的 DNS 记录 (通常是 A 记录或 CNAME 记录)。
+4.  **等待 DNS 生效**: 可能需要几分钟到几小时。
+5.  **启用 HTTPS**: Netlify 通常会自动为自定义域名配置 SSL 证书。
 
-3. **在 GitHub 中配置**：
-   - 进入你的仓库
-   - 前往 Settings > Pages
-   - 在 "Custom domain" 部分填入你的域名
-   - 勾选 "Enforce HTTPS"（如果可用）
+### (可选) GitHub Pages 绑定域名
 
-### Vercel 或 Netlify 绑定域名
+如果你选择部署到 GitHub Pages 且不需要 CMS 功能，可以按以下步骤绑定域名：
 
-1. **在服务商后台添加域名**：
-   - 进入你的 Vercel/Netlify 项目
-   - 找到域名或自定义域名设置
-   - 添加你的域名
+1.  **添加 CNAME 文件**: 在 `public` 目录下创建 `CNAME` 文件，内容为你的域名。
+2.  **设置 DNS 记录**: (同之前说明)。
+3.  **在 GitHub 中配置**: (同之前说明)。
 
-2. **设置 DNS 记录**：
-   - 根据平台提供的指导，添加相应的 DNS 记录
-   - 通常需要添加一条 CNAME 记录，将你的域名指向平台提供的值
-
-3. **验证域名所有权**：
-   - 按照平台的要求完成域名验证步骤
-   - 可能需要添加 TXT 记录或通过其他方式验证
-
-完成上述步骤后，等待 DNS 生效（可能需要几分钟到几小时），然后你就可以通过自定义域名访问你的博客了。
-
-## ❓ 常见问题 {#常见问题}
+## ❓ 常见问题
 
 ### Favicon 没有显示？
 
@@ -308,7 +272,7 @@ pre[class*="language-"] {
 }
 ```
 
-## 🚀 未来计划 {#未来计划}
+## 🚀 未来计划
 
 WhisperWind Blog 正在持续改进中，以下是我们近期的开发计划：
 

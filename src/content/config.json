@@ -1,12 +1,12 @@
 {
-  "title": "WhisperWind Blog 🍃",
+  "title": "Your Blog Title 🍃",
   "description": "An open-source blog template inspired by Ghibli style, built with Next.js, TypeScript, and Tailwind CSS",
   "author": "Your Name",
   "logo": "/images/logo.png",
   "favicon": "/favicon.ico",
-  "adminUrl": "https://${NETLIFY_SITE}/admin/",
+  "adminUrl": "",
   "social": {
-    "github": "https://github.com/wowyuarm/WhisperWind-blog",
+    "github": "https://github.com/your-username/your-repo",
     "twitter": "",
     "weibo": "",
     "zhihu": ""
