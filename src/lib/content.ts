@@ -15,7 +15,7 @@ export interface PostMeta {
   publishDate: string;
   slug: string;
   tags?: string[];
-  featuredImage?: string;
+  featuredImage?: string | null;
   excerpt?: string;
 }
 
@@ -202,7 +202,7 @@ export function getAllPostMetas(): PostMeta[] {
   return posts.map(({ content: _, ...meta }) => {
     return {
       ...meta,
-      featuredImage: meta.featuredImage ? `${basePath}${meta.featuredImage}` : undefined,
+      featuredImage: meta.featuredImage ? `${basePath}${meta.featuredImage}` : null,
     };
   });
 }
