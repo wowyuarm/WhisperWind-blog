@@ -15,7 +15,7 @@
 
 ## 🖼️ Preview
 
-Visit the [live demo](https://your-netlify-site-name.netlify.app/) (Replace with your Netlify URL) to see it in action.
+Visit the [live demo](https://yucreate.netlify.app/) (Replace with your Netlify URL) to see it in action.
 
 ## 🚀 Quick Start
 
