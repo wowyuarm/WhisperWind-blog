@@ -41,36 +41,70 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps<TagPageProps, { tag: string }> = async (context) => {
-  const tagParam = context.params?.tag;
-  if (!tagParam) {
+  try {
+    const tagParam = context.params?.tag;
+    if (!tagParam) {
+      return { notFound: true };
+    }
+    
+    // 不需要额外解码，因为Next.js已经处理了URL参数的解码
+    const tag = tagParam;
+    console.log(`Getting posts for tag: ${tag}`); // 调试信息
+  
+    const allPosts = getAllPostMetas();
+    
+    // 添加健壮的日期解析，确保无效日期不会导致构建失败
+    const validateDate = (dateStr: string) => {
+      try {
+        const date = new Date(dateStr);
+        // 检查是否是有效日期
+        if (isNaN(date.getTime())) {
+          console.warn(`无效的日期字符串: ${dateStr}`);
+          // 返回一个默认日期（当前日期减去一天）而不是直接抛出错误
+          return new Date(Date.now() - 86400000).getTime(); 
+        }
+        return date.getTime();
+      } catch (error) {
+        console.error(`日期解析错误: ${dateStr}`, error);
+        // 出错时返回一个默认日期时间戳
+        return new Date(Date.now() - 86400000).getTime();
+      }
+    };
+    
+    // 过滤并排序文章，添加额外的错误处理
+    const taggedPosts = allPosts
+      .filter(post => {
+        // 确保post.tags是数组并包含目标标签
+        return post.tags && Array.isArray(post.tags) && post.tags.includes(tag);
+      })
+      .sort((a, b) => {
+        // 使用健壮的日期解析函数
+        return validateDate(b.publishDate) - validateDate(a.publishDate);
+      });
+  
+    if (taggedPosts.length === 0) {
+      console.log(`No posts found for tag: ${tag}`); // 调试信息
+      return { notFound: true }; 
+    }
+  
+    console.log(`Found ${taggedPosts.length} posts for tag: ${tag}`); // 调试信息
+  
+    const siteConfig = getSiteConfig();
+  
+    return {
+      props: {
+        tag,
+        taggedPosts,
+        siteConfig,
+      },
+    };
+  } catch (error) {
+    // 捕获并记录任何错误
+    console.error(`Error processing tag ${context.params?.tag}:`, error);
+    
+    // 返回notFound而不是让构建失败
     return { notFound: true };
   }
-  
-  // 不需要额外解码，因为Next.js已经处理了URL参数的解码
-  const tag = tagParam;
-  console.log(`Getting posts for tag: ${tag}`); // 调试信息
-
-  const allPosts = getAllPostMetas();
-  const taggedPosts = allPosts
-    .filter(post => post.tags && Array.isArray(post.tags) && post.tags.includes(tag))
-    .sort((a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime());
-
-  if (taggedPosts.length === 0) {
-    console.log(`No posts found for tag: ${tag}`); // 调试信息
-    return { notFound: true }; 
-  }
-
-  console.log(`Found ${taggedPosts.length} posts for tag: ${tag}`); // 调试信息
-
-  const siteConfig = getSiteConfig();
-
-  return {
-    props: {
-      tag,
-      taggedPosts,
-      siteConfig,
-    },
-  };
 };
 
 // 生成云朵SVG路径
