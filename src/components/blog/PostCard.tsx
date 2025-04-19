@@ -13,7 +13,7 @@ interface PostCardProps {
   excerpt?: string
   publishDate: string
   tags?: string[]
-  featuredImage?: string // 保留属性但不显示图片
+  featuredImage?: string | null // 保留属性但不显示图片
 }
 
 export function PostCard({ title, slug, excerpt, publishDate, tags = [] }: PostCardProps) {
