@@ -99,7 +99,7 @@
     // !! 重要 !!
     // 请将下面的 "YOUR_NETLIFY_SITE.netlify.app" 替换为您在 Netlify 上部署此站点的实际域名。
     // 例如：const NETLIFY_SITE = "my-awesome-blog.netlify.app";
-    const NETLIFY_SITE = "yucreate.netlify.app"; 
+    const NETLIFY_SITE = "YOUR_NETLIFY_SITE.netlify.app"; 
 
     // **********************************************************
     // ** 用户配置区域 (结束) **
@@ -236,6 +236,309 @@
         console.log("开始初始化CMS...");
         
         try {
+          // 自定义Markdown编辑器配置
+          if (window.CMS) {
+            // 注册自定义Markdown编辑器组件
+            CMS.registerEditorComponent({
+              id: "center",
+              label: "居中",
+              fields: [
+                {
+                  name: "text",
+                  label: "文本内容",
+                  widget: "string"
+                }
+              ],
+              pattern: /^<div style="text-align: center">(.*)<\/div>$/,
+              fromBlock: function(match) {
+                return {
+                  text: match[1]
+                };
+              },
+              toBlock: function(data) {
+                return `<div style="text-align: center">${data.text}</div>`;
+              },
+              toPreview: function(data) {
+                return `<div style="text-align: center">${data.text}</div>`;
+              }
+            });
+
+            // 注册删除线组件
+            CMS.registerEditorComponent({
+              id: "strikethrough",
+              label: "删除线",
+              fields: [
+                {
+                  name: "text",
+                  label: "文本内容",
+                  widget: "string"
+                }
+              ],
+              pattern: /^~~(.*)~~$/,
+              fromBlock: function(match) {
+                return {
+                  text: match[1]
+                };
+              },
+              toBlock: function(data) {
+                return `~~${data.text}~~`;
+              },
+              toPreview: function(data) {
+                return `<del>${data.text}</del>`;
+              }
+            });
+
+            // 注册下划线组件
+            CMS.registerEditorComponent({
+              id: "underline",
+              label: "下划线",
+              fields: [
+                {
+                  name: "text",
+                  label: "文本内容",
+                  widget: "string"
+                }
+              ],
+              pattern: /^<u>(.*)<\/u>$/,
+              fromBlock: function(match) {
+                return {
+                  text: match[1]
+                };
+              },
+              toBlock: function(data) {
+                return `<u>${data.text}</u>`;
+              },
+              toPreview: function(data) {
+                return `<u>${data.text}</u>`;
+              }
+            });
+
+            // 注册高亮组件
+            CMS.registerEditorComponent({
+              id: "highlight",
+              label: "高亮",
+              fields: [
+                {
+                  name: "text",
+                  label: "文本内容",
+                  widget: "string"
+                }
+              ],
+              pattern: /^<mark>(.*)<\/mark>$/,
+              fromBlock: function(match) {
+                return {
+                  text: match[1]
+                };
+              },
+              toBlock: function(data) {
+                return `<mark>${data.text}</mark>`;
+              },
+              toPreview: function(data) {
+                return `<mark>${data.text}</mark>`;
+              }
+            });
+
+            // 注册上标组件
+            CMS.registerEditorComponent({
+              id: "superscript",
+              label: "上标",
+              fields: [
+                {
+                  name: "text",
+                  label: "文本内容",
+                  widget: "string"
+                }
+              ],
+              pattern: /^<sup>(.*)<\/sup>$/,
+              fromBlock: function(match) {
+                return {
+                  text: match[1]
+                };
+              },
+              toBlock: function(data) {
+                return `<sup>${data.text}</sup>`;
+              },
+              toPreview: function(data) {
+                return `<sup>${data.text}</sup>`;
+              }
+            });
+
+            // 注册下标组件
+            CMS.registerEditorComponent({
+              id: "subscript",
+              label: "下标",
+              fields: [
+                {
+                  name: "text",
+                  label: "文本内容",
+                  widget: "string"
+                }
+              ],
+              pattern: /^<sub>(.*)<\/sub>$/,
+              fromBlock: function(match) {
+                return {
+                  text: match[1]
+                };
+              },
+              toBlock: function(data) {
+                return `<sub>${data.text}</sub>`;
+              },
+              toPreview: function(data) {
+                return `<sub>${data.text}</sub>`;
+              }
+            });
+
+            // 注册引用块组件
+            CMS.registerEditorComponent({
+              id: "blockquote",
+              label: "引用块",
+              fields: [
+                {
+                  name: "text",
+                  label: "引用内容",
+                  widget: "text"
+                }
+              ],
+              pattern: /^>\s(.*)$/,
+              fromBlock: function(match) {
+                return {
+                  text: match[1]
+                };
+              },
+              toBlock: function(data) {
+                return `> ${data.text}`;
+              },
+              toPreview: function(data) {
+                return `<blockquote>${data.text}</blockquote>`;
+              }
+            });
+
+            // 注册表格组件
+            CMS.registerEditorComponent({
+              id: "table",
+              label: "表格",
+              fields: [
+                {
+                  name: "headers",
+                  label: "表头 (用逗号分隔)",
+                  widget: "string"
+                },
+                {
+                  name: "rows",
+                  label: "行内容 (每行用分号分隔，每个单元格用逗号分隔)",
+                  widget: "text"
+                }
+              ],
+              pattern: /^\|([^|]+)\|([^|]+)\|([^|]+)\|\n\|:?-+:?\|:?-+:?\|:?-+:?\|\n([\s\S]*?)$/,
+              fromBlock: function(match) {
+                const headers = match[1].trim() + "," + match[2].trim() + "," + match[3].trim();
+                let rows = "";
+                // 处理表格数据行
+                const rowLines = match[4].split("\n");
+                for (let i = 0; i < rowLines.length; i++) {
+                  if (rowLines[i].trim() !== "") {
+                    const rowCells = rowLines[i].replace(/^\||\|$/g, "").split("|");
+                    rows += rowCells.map(cell => cell.trim()).join(",");
+                    if (i < rowLines.length - 1) {
+                      rows += ";";
+                    }
+                  }
+                }
+                return {
+                  headers: headers,
+                  rows: rows
+                };
+              },
+              toBlock: function(data) {
+                const headers = data.headers.split(",").map(header => header.trim());
+                let markdown = "|";
+                headers.forEach(header => {
+                  markdown += ` ${header} |`;
+                });
+                markdown += "\n|";
+                headers.forEach(() => {
+                  markdown += " --- |";
+                });
+                markdown += "\n";
+                
+                data.rows.split(";").forEach(row => {
+                  markdown += "|";
+                  row.split(",").map(cell => cell.trim()).forEach(cell => {
+                    markdown += ` ${cell} |`;
+                  });
+                  markdown += "\n";
+                });
+                
+                return markdown;
+              },
+              toPreview: function(data) {
+                const headers = data.headers.split(",").map(header => header.trim());
+                
+                let html = "<table><thead><tr>";
+                headers.forEach(header => {
+                  html += `<th>${header}</th>`;
+                });
+                html += "</tr></thead><tbody>";
+                
+                data.rows.split(";").forEach(row => {
+                  html += "<tr>";
+                  row.split(",").map(cell => cell.trim()).forEach(cell => {
+                    html += `<td>${cell}</td>`;
+                  });
+                  html += "</tr>";
+                });
+                
+                html += "</tbody></table>";
+                return html;
+              }
+            });
+
+            // 任务列表
+            CMS.registerEditorComponent({
+              id: "tasklist",
+              label: "任务列表",
+              fields: [
+                {
+                  name: "tasks",
+                  label: "任务 (每行一个，在行首加 [x] 表示已完成，[ ] 表示未完成)",
+                  widget: "text"
+                }
+              ],
+              pattern: /^(?:- \[([ x])\] (.*)(?:\n)?)+$/,
+              fromBlock: function(match) {
+                return {
+                  tasks: match[0]
+                };
+              },
+              toBlock: function(data) {
+                return data.tasks.split("\n").map(task => {
+                  if (task.trim().startsWith("- [")) {
+                    return task;
+                  } else if (task.trim()) {
+                    return `- [ ] ${task.trim()}`;
+                  }
+                  return "";
+                }).filter(Boolean).join("\n");
+              },
+              toPreview: function(data) {
+                const items = data.tasks.split("\n").map(task => {
+                  const checkMatch = task.match(/- \[([ x])\] (.*)/);
+                  if (checkMatch) {
+                    const checked = checkMatch[1] === "x";
+                    return `<li style="list-style-type: none;"><input type="checkbox" ${checked ? "checked" : ""} disabled> ${checkMatch[2]}</li>`;
+                  } else if (task.trim()) {
+                    return `<li style="list-style-type: none;"><input type="checkbox" disabled> ${task.trim()}</li>`;
+                  }
+                  return "";
+                }).filter(Boolean).join("");
+                
+                return `<ul style="padding-left: 1em;">${items}</ul>`;
+              }
+            });
+
+            console.log("已注册自定义Markdown编辑器组件");
+          }
+
           // !! 修改 CMS 初始化调用，让它默认加载 config.yml !!
           // window.CMS.init({ config }); // 删除这一行
           window.CMS.init(); // 使用这一行来加载 config.yml
