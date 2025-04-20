@@ -194,14 +194,6 @@ export function ContributionGraph({ posts, className = "" }: ContributionGraphPr
               </div>
             ))}
           </div>
-
-          {/* 贡献图例 */}
-          <div className="flex items-center justify-center mt-4 text-sm text-muted-foreground">
-            <span className="mr-2">较少</span>
-            <div className="w-4 h-4 rounded-sm bg-stone-200/30 mx-1"></div>
-            <div className="w-4 h-4 rounded-sm bg-primary mx-1"></div>
-            <span className="ml-2">较多</span>
-          </div>
         </div>
       </motion.div>
     </div>
