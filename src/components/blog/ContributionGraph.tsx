@@ -78,7 +78,6 @@ export function ContributionGraph({ posts, className = "" }: ContributionGraphPr
     setVerticalGrid(gridData);
     
     // --- 计算月份标签 --- 
-    const { startDate } = getDateRange(posts);
     const monthLabels: {label: string, startColumnIndex: number}[] = [];
     let currentMonth = -1;
     let currentYear = -1;
@@ -90,7 +89,6 @@ export function ContributionGraph({ posts, className = "" }: ContributionGraphPr
       if (firstValidDay) {
         const month = firstValidDay.getMonth();
         const year = firstValidDay.getFullYear();
-        const monthYearKey = `${year}-${month}`;
         
         // 如果是新的一个月，添加标签
         if (currentMonth !== month || currentYear !== year) {
@@ -144,7 +142,6 @@ export function ContributionGraph({ posts, className = "" }: ContributionGraphPr
   
   const squareSize = 14; // 减小方格尺寸，使其更紧凑 (w-3.5)
   const gap = 3;  // 减小间距，使其更紧凑
-  const columnWidth = squareSize + gap;
 
   return (
     <div className={`${className}`}>
@@ -172,7 +169,7 @@ export function ContributionGraph({ posts, className = "" }: ContributionGraphPr
             })}
           </div>
 
-          {/* 贡献网格 - 保持不变 */}
+          {/* 贡献网格 */}
           <div className="grid grid-flow-col auto-cols-max gap-[3px]">
             {verticalGrid.map((week, weekIndex) => (
               <div key={weekIndex} className="grid grid-rows-7 gap-[3px]">
@@ -197,8 +194,16 @@ export function ContributionGraph({ posts, className = "" }: ContributionGraphPr
               </div>
             ))}
           </div>
+
+          {/* 贡献图例 */}
+          <div className="flex items-center justify-center mt-4 text-sm text-muted-foreground">
+            <span className="mr-2">较少</span>
+            <div className="w-4 h-4 rounded-sm bg-stone-200/30 mx-1"></div>
+            <div className="w-4 h-4 rounded-sm bg-primary mx-1"></div>
+            <span className="ml-2">较多</span>
+          </div>
         </div>
       </motion.div>
     </div>
   );
-} 
+}
