@@ -213,6 +213,7 @@ export const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content, cla
                     />
                   ) : (
                     // 回退到普通 img 标签，用于处理可能不符合 Next.js Image 要求的源
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img 
                       src={src} 
                       alt={alt || ''} 
