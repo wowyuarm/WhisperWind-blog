@@ -151,14 +151,12 @@ export default function TagPage({ tag, taggedPosts, siteConfig }: InferGetStatic
   
   // 云朵装饰背景动画
   const cloudVariants = {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    initial: (_i: number) => ({
+    initial: () => ({
       opacity: 0.03 + Math.random() * 0.07,
       x: -20,
       y: -10 + Math.random() * 20
     }),
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    animate: (_i: number) => ({
+    animate: () => ({
       opacity: 0.04 + Math.random() * 0.06,
       x: 20,
       y: -10 + Math.random() * 20,
@@ -167,7 +165,7 @@ export default function TagPage({ tag, taggedPosts, siteConfig }: InferGetStatic
         repeat: Infinity,
         repeatType: "reverse" as const,
         ease: "linear",
-        delay: _i * 2
+        delay: Math.random() * 2
       }
     })
   };
