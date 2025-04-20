@@ -32,6 +32,7 @@ interface TagPosition {
   size: number;
   zOffset: number;
   floatDelay: number;
+  rotation?: number;
 }
 
 export const getStaticProps: GetStaticProps<TagsIndexPageProps> = async () => {
@@ -76,125 +77,126 @@ export const getStaticProps: GetStaticProps<TagsIndexPageProps> = async () => {
   }
 };
 
-// 用于根据标签数量计算标签大小的函数
+// 优化标签大小计算函数
 function getTagSize(count: number, maxCount: number): number {
-  // 标签大小与文章数量成正比，但使用对数比例使差异不太极端
-  const minSize = 0.65; // 减小最小尺寸
-  const maxSize = 1.6; // 减小最大尺寸
+  const minSize = 0.9; // 最小尺寸
+  const maxSize = 2.0; // 稍微增大最大尺寸，增强差异感
   
-  // 优化计算逻辑，使标签大小更均匀分布
-  const normalizedCount = count / maxCount; // 标准化计数 (0-1范围)
-  const logFactor = Math.log(normalizedCount * 9 + 1) / Math.log(10); // 对数缩放 (0-1范围)
+  // 使用更平滑的比例计算
+  const normalizedCount = count / maxCount;
+  // 使用平方根函数使差异更明显但不过分
+  const sizeFactor = Math.pow(normalizedCount, 0.55); // 稍微调整指数，增强层次感
   
-  // 应用最小和最大大小限制
-  return minSize + logFactor * (maxSize - minSize);
+  return minSize + (sizeFactor * (maxSize - minSize));
 }
 
-// 优化的标签位置计算函数
+// 优化的标签位置计算函数 - 更自然的分布
 function calculateTagPositions(tags: TagInfo[], cloudRadius: number): Record<string, TagPosition> {
-  // 没有标签时返回空对象
   if (tags.length === 0) return {};
   
-  // 获取最大标签计数
-  const maxCount = tags[0].count;
-  
-  // 创建保存所有标签位置的对象
+  const maxCount = Math.max(...tags.map(tag => tag.count));
   const positions: Record<string, TagPosition> = {};
+  const usedPositions: {x: number, y: number, radius: number}[] = [];
+  let currentIndex = 1;
   
-  // 对标签进行深度克隆并按计数降序排序（确保高计数的标签先放置）
+  // 按文章数量排序
   const sortedTags = [...tags].sort((a, b) => b.count - a.count);
   
-  // 记录已使用的位置，避免标签重叠
-  const usedPositions: {x: number, y: number, radius: number}[] = [];
-  
-  // 设置中心标签
+  // 处理中心标签
   if (sortedTags.length > 0) {
-    const centerTag = sortedTags[0]; // 文章数量最多的标签
+    const centerTag = sortedTags[0];
     const size = getTagSize(centerTag.count, maxCount);
-    
     positions[centerTag.name] = {
-      x: 0, // 正中心
-      y: 0, // 正中心
-      size: size,
-      zOffset: 50, // 最高层级
-      floatDelay: 0
+      x: 0,
+      y: 0,
+      size,
+      zOffset: 50,
+      floatDelay: 0,
+      // 中心标签保持无旋转
+      rotation: 0
     };
     
-    // 记录中心标签的位置和大小
-    const tagRadius = size * 1.6 * 16; // 减小标签半径换算倍数
-    usedPositions.push({x: 0, y: 0, radius: tagRadius});
-    
-    // 移除中心标签，处理其余标签
-    sortedTags.shift();
+    usedPositions.push({
+      x: 0,
+      y: 0,
+      radius: size * 1.8 * 16 // 保护半径
+    });
   }
   
-  // 螺旋放置函数 - 根据标签数量从高到低，从中心向外螺旋放置
-  const goldenAngle = Math.PI * (3 - Math.sqrt(5)); // 黄金角
-  let currentAngle = Math.random() * Math.PI * 2; // 随机起始角度
-  let currentIndex = 1; // 跳过中心标签
+  // 更自然的分布，使用均匀随机+冲突检测
+  const restTags = sortedTags.slice(1);
   
-  // 处理剩余标签
-  sortedTags.forEach((tag, index) => {
+  // 根据标签大小分组，但不严格分层
+  restTags.forEach((tag) => {
     const size = getTagSize(tag.count, maxCount);
-    const tagRadius = size * 1.6 * 16; // 减小标签半径换算倍数
+    const tagImportance = tag.count / maxCount;
     
-    // 标签应该放置的距离中心的距离，与文章数量成反比
-    // 文章数量越多，越靠近中心
-    const normalizedCount = tag.count / maxCount;
-    // 这里使用平方根函数使分布更加均匀
-    const distanceRatio = Math.sqrt(1 - normalizedCount);
+    // 只保留旋转，移除形状变化
+    // 根据重要性调整旋转角度 - 重要标签旋转更小
+    const rotation = (Math.random() * 6 - 3) * (1 - tagImportance * 0.7);
     
-    // 初始放置距离（根据tag在排序后的位置）
-    // 减小基础距离，使整体更紧凑
-    let distance = cloudRadius * 0.15 + distanceRatio * cloudRadius * 0.65;
+    const tagRadius = size * 1.8 * 16;
     
-    // 增加角度变化，分散相同数量的标签
-    const angleStep = goldenAngle + (index % 3) * 0.1;
-    currentAngle += angleStep;
+    // 关键变化：使用更自然的分布方法
+    // 根据标签重要性决定分布半径范围
+    // 更重要的标签（文章数量多）更靠近中心，但带有随机性
+    const distanceFactor = 0.8 - (tagImportance * 0.5) + (Math.random() * 0.3); // 0.3-0.8 + 随机性
+    const baseDistance = cloudRadius * distanceFactor;
     
-    // 寻找可放置的位置
+    // 寻找可用位置
     let validPosition = false;
     let attempts = 0;
     let x = 0, y = 0;
+    let bestX = 0, bestY = 0, bestDistance = Infinity;
     
-    // 尝试找到不重叠的位置
     while (!validPosition && attempts < 50) {
-      // 计算基于当前角度和距离的位置
-      x = Math.cos(currentAngle) * distance;
-      y = Math.sin(currentAngle) * distance;
+      // 完全随机的角度，不遵循螺旋
+      const angle = Math.random() * Math.PI * 2;
       
-      // 检查与已放置标签的距离
+      // 带随机性的距离，不严格遵循重要性
+      const randomDistanceFactor = 0.8 + Math.random() * 0.4; // 0.8-1.2的随机系数
+      const distance = baseDistance * randomDistanceFactor * (1 + attempts * 0.01);
+      
+      x = Math.cos(angle) * distance;
+      y = Math.sin(angle) * distance;
+      
       validPosition = true;
+      
+      // 检查是否与已有标签重叠
       for (const pos of usedPositions) {
         const dx = x - pos.x;
         const dy = y - pos.y;
-        const minDistance = tagRadius + pos.radius + 3; // 减小额外间距
+        const minDistance = tagRadius + pos.radius + 15;
         const actualDistance = Math.sqrt(dx*dx + dy*dy);
         
         if (actualDistance < minDistance) {
           validPosition = false;
+          if (actualDistance > bestDistance) {
+            bestDistance = actualDistance;
+            bestX = x;
+            bestY = y;
+          }
           break;
         }
       }
       
-      // 如果位置无效，稍微调整角度和距离
-      if (!validPosition) {
-        currentAngle += 0.2; // 微调角度
-        distance += 5; // 稍微增加距离
-        attempts++;
-      }
+      attempts++;
     }
     
-    // 添加位置
+    if (!validPosition && bestDistance < Infinity) {
+      x = bestX;
+      y = bestY;
+    }
+    
     positions[tag.name] = {
-      x: x,
-      y: y,
-      size: size,
-      zOffset: 40 - currentIndex, // 确保高计数标签显示在上层
-      floatDelay: currentIndex
+      x,
+      y,
+      size,
+      zOffset: 40 - Math.floor((currentIndex / tags.length) * 30),
+      floatDelay: currentIndex * 0.1,
+      rotation
     };
     
-    // 记录已使用的位置
     usedPositions.push({x, y, radius: tagRadius});
     currentIndex++;
   });
@@ -202,35 +204,61 @@ function calculateTagPositions(tags: TagInfo[], cloudRadius: number): Record<str
   return positions;
 }
 
-// 生成云朵SVG路径
+// 优化的云朵SVG路径生成函数
 function generateCloudPath(): string {
-  // 生成随机的云朵路径
   const centerX = 50;
   const centerY = 40;
-  const radius = 25 + Math.random() * 10;
+  const radius = 20 + Math.random() * 8; // 减小云朵大小
   
-  // 创建基本的云朵形状
   let path = `M${centerX - radius * 0.8},${centerY} `;
   
-  // 添加几个圆形突起来创建云朵效果
-  const bumps = 5 + Math.floor(Math.random() * 3);
+  const bumps = 4 + Math.floor(Math.random() * 3); // 减少突起数量
   const angleStep = (2 * Math.PI) / bumps;
   
   for (let i = 0; i < bumps; i++) {
     const angle = i * angleStep;
-    const bumpRadius = radius * (0.7 + Math.random() * 0.3);
+    const bumpRadius = radius * (0.8 + Math.random() * 0.2); // 更均匀的突起
     const x = centerX + Math.cos(angle) * bumpRadius;
-    const y = centerY + Math.sin(angle) * bumpRadius * 0.6;
+    const y = centerY + Math.sin(angle) * bumpRadius * 0.7;
     
-    path += `Q${centerX + Math.cos(angle + angleStep/2) * bumpRadius * 1.2},`
-    path += `${centerY + Math.sin(angle + angleStep/2) * bumpRadius * 0.8} `
+    path += `Q${centerX + Math.cos(angle + angleStep/2) * bumpRadius * 1.1},`
+    path += `${centerY + Math.sin(angle + angleStep/2) * bumpRadius * 0.7} `
     path += `${x},${y} `;
   }
   
-  // 闭合路径
   path += 'Z';
   return path;
 }
+
+// 优化纹理效果，使用更简单可靠的方式
+const paperTextureCSS = `
+  linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+  linear-gradient(rgba(0, 0, 0, 0.01) 1px, transparent 1px),
+  linear-gradient(90deg, rgba(0, 0, 0, 0.01) 1px, transparent 1px)
+`;
+
+// 优化浮动动画，根据标签大小调整动画特性
+const floatVariants = {
+  float: (customData: { delay: number, importance: number }) => {
+    // 重要性越高，动画越微妙；重要性越低，动画越活泼
+    const { delay, importance } = customData;
+    const magnitude = 1 - Math.min(0.8, importance); // 振幅系数，越小越重要，振幅越小
+    
+    return {
+      y: [0, -3 * magnitude, 0],
+      x: [0, (delay % 2 === 0 ? 1 : -1) * magnitude * 2, 0],
+      rotate: [0, (delay % 2 === 0 ? 0.4 : -0.4) * magnitude, 0],
+      transition: {
+        repeat: Infinity,
+        repeatType: "reverse" as const,
+        duration: 4 + (3 * importance), // 重要标签周期更长
+        ease: "easeInOut",
+        delay: delay * 0.12 % 2
+      }
+    };
+  }
+};
 
 // 设置不显示页脚
 TagsIndexPage.showFooter = false;
@@ -244,41 +272,36 @@ export default function TagsIndexPage({
   const [tagPositions, setTagPositions] = useState<Record<string, TagPosition>>({});
   const cloudContainerRef = useRef<HTMLDivElement>(null);
   const [cloudPaths, setCloudPaths] = useState<string[]>([]);
+  const [positionsCalculated, setPositionsCalculated] = useState(false);
   
-  // 定义标签动画
+  // 修改标签加载动画，从虚化到显现
   const tagVariants = {
-    hidden: { opacity: 0, scale: 0 },
+    hidden: { 
+      opacity: 0, 
+      filter: "blur(8px)",
+      scale: 0.9
+    },
     visible: (i: number) => ({ 
       opacity: 1, 
+      filter: "blur(0px)",
       scale: 1,
       transition: { 
-        delay: i * 0.05, 
-        duration: 0.6,
-        type: "spring",
-        stiffness: 50,
-        damping: 8
+        delay: i * 0.04, // 略微增加延迟，使效果更明显
+        duration: 0.7,   // 增加动画时长，让过渡更平滑
+        opacity: { duration: 0.5 },
+        filter: { duration: 0.6 },
+        scale: { 
+          type: "spring",
+          stiffness: 50,
+          damping: 10
+        }
       }
     }),
     hover: { 
-      scale: 1.1,
-      filter: "drop-shadow(0px 5px 15px rgba(0, 0, 0, 0.1))",
-      transition: { duration: 0.3 }
+      scale: 1.05,
+      filter: "drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.1))",
+      transition: { duration: 0.3, ease: "easeOut" }
     }
-  };
-  
-  // 浮动动画设置 - 仅保留位置变化，移除透明度变化
-  const floatVariants = {
-    float: (i: number) => ({
-      y: [0, i % 2 === 0 ? -3 : -5, 0],
-      x: [0, i % 2 === 0 ? 2 : -2, 0],
-      transition: {
-        repeat: Infinity,
-        repeatType: "reverse" as const,
-        duration: 3 + (i % 4),
-        ease: "easeInOut",
-        delay: i * 0.2 % 2
-      }
-    })
   };
   
   // 云朵背景动画 - 保持静态透明度，只移动位置
@@ -338,9 +361,17 @@ export default function TagsIndexPage({
   // 使用优化的算法计算标签位置
   useEffect(() => {
     if (cloudContainerRef.current && windowWidth > 0 && tags.length > 0) {
+      // 标记为未计算状态
+      setPositionsCalculated(false);
+      
       // 使用新的算法计算所有标签位置
       const positions = calculateTagPositions(tags, cloudRadius);
       setTagPositions(positions);
+      
+      // 标记计算完成
+      setTimeout(() => {
+        setPositionsCalculated(true);
+      }, 100); // 短暂延迟，确保位置已应用
     }
   }, [tags, cloudRadius, windowWidth]);
   
@@ -385,13 +416,39 @@ export default function TagsIndexPage({
           ))}
         </div>
 
+        {/* 加载指示器 - 在标签准备好前显示 */}
+        <motion.div 
+          className="absolute inset-0 flex items-center justify-center pointer-events-none"
+          initial={{ opacity: 1 }}
+          animate={{ opacity: positionsCalculated ? 0 : 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <motion.div 
+            className="text-primary/30 text-lg"
+            initial={{ opacity: 0, filter: "blur(4px)" }}
+            animate={{ 
+              opacity: [0, 1, 1, 0], 
+              filter: ["blur(4px)", "blur(0px)", "blur(0px)", "blur(4px)"]
+            }}
+            transition={{ 
+              duration: 2, 
+              repeat: Infinity,
+              times: [0, 0.2, 0.8, 1]
+            }}
+          >
+            正在准备标签云...
+          </motion.div>
+        </motion.div>
+
         <div 
           className="absolute inset-0 flex items-center justify-center" 
           style={{ perspective: 1000 }}
         >
-          {tags.map((tag, index) => {
+          {positionsCalculated && tags.map((tag, index) => {
             const position = tagPositions[tag.name] || { x: 0, y: 0, size: 1, zOffset: 0, floatDelay: index };
             const size = position.size;
+            const maxCount = Math.max(...tags.map(t => t.count));
+            const importance = tag.count / maxCount; // 标签重要性
             
             return (
               <motion.div
@@ -403,7 +460,10 @@ export default function TagsIndexPage({
                   zIndex: Math.floor(10 + position.zOffset),
                   transform: `translate(-50%, -50%) translateZ(${position.zOffset}px)`
                 }}
-                custom={position.floatDelay}
+                custom={{
+                  delay: position.floatDelay,
+                  importance: importance // 传递重要性参数给动画
+                }}
                 initial="hidden"
                 animate={["visible", "float"]}
                 variants={{
@@ -413,34 +473,84 @@ export default function TagsIndexPage({
                 whileHover="hover"
               >
                 <Link href={`/tags/${tag.name}/`} className="block">
-                  <motion.div className={cn(
-                    "flex items-center justify-center rounded-full cursor-pointer transition-all",
-                    "bg-warm-paper border border-primary/20 hover:border-primary/50",
-                    "shadow-sm overflow-hidden relative"
-                  )}
-                  style={{
-                    width: `${3.2 * size}rem`, // 减小标签尺寸
-                    height: `${3.2 * size}rem`, // 减小标签尺寸
-                    minWidth: "3rem", // 减小最小宽度
-                    minHeight: "3rem" // 减小最小高度
-                  }}
-                  whileHover={{ 
-                    backgroundColor: "rgba(var(--primary-rgb), 0.08)",
-                    transition: { duration: 0.2 }
-                  }}
+                  <motion.div
+                    className={cn(
+                      "flex items-center justify-center rounded-full cursor-pointer transition-all",
+                      "bg-warm-paper/95 border border-primary/15 hover:border-primary/40",
+                      "shadow-sm hover:shadow-md backdrop-blur-sm"
+                    )}
+                    style={{
+                      width: `${3.2 * size}rem`,
+                      height: `${3.2 * size}rem`,
+                      minWidth: "3.2rem",
+                      minHeight: "3.2rem",
+                      backdropFilter: "blur(8px)",
+                      background: `
+                        ${paperTextureCSS},
+                        radial-gradient(circle at ${40 + Math.random() * 10}% ${35 + Math.random() * 15}%, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.03) 75%)
+                      `,
+                      backgroundSize: `
+                        20px 20px,
+                        20px 20px,
+                        100px 100px,
+                        100px 100px,
+                        cover
+                      `,
+                      boxShadow: `0 ${1.5 + size}px ${3 + size * 2.5}px rgba(0, 0, 0, 0.08), 
+                                inset 0 0 0 1px rgba(255, 255, 255, 0.35)`,
+                      transform: `rotate(${position.rotation || 0}deg)`,
+                      transformOrigin: 'center center',
+                      willChange: 'transform',
+                      backfaceVisibility: 'hidden',
+                    }}
+                    whileHover={{ 
+                      backgroundColor: "rgba(var(--primary-rgb), 0.04)",
+                      scale: 1 + Math.max(0.01, 0.03 * (1 - 0.7 * importance)), // 大标签缩放效果更小
+                      boxShadow: `0 ${2 + size}px ${4 + size * 3}px rgba(0, 0, 0, 0.1), 
+                                inset 0 0 0 1px rgba(255, 255, 255, 0.5)`,
+                      transition: { 
+                        duration: 0.35 + (importance * 0.2), // 重要标签过渡更慢
+                        ease: "easeOut" 
+                      }
+                    }}
+                    layout="position"
                   >
-                    {/* 内容区域 */}
-                    <div className="text-center px-2 relative z-10">
-                      <div className="font-medium text-sm">{tag.name}</div> {/* 减小字体大小 */}
-                      <div className="text-xs text-muted-foreground mt-0.5">{tag.count} 篇</div> {/* 减小上边距 */}
+                    {/* 内容区域，保持水平 */}
+                    <div 
+                      className="text-center px-2 relative z-10"
+                      style={{
+                        transform: position.rotation ? `rotate(${-position.rotation}deg)` : 'none' // 内容反向旋转，保持水平
+                      }}
+                    >
+                      <div className="font-medium whitespace-nowrap tracking-wide text-primary" style={{
+                        fontSize: `${0.75 + (size - 0.9) * 0.5}rem`
+                      }}>{tag.name}</div>
+                      
+                      {/* 突出显示文章数量 */}
+                      <div 
+                        className="mt-1 inline-block rounded-full px-2 py-0.5" 
+                        style={{
+                          fontSize: `${0.65 + (size - 0.9) * 0.3}rem`,
+                          backgroundColor: "rgba(var(--primary-rgb), 0.06)",
+                          color: "rgba(var(--primary-rgb), 0.9)",
+                          fontWeight: size > 1.3 ? "600" : size > 1.1 ? "500" : "normal",
+                          border: "1px solid rgba(var(--primary-rgb), 0.12)",
+                          boxShadow: "inset 0 0 0 1px rgba(255, 255, 255, 0.15)",
+                          transform: `scale(${0.9 + (size - 0.9) * 0.2})`,
+                          letterSpacing: "0.02em"
+                        }}
+                      >
+                        <span>{tag.count}</span>
+                        <span className="opacity-60"> 篇</span>
+                      </div>
                     </div>
                   </motion.div>
-              </Link>
+                </Link>
               </motion.div>
             );
           })}
-          </div>
+        </div>
       </div>
     </>
   );
-} 
+}
